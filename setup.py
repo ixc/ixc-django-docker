@@ -15,7 +15,6 @@ setuptools.setup(
     license='MIT',
     packages=setuptools.find_packages(),
     scripts=[
-        'go.sh',
         'ixc_django_docker/bin/bash.sh',
         'ixc_django_docker/bin/bower-install.sh',
         'ixc_django_docker/bin/celery.sh',
