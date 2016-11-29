@@ -30,25 +30,8 @@ VAR_DIR = os.path.join(PROJECT_DIR, 'var')
 # Get the secret key from the environment.
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-if not SECRET_KEY:
-    SECRET_FILE = os.path.join(VAR_DIR, 'secret.txt')
-    try:
-        # Get the secret key from the file system.
-        with open(SECRET_FILE) as f:
-            SECRET_KEY = f.read()
-    except IOError:
-        # Generate a random secret key.
-        SECRET_KEY = ''.join(random.choice(''.join([
-            string.ascii_letters,
-            string.digits,
-            string.punctuation,
-        ])) for i in range(50))
-        # Save the secret key to the file system.
-        with open(SECRET_FILE, 'w') as f:
-            f.write(SECRET_KEY)
-            os.chmod(SECRET_FILE, 0o400)  # Read only by owner
-
-DEBUG = False  # Don't show detailed error pages when exceptions are raised
+# Don't show detailed error pages when exceptions are raised.
+DEBUG = False
 
 #
 # ENVIRONMENT SPECIFIC
