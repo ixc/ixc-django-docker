@@ -9,7 +9,7 @@ EOF
 set -e
 
 if [[ -z "$@" ]]; then
-	exec supervisord --configuration "$IXC_DJANGO_DOCKER_DIR/etc/supervisor/supervisord.conf"
+	exec supervisord --configuration "$IXC_DJANGO_DOCKER_DIR/etc/supervisord.conf"
 else
-	exec supervisorctl --configuration "$IXC_DJANGO_DOCKER_DIR/etc/supervisor/supervisord.conf" "$@"
+	exec supervisorctl --configuration "$IXC_DJANGO_DOCKER_DIR/etc/supervisord.conf" "$@"
 fi
