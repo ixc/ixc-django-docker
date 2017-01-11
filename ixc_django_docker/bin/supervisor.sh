@@ -8,6 +8,8 @@ EOF
 
 set -e
 
+export SUPERVISORD_INCLUDE="${SUPERVISORD_INCLUDE:-supervisord.default.conf}"
+
 if [[ -z "$@" ]]; then
 	exec supervisord --configuration "$IXC_DJANGO_DOCKER_DIR/etc/supervisord.conf"
 else
