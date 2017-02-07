@@ -12,6 +12,11 @@ DIR="${1:-$PROJECT_DIR/var}"
 
 mkdir -p "$DIR"
 
+if [[ $(python -c 'import django; print(django.get_version());') < 1.7 ]]; then
+	echo 'Always sync database, because Django version is less than 1.7.'
+	manage.py syncdb --noinput
+fi
+
 touch "$DIR/migrate.txt.md5"
 manage.py migrate --list > "$DIR/migrate.txt"
 
