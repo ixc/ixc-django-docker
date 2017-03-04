@@ -13,7 +13,7 @@ set -e
 export PROJECT_DIR=$(cd $(dirname "${BASH_SOURCE[0]}"); pwd -P)
 
 # Set location of virtualenv.
-export PROJECT_VENV_DIR="$PROJECT_DIR/var/go.sh-venv"
+export PROJECT_VENV_DIR="${VIRTUAL_ENV:-$PROJECT_DIR/var/go.sh-venv}"
 
 # Create virtualenv.
 if [[ ! -d "$PROJECT_VENV_DIR" ]]; then
