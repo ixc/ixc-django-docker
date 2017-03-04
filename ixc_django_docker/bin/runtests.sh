@@ -21,7 +21,7 @@ if [[ $(python -c 'import django; print(django.get_version());') < 1.7 ]]; then
 	echo 'Always sync database, because Django version is less than 1.7.'
 	manage.py syncdb --noinput
 fi
-manage.py migrate --noinput
+[[ -z "$QUICK" ]] && manage.py migrate --noinput
 
 # Only collect and compress static files when QUICK is not set or when it has
 # never been done before.
