@@ -22,7 +22,7 @@ fi
 
 # Install `ixc-django-docker` package.
 if [[ -z $("$PROJECT_VENV_DIR/bin/python" -m pip freeze | grep ixc-django-docker) ]]; then
-    "$PROJECT_VENV_DIR/bin/python" -m pip install -r ixc-django-docker
+    "$PROJECT_VENV_DIR/bin/python" -m pip install -e git+https://github.com/ixc/ixc-django-docker.git#egg=ixc-django-docker
 fi
 
 # Execute entrypoint and command.
