@@ -34,6 +34,7 @@ setuptools.setup(
         'ixc_django_docker/bin/setup-django.sh',
         'ixc_django_docker/bin/setup-git-secret.sh',
         'ixc_django_docker/bin/setup-postgres.sh',
+        'ixc_django_docker/bin/setup-tests.sh',
         'ixc_django_docker/bin/supervisor.sh',
         'ixc_django_docker/bin/transfer.sh',
         'ixc_django_docker/bin/waitlock.sh',
