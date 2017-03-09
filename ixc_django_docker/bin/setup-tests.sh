@@ -11,7 +11,7 @@ set -e
 
 export BASE_SETTINGS_MODULE=test
 export REUSE_DB=1
-export SRC_PGDATABASE="$PROJECT_DIR/test_initial_data.sql"
+export SRC_PGDATABASE="${SRC_PGDATABASE:-$PROJECT_DIR/test_initial_data.sql}"
 
 # Only drop existing database when QUICK is not set.
 [[ -z "$QUICK" ]] && export SETUP_POSTGRES_FORCE=1
