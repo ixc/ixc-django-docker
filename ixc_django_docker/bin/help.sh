@@ -88,6 +88,10 @@ Here is a list of frequently used commands you might want to run:
 
 		Drop and recreate the database if 'SETUP_POSTGRES_FORCE' is defined.
 
+	setup-tests.sh [COMMAND]
+		Configure environment, create and restore test database, apply Django
+		migrations, and execute a command.
+
 	supervisor.sh [OPTIONS] [ACTION [ARGS]]
 		With no arguments, start Supervisord. This is normally managed by
 		Docker, and is usually only used interactively when not using Docker.

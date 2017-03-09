@@ -28,6 +28,7 @@ frequently used scripts you might want to run:
     setup-django.sh [COMMAND]
     setup-git-secret.sh [COMMAND]
     setup-postgres.sh
+    setup-tests.sh [COMMAND]
     supervisor.sh [OPTIONS] [ACTION [ARGS]]
     transfer.sh <FILE>
     waitlock.sh <COMMAND>
