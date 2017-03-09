@@ -50,13 +50,12 @@ Here is a list of frequently used commands you might want to run:
 		Start the Django development server.
 
 	runtests.sh [ARGS]
-		Configure the environment and run the Django 'test' management command.
+		Configure environment, create and restore test database, apply Django
+		migrations, then run 'collectstatic', 'compress', and 'test' management
+		commands.
 
-		This will drop and recreate the test database and re-run the Django
-		'collectstatic' and 'compress' management commands for consistency.
-
-		Set 'QUICK=1' to reuse the test database and collected static and
-		compressed files.
+		Set 'QUICK=1' to reuse the existing test database and collected static
+		and compressed files.
 
 			# QUICK=1 runtests.sh
 
