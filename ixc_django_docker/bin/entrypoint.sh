@@ -68,20 +68,37 @@ else
 	export PATH="$PROJECT_VENV_DIR/bin:$PATH"
 fi
 
-# Set default base settings module.
-export BASE_SETTINGS_MODULE="${BASE_SETTINGS_MODULE:-develop}"
-
-# Get number of CPU cores, so we know how many processes to run.
-export CPU_CORES=$(python -c "import multiprocessing; print(multiprocessing.cpu_count());")
-
-# Set location of GPG home directory.
-export GNUPGHOME="$PROJECT_DIR/.gnupg"
-
 # Get absolute directory for the `ixc_django_docker` package.
 export IXC_DJANGO_DOCKER_DIR=$(python -c "import ixc_django_docker, os; print(os.path.dirname(ixc_django_docker.__file__));")
 
 # Add project and `ixc-django-docker` bin directories to PATH.
 export PATH="$PROJECT_DIR/bin:$IXC_DJANGO_DOCKER_DIR/bin:$PATH"
+
+if [[ -d "$PROJECT_DIR/.gitsecret" ]]; then
+	# Set location of GPG home directory.
+	export GNUPGHOME="$PROJECT_DIR/.gnupg"
+
+	# Decrypt files with git-secret.
+	setup-git-secret.sh || true  # Don't exit if we can't decrypt secrets
+fi
+
+# Decrypt files with transcrypt.
+if [[ -n "$TRANSCRYPT_PASSWORD" ]]; then
+	transcrypt -c "${TRANSCRYPT_CIPHER:-aes-256-cbc}" -p "$TRANSCRYPT_PASSWORD" -y || true
+fi
+
+# Source dotenv file.
+set -o allexport
+if [[ -f "$PROJECT_DIR/.env.${DOTENV:-local}" ]]; then
+	source "$PROJECT_DIR/.env.${DOTENV:-local}"
+fi
+set +o allexport
+
+# Set default base settings module.
+export BASE_SETTINGS_MODULE="${BASE_SETTINGS_MODULE:-develop}"
+
+# Get number of CPU cores, so we know how many processes to run.
+export CPU_CORES=$(python -c "import multiprocessing; print(multiprocessing.cpu_count());")
 
 # Configure Pip.
 export PIP_DISABLE_PIP_VERSION_CHECK=on
@@ -120,16 +137,6 @@ export PGUSER="${PGUSER:-$(whoami)}"
 
 # Get Redis host and port.
 export REDIS_ADDRESS="${REDIS_ADDRESS:-localhost:6379}"
-
-# Decrypt dotenv files.
-setup-git-secret.sh || true  # Don't exit if we can't decrypt secrets
-
-# Source dotenv file.
-set -o allexport
-if [[ -f "$PROJECT_DIR/.env.${DOTENV:-local}" ]]; then
-	source "$PROJECT_DIR/.env.${DOTENV:-local}"
-fi
-set +o allexport
 
 # Execute command.
 exec "${@:-bash.sh}"
