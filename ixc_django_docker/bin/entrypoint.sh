@@ -84,6 +84,7 @@ fi
 
 # Decrypt files with transcrypt.
 if [[ -n "$TRANSCRYPT_PASSWORD" ]]; then
+	git status  # See: https://github.com/elasticdog/transcrypt/issues/37
 	transcrypt -c "${TRANSCRYPT_CIPHER:-aes-256-cbc}" -p "$TRANSCRYPT_PASSWORD" -y || true
 fi
 
