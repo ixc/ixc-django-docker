@@ -84,7 +84,7 @@ fi
 
 # Decrypt files with transcrypt.
 if [[ -n "$TRANSCRYPT_PASSWORD" ]]; then
-	transcrypt -c "${TRANSCRYPT_CIPHER:-aes-256-cbc}" -p "$TRANSCRYPT_PASSWORD" -y || true
+	transcrypt -c "${TRANSCRYPT_CIPHER:-aes-256-cbc}" -p "$TRANSCRYPT_PASSWORD" -y
 fi
 
 # Source dotenv file.
