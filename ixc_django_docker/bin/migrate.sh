@@ -22,7 +22,15 @@ manage.py migrate --list > "$DIR/migrate.txt"
 
 if [[ ! -s "$DIR/migrate.txt.md5" ]] || ! md5sum --status -c "$DIR/migrate.txt.md5" > /dev/null 2>&1; then
 	echo 'Migrations are out of date.'
-	manage.py migrate --noinput
+
+	# Skip initial migration if all tables created by the initial migration
+	# already exist.
+	if [[ $(python -c 'import django; print(django.get_version());') < 1.7 ]]; then
+		manage.py migrate --noinput  # South has no `--fake-initial` option
+	else
+		manage.py migrate --fake-initial --noinput
+	fi
+
 	manage.py migrate --list > "$DIR/migrate.txt"
 	md5sum "$DIR/migrate.txt" > "$DIR/migrate.txt.md5"
 fi
