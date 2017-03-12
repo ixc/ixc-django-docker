@@ -6,4 +6,4 @@ EOF
 
 set -e
 
-exec celery --app="${CELERY_APP:-ixc_django_docker.celery}" flower "$@"
+exec celery --app="${CELERY_APP:-ixc_django_docker.celery}" flower --port=8080 "$@"
