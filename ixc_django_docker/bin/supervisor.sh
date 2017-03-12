@@ -8,11 +8,17 @@ EOF
 
 set -e
 
-if [[ -f "$PROJECT_DIR/etc/supervisord.conf" ]]; then
+# Render project or default programs config template.
+if [[ -f "$PROJECT_DIR/etc/supervisord.tmpl.conf" ]]; then
+	dockerize -template "$PROJECT_DIR/etc/supervisord.tmpl.conf:$PROJECT_DIR/etc/supervisord.conf"
 	export SUPERVISORD_INCLUDE="$PROJECT_DIR/etc/supervisord.conf"
 else
-	export SUPERVISORD_INCLUDE="supervisord.default.conf"
+	dockerize -template "$IXC_DJANGO_DOCKER_DIR/etc/supervisord.nginx-proxy.tmpl.conf:$IXC_DJANGO_DOCKER_DIR/etc/supervisord.nginx-proxy.conf"
+	export SUPERVISORD_INCLUDE="supervisord.nginx-proxy.conf"
 fi
+
+# Render supervisord config template.
+dockerize -template "$IXC_DJANGO_DOCKER_DIR/etc/supervisord.tmpl.conf:$IXC_DJANGO_DOCKER_DIR/etc/supervisord.conf"
 
 if [[ -z "$@" ]]; then
 	exec supervisord --configuration "$IXC_DJANGO_DOCKER_DIR/etc/supervisord.conf"
