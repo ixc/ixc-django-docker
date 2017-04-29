@@ -131,11 +131,6 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',  # Default
 )
 
-# Enable cross-subdomain cookies, only if `SITE_DOMAIN` is not a TLD.
-if '.' in SITE_DOMAIN:
-    CSRF_COOKIE_DOMAIN = LANGUAGE_COOKIE_DOMAIN = SESSION_COOKIE_DOMAIN = \
-        '.%s' % SITE_DOMAIN
-
 DEFAULT_FROM_EMAIL = SERVER_EMAIL = 'noreply@%s' % SITE_DOMAIN
 
 EMAIL_SUBJECT_PREFIX = '[%s] ' % PROJECT_SLUG
