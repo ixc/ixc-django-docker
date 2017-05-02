@@ -74,6 +74,14 @@ export IXC_DJANGO_DOCKER_DIR=$(python -c "import ixc_django_docker, os; print(os
 # Add project and `ixc-django-docker` bin directories to PATH.
 export PATH="$PROJECT_DIR/bin:$IXC_DJANGO_DOCKER_DIR/bin:$PATH"
 
+# Source dotenv file.
+set -o allexport
+if [[ -f "$PROJECT_DIR/.env.${DOTENV:-local}" ]]; then
+	source "$PROJECT_DIR/.env.${DOTENV:-local}"
+fi
+set +o allexport
+
+# Decrypt files with git secret.
 if [[ -d "$PROJECT_DIR/.gitsecret" ]]; then
 	# Set location of GPG home directory.
 	export GNUPGHOME="$PROJECT_DIR/.gnupg"
@@ -87,13 +95,6 @@ if [[ -n "$TRANSCRYPT_PASSWORD" ]]; then
 	git status  # See: https://github.com/elasticdog/transcrypt/issues/37
 	transcrypt -c "${TRANSCRYPT_CIPHER:-aes-256-cbc}" -p "$TRANSCRYPT_PASSWORD" -y || true
 fi
-
-# Source dotenv file.
-set -o allexport
-if [[ -f "$PROJECT_DIR/.env.${DOTENV:-local}" ]]; then
-	source "$PROJECT_DIR/.env.${DOTENV:-local}"
-fi
-set +o allexport
 
 # Set default base settings module.
 export BASE_SETTINGS_MODULE="${BASE_SETTINGS_MODULE:-develop}"
