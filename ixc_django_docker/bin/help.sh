@@ -102,7 +102,7 @@ Here is a list of frequently used commands you might want to run:
 	transfer.sh
 		Encrypt and upload a file to https://transfer.sh
 
-	waitlock.sh <COMMAND>
+	waitlock.py [-b] <COMMAND>
 		Serialize the execution of a command with a Redis lock.
 
 EOF

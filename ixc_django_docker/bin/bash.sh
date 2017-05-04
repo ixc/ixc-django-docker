@@ -31,7 +31,7 @@ frequently used scripts you might want to run:
     setup-tests.sh [COMMAND]
     supervisor.sh [OPTIONS] [ACTION [ARGS]]
     transfer.sh <FILE>
-    waitlock.sh <COMMAND>
+    waitlock.py [-b] <COMMAND>
 
 Most of these scripts are minimal wrappers that specify configuration and
 provide automation or integration with Docker and various 'ixc-django-docker'

@@ -20,7 +20,6 @@ setuptools.setup(
         'ixc_django_docker/bin/celery.sh',
         'ixc_django_docker/bin/celerybeat.sh',
         'ixc_django_docker/bin/celeryflower.sh',
-        'ixc_django_docker/bin/cronlock.sh',
         'ixc_django_docker/bin/entrypoint.sh',
         'ixc_django_docker/bin/gunicorn.sh',
         'ixc_django_docker/bin/help.sh',
@@ -37,8 +36,11 @@ setuptools.setup(
         'ixc_django_docker/bin/setup-tests.sh',
         'ixc_django_docker/bin/supervisor.sh',
         'ixc_django_docker/bin/transfer.sh',
-        'ixc_django_docker/bin/waitlock.sh',
+        'ixc_django_docker/bin/waitlock.py',
     ],
     include_package_data=True,
+    install_requires=[
+        'python-redis-lock',
+    ],
     setup_requires=['setuptools_scm'],
 )
