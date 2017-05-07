@@ -17,7 +17,7 @@ export PROJECT_VENV_DIR="${VIRTUAL_ENV:-$PROJECT_DIR/var/go.sh-venv}"
 
 # Create virtualenv.
 if [[ ! -d "$PROJECT_VENV_DIR" ]]; then
-    virtualenv "$PROJECT_VENV_DIR"
+	virtualenv "$PROJECT_VENV_DIR"
 fi
 
 # Install `ixc-django-docker` package.
