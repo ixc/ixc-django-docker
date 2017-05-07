@@ -8,7 +8,7 @@ EOF
 
 set -e
 
-if [[ -n "${DOCKER+1}" ]]; then
+if [[ -f /.dockerenv ]]; then
 	# When run via Docker, the only system site packages are the ones that we
 	# have installed, so we do not need a virtualenv for isolation. Using an
 	# isolated virtualenv would mean we have to reinstall everything during
