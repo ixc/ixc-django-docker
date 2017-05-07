@@ -42,6 +42,13 @@ if [[ -f /.dockerenv ]]; then
 	# For some reason pip allows us to install sdist packages, but not editable
 	# packages, when this directory doesn't exist. So make sure it does.
 	mkdir -p "$PYTHONUSERBASE/lib/python2.7/site-packages"
+
+	# On Docker for Mac, osxfs has performance issues when watching file system
+	# events. Detect Docker for Mac and export an environment variable that we
+	# can check to disable file system watches.
+	if mount | grep -q osxfs; then
+		export DOCKER_FOR_MAC=1
+	fi
 else
 	# When run via 'go.sh', we need a virtualenv for isolation from system site
 	# packages, and we also verify that required environment variables and
