@@ -56,11 +56,12 @@ if [[ -f /.dockerenv ]]; then
 		#
 		#     https://docs.docker.com/docker-for-mac/osxfs/#/performance-issues-solutions-and-roadmap
 		#
-		# You should avoid anything that watches the file system, e.g. the
-		# Django dev server with auto-reloading enabled.
+		# You should avoid anything that watches the file system. For example,
+		# the Django dev server with auto-reloading enabled.
 		#
-		# You can check the 'DOCKER_FOR_MAC=1' environment variable to disable
-		# any such features programmatically.
+		# You can check the 'DOCKER_FOR_MAC=1' environment variable to
+		# conditionally disable any such features. The 'runserver.sh' script
+		# already does this.
 		#
 		EOF
 		export DOCKER_FOR_MAC=1
