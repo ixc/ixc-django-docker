@@ -11,6 +11,8 @@ set -e
 
 cat <<EOF
 #
+# IMPORTANT
+#
 # Do not be alarmed if you see "Waiting to acquire lock for command:" for
 # several minutes at a time. It might seem like nothing is happening, but the
 # command is already running in another background container.
