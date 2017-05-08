@@ -119,8 +119,8 @@ export PROJECT_NAME=$(basename "$PROJECT_DIR")
 # Configure Python.
 export PYTHONDONTWRITEBYTECODE=1
 export PYTHONHASHSEED=random
-export PYTHONWARNINGS=ignore
 export PYTHONPATH="$PROJECT_DIR:$PYTHONPATH"
+export PYTHONWARNINGS=ignore
 
 # Derive 'PGDATABASE' from 'PROJECT_NAME' and git branch or
 # 'BASE_SETTINGS_MODULE', if not already defined.
