@@ -117,6 +117,7 @@ export PIP_SRC="$PROJECT_DIR/var/src"
 export PROJECT_NAME=$(basename "$PROJECT_DIR")
 
 # Configure Python.
+export PYTHONDONTWRITEBYTECODE=1
 export PYTHONHASHSEED=random
 export PYTHONWARNINGS=ignore
 export PYTHONPATH="$PROJECT_DIR:$PYTHONPATH"
