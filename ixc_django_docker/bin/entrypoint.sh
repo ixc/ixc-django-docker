@@ -47,6 +47,22 @@ if [[ -f /.dockerenv ]]; then
 	# events. Detect Docker for Mac and export an environment variable that we
 	# can check to disable file system watches.
 	if mount | grep -q osxfs; then
+		cat <<-EOF
+		#
+		# IMPORTANT
+		#
+		# You are running Docker for Mac with shared volumes, which has
+		# performance issues causing high CPU utilisation. See:
+		#
+		#     https://docs.docker.com/docker-for-mac/osxfs/#/performance-issues-solutions-and-roadmap
+		#
+		# You should avoid anything that watches the file system, e.g. the
+		# Django dev server with auto-reloading enabled.
+		#
+		# You can check the 'DOCKER_FOR_MAC=1' environment variable to disable
+		# any such features programmatically.
+		#
+		EOF
 		export DOCKER_FOR_MAC=1
 	fi
 else
