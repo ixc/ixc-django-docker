@@ -24,14 +24,11 @@ if [[ -f /.dockerenv ]]; then
 
 	# Make `pip install --user` the default, to ensure we always install into
 	# the userbase directory.
-	pip() {
-		if [[ "$1" == install ]]; then
-			shift
-			set -- install --user "$@"
-		fi
-		command pip "$@"
-	}
-	export -f pip
+	mkdir -p "$HOME/.config/pip"
+	cat <<-EOF > "$HOME/.config/pip/pip.conf"
+	[install]
+	user = true
+	EOF
 
 	# Set location of userbase directory.
 	export PYTHONUSERBASE="$PROJECT_DIR/var/docker-pythonuserbase"
