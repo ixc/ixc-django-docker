@@ -104,10 +104,7 @@ set +o allexport
 
 # Decrypt files with git secret.
 if [[ -d "$PROJECT_DIR/.gitsecret" ]]; then
-	# Set location of GPG home directory.
 	export GNUPGHOME="$PROJECT_DIR/.gnupg"
-
-	# Decrypt files with git-secret.
 	setup-git-secret.sh || true  # Don't exit if we can't decrypt secrets
 fi
 
