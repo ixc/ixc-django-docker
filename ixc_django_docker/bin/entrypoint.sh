@@ -95,12 +95,13 @@ export IXC_DJANGO_DOCKER_DIR=$(python -c "import ixc_django_docker, os; print(os
 # Add project and `ixc-django-docker` bin directories to PATH.
 export PATH="$PROJECT_DIR/bin:$IXC_DJANGO_DOCKER_DIR/bin:$PATH"
 
-# Source dotenv file.
-set -o allexport
-if [[ -f "$PROJECT_DIR/.env.${DOTENV:-local}" ]]; then
-	source "$PROJECT_DIR/.env.${DOTENV:-local}"
+# Source local dotenv file, which is not encrypted or version controlled, and
+# may contain the password needed to decrypt secret files.
+if [[ -f "$PROJECT_DIR/.env.local" ]]; then
+	set -o allexport
+	source "$PROJECT_DIR/.env.local"
+	set +o allexport
 fi
-set +o allexport
 
 # Decrypt files with git secret.
 if [[ -d "$PROJECT_DIR/.gitsecret" ]]; then
@@ -112,6 +113,13 @@ fi
 if [[ -n "$TRANSCRYPT_PASSWORD" ]]; then
 	git status  # See: https://github.com/elasticdog/transcrypt/issues/37
 	transcrypt -c "${TRANSCRYPT_CIPHER:-aes-256-cbc}" -p "$TRANSCRYPT_PASSWORD" -y || true  # Don't exit if we can't decrypt secrets
+fi
+
+# Source dotenv file.
+if [[ -f "$PROJECT_DIR/.env.${DOTENV}" ]]; then
+	set -o allexport
+	source "$PROJECT_DIR/.env.${DOTENV}"
+	set +o allexport
 fi
 
 # Set default base settings module.
