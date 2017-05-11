@@ -40,7 +40,6 @@ setuptools.setup(
     ],
     include_package_data=True,
     install_requires=[
-        'gevent',
         'python-redis-lock',
     ],
     setup_requires=['setuptools_scm'],
