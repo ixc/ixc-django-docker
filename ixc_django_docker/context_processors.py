@@ -9,7 +9,7 @@ def environment(request=None):
     context = {
     }
 
-    for key in settings.CONTEXT_PROCESSOR_SETTINGS:
+    for key in getattr(settings, 'CONTEXT_PROCESSOR_SETTINGS', []):
         context[key] = getattr(settings, key, None)
 
     try:
