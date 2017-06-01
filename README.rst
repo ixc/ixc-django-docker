@@ -120,7 +120,7 @@ To enable, set the ``GPG_PASSPHRASE`` environment variable in ``.env.local`` or
   individual hunks.
 
 
-## Transcrypt
+## Transcrypt (recommended)
 
 To enable, set the ``TRANSCRYPT_PASSWORD`` environment variable in
 ``.env.local`` or ``docker-cloud.*.yml`` files.
