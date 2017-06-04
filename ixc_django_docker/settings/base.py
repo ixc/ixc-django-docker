@@ -10,13 +10,11 @@ import string
 from django.core.urlresolvers import reverse_lazy
 from django.utils.text import slugify
 
-PROJECT_DIR = os.path.abspath(os.environ['PROJECT_DIR'])
-
 PROJECT_SLUG = re.sub(r'[^0-9A-Za-z]+', '-', slugify(
     unicode(os.path.basename(PROJECT_DIR)).lower()))
 
+REDIS_ADDRESS = os.environ.get('REDIS_ADDRESS', 'localhost:6379')
 SITE_DOMAIN = os.environ.get('SITE_DOMAIN', '%s.lvh.me' % PROJECT_SLUG)
-
 VAR_DIR = os.path.join(PROJECT_DIR, 'var')
 
 # DJANGO CHECKLIST ############################################################
@@ -30,8 +28,26 @@ VAR_DIR = os.path.join(PROJECT_DIR, 'var')
 # Get the secret key from the environment.
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-# Don't show detailed error pages when exceptions are raised.
-DEBUG = False
+# Get or generate and save random secret key.
+if not SECRET_KEY:
+    SECRET_FILE = os.path.join(VAR_DIR, 'secret.txt')
+    try:
+        # Get the secret key from the file system.
+        with open(SECRET_FILE) as f:
+            SECRET_KEY = f.read()
+    except IOError:
+        # Generate a random secret key.
+        SECRET_KEY = ''.join(random.choice(''.join([
+            string.ascii_letters,
+            string.digits,
+            string.punctuation,
+        ])) for i in range(50))
+        # Save the secret key to the file system.
+        with open(SECRET_FILE, 'w') as f:
+            f.write(SECRET_KEY)
+            os.chmod(SECRET_FILE, 0o400)  # Read only by owner
+
+DEBUG = False  # Don't show detailed error pages when exceptions are raised
 
 #
 # ENVIRONMENT SPECIFIC
@@ -41,25 +57,33 @@ DEBUG = False
 ALLOWED_HOSTS = ('.%s' % SITE_DOMAIN, )
 
 # Use dummy caching, so we don't get confused because a change is not taking
-# effect when we expect it to.
+# effect when we expect it to, and so we can execute management commands when
+# building a Docker image.
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+        'BACKEND': 'ixc_django_docker.redis_lock.DummyCache',
         'KEY_PREFIX': 'default-%s' % PROJECT_SLUG,
     }
 }
 
-# Use SQLite, because it has no external dependencies.
+# Always use PostgreSQL for consistency.
 DATABASES = {
     'default': {
         'ATOMIC_REQUESTS': True,
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(VAR_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('PGDATABASE', PROJECT_SLUG),
+        'HOST': os.environ.get('PGHOST'),
+        'PORT': os.environ.get('PGPORT'),
+        'USER': os.environ.get('PGUSER'),
+        'PASSWORD': os.environ.get('PGPASSWORD'),
     },
 }
 
+# Don't actually send emails, in case we are running locally with a copy of the
+# production database.
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# Get email credentials from the environment.
 EMAIL_HOST = os.environ.get('EMAIL_HOST')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
@@ -96,9 +120,10 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'logfile': {
-            'format': (
-                '%(asctime)s %(levelname)s (%(module)s.%(funcName)s) '
-                '%(message)s'),
+            'format': '%(asctime)s '
+                      '%(levelname)s '
+                      '%(module)s.%(funcName)s:%(lineno)d '
+                      '%(message)s',
         },
     },
     'filters': {
@@ -111,6 +136,14 @@ LOGGING = {
             'level': 'DEBUG',
             'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
+        },
+        'logfile': {
+            'level': 'DEBUG',
+            'class': 'cloghandler.ConcurrentRotatingFileHandler',
+            'filename': os.path.join(VAR_DIR, 'logs', '%s.log' % PROJECT_SLUG),
+            'maxBytes': 20 * 1024 * 1024,  # 20 MiB
+            'backupCount': 10,
+            'formatter': 'logfile',
         },
     },
     'loggers': {
