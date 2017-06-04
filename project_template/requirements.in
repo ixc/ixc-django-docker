@@ -1,1 +1,2 @@
-ixc-django-docker
+# -e ..[project_template]
+ixc-django-docker[project_template]
