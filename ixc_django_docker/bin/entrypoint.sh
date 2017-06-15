@@ -116,7 +116,7 @@ if [[ -n "$TRANSCRYPT_PASSWORD" ]]; then
 fi
 
 # Source dotenv file.
-if [[ -f "$PROJECT_DIR/.env.${DOTENV}" ]]; then
+if [[ -n "$DOTENV" ]]; then
 	set -o allexport
 	source "$PROJECT_DIR/.env.${DOTENV}"
 	set +o allexport
