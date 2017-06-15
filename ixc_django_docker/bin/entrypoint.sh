@@ -8,6 +8,11 @@ EOF
 
 set -e
 
+# Print the full commit hash so it can be logged during startup.
+if [[ -d .git ]]; then
+	echo "Git Commit: $(git rev-parse HEAD)"
+fi
+
 if [[ -f /.dockerenv ]]; then
 	# When run via Docker, the only system site packages are the ones that we
 	# have installed, so we do not need a virtualenv for isolation. Using an
