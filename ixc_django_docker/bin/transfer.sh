@@ -16,12 +16,12 @@ fi
 
 if tty -s; then
 	BASENAME=$(basename "$1" | sed -e 's/[^a-zA-Z0-9._-]/-/g')
-	URL=$(cat "$1" | xz | gpg -aco - | curl --progress-bar --upload-file - "https://transfer.sh/$BASENAME")
+	URL=$(pv "$1" | gzip | gpg -aco - | curl --progress-bar --upload-file - "https://transfer.sh/$BASENAME")
 else
-	URL=$(xz - | gpg -aco - | curl --progress-bar --upload-file - "https://transfer.sh/$1")
+	URL=$(pv - | gzip | gpg -aco - | curl --progress-bar --upload-file - "https://transfer.sh/$1")
 fi
 
 cat <<EOF
 To download:
-	curl --progress-bar $URL | gpg -o - | unxz > $BASENAME
+	curl --progress-bar $URL | gpg -o - | gunzip > $BASENAME
 EOF
