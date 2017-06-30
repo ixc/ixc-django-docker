@@ -111,6 +111,7 @@ fi
 # Decrypt files with git secret.
 if [[ -d "$PROJECT_DIR/.gitsecret" ]]; then
 	export GNUPGHOME="$PROJECT_DIR/.gnupg"
+	export SECRETS_GPG_COMMAND=gpg2
 	setup-git-secret.sh || true  # Don't exit if we can't decrypt secrets
 fi
 
