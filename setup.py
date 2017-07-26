@@ -28,6 +28,7 @@ setuptools.setup(
         'ixc_django_docker/bin/nginx.sh',
         'ixc_django_docker/bin/npm-install.sh',
         'ixc_django_docker/bin/pip-install.sh',
+        'ixc_django_docker/bin/pydevd.sh',
         'ixc_django_docker/bin/runserver.sh',
         'ixc_django_docker/bin/runtests.sh',
         'ixc_django_docker/bin/setup-django.sh',
@@ -40,6 +41,7 @@ setuptools.setup(
     ],
     include_package_data=True,
     install_requires=[
+        'pydevd',
         'python-redis-lock',
     ],
     setup_requires=['setuptools_scm'],

@@ -23,6 +23,7 @@ frequently used scripts you might want to run:
     nginx.sh
     npm-install.sh <DIR>
     pip-install.sh <DIR>
+    pydevd.sh <COMMAND>
     runserver.sh [ARGS]
     runtests.sh [ARGS]
     setup-django.sh [COMMAND]
