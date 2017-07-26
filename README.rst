@@ -35,9 +35,9 @@ Remote debug server with `pydevd` (e.g. PyCharm)
 * Add a `Python Remote Debug` run configuration to PyCharm with the following
   options:
 
-    * Name: `pydevd`
-    * Local host name: `localhost`
-    * Port: `5678`
+  * Name: `pydevd`
+  * Local host name: `localhost`
+  * Port: `5678`
 
 * Select the `pydevd` configuration and click the `Debug` icon (`^D`) to start
   the debug server.
