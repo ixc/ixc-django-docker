@@ -9,6 +9,7 @@ EOF
 set -e
 
 DIR="${1:-$PWD}"
+KEY="bower-install.sh:$DIR"
 
 mkdir -p "$DIR"
 cd "$DIR"
@@ -24,14 +25,14 @@ if [[ ! -s bower.json ]]; then
 EOF
 fi
 
-touch bower.json.md5
+MD5="$(md5sum bower.json)"
 
-if [[ ! -s bower.json.md5 ]] || ! md5sum --status -c bower.json.md5 > /dev/null 2>&1; then
+if [[ "$MD5" != "$(redis-cli get '$KEY')" ]]; then
 	echo "Bower components in '$DIR' directory are out of date."
 	if [[ -d bower_components ]]; then
 		echo 'Removing old Bower components directory.'
 		rm -rf bower_components
 	fi
 	bower install --allow-root
-	md5sum bower.json > bower.json.md5
+	echo "$MD5" | redis-cli -x set "$KEY"
 fi

@@ -9,6 +9,7 @@ EOF
 set -e
 
 DIR="${1:-$PROJECT_DIR/var}"
+KEY="migrate.sh:$DIR"
 
 mkdir -p "$DIR"
 
@@ -17,10 +18,9 @@ if [[ $(python -c 'import django; print(django.get_version());') < 1.7 ]]; then
 	manage.py syncdb --noinput
 fi
 
-touch "$DIR/migrate.txt.md5"
-manage.py migrate --list > "$DIR/migrate.txt"
+MIGRATE_LIST=$(manage.py migrate --list)
 
-if [[ ! -s "$DIR/migrate.txt.md5" ]] || ! md5sum --status -c "$DIR/migrate.txt.md5" > /dev/null 2>&1; then
+if [[ "$MIGRATE_LIST" != "$(redis-cli get '$KEY')" ]]; then
 	echo 'Migrations are out of date.'
 
 	# Skip initial migration if all tables created by the initial migration
@@ -31,6 +31,5 @@ if [[ ! -s "$DIR/migrate.txt.md5" ]] || ! md5sum --status -c "$DIR/migrate.txt.m
 		manage.py migrate --fake-initial --noinput
 	fi
 
-	manage.py migrate --list > "$DIR/migrate.txt"
-	md5sum "$DIR/migrate.txt" > "$DIR/migrate.txt.md5"
+	echo "$MIGRATE_LIST" | redis-cli -x set "$KEY"
 fi
