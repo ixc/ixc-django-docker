@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 REDIS_HOST, REDIS_PORT = \
     os.environ.get('REDIS_ADDRESS', 'localhost:6379').split(':')
 
-TIMEOUT_SECS = 60 * 60  # 1 hour
+DEFAULT_EXPIRE_TIMEOUT_SECS = None
 
 ACTION_CHOICES = ['set', 'match', 'get', 'delete']
 
@@ -86,10 +86,10 @@ def main():
     )
     parser.add_argument(
         '--expire-secs',
-        default=TIMEOUT_SECS,
+        default=DEFAULT_EXPIRE_TIMEOUT_SECS,
         help=(
             'Expiry timeout in seconds for cached values (default: %s)'
-            % TIMEOUT_SECS
+            % DEFAULT_EXPIRE_TIMEOUT_SECS
         ),
     )
     parser.add_argument(
