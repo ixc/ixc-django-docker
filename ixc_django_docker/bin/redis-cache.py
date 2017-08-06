@@ -122,7 +122,7 @@ def main():
                 " by setting the [-x] option for get actions"
             )
 
-    conn = redis.Redis(
+    conn = redis.StrictRedis(
         host=args.redis_host, port=args.redis_port,
     )
 
