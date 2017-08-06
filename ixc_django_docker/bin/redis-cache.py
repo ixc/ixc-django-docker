@@ -17,7 +17,7 @@ REDIS_HOST, REDIS_PORT = \
 
 TIMEOUT_SECS = 60 * 60  # 1 hour
 
-ACTION_CHOICES = ['set', 'set-and-match', 'match', 'get']
+ACTION_CHOICES = ['set', 'match', 'get']
 
 
 def fault(parser, message=None):
@@ -56,11 +56,6 @@ def main():
             "'match': return ERRORLEVEL 0 if Redis has a value for\n"
             "       <key> matching the given <value> argument or STDIN,\n"
             "       or ERRORLEVEL 100 if there is no match.\n"
-            "\n"
-            "'set-and-match': return ERRORLEVEL 0 if Redis has a value for\n"
-            "       <key> matching the given <value> argument or STDIN,\n"
-            "       or ERRORLEVEL 100 if there is no match.\n"
-            "       Also 'set' the given value in Redis either way."
             "\n"
         ),
     )
@@ -136,15 +131,11 @@ def main():
             sys.exit(100)
         else:
             sys.stdout.write(cached_data + "\n")
-    elif args.action in ('match', 'set-and-match'):
+    elif args.action == 'match':
         # Read cached data
         cached_data = redis_get(conn, args.key)
         # Does cached data match input data?
-        is_match = cached_data == input_data
-        if args.action == 'set-and-match':
-            # Set/update the value in Redis either way
-            redis_set(conn, args.key, input_data, args.expire_secs)
-        if is_match:
+        if cached_data == input_data:
             return
         else:
             sys.exit(100)
