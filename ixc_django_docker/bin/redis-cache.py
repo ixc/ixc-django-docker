@@ -17,7 +17,7 @@ REDIS_HOST, REDIS_PORT = \
 
 TIMEOUT_SECS = 60 * 60  # 1 hour
 
-ACTION_CHOICES = ['set', 'match', 'get']
+ACTION_CHOICES = ['set', 'match', 'get', 'delete']
 
 
 def fault(parser, message=None):
@@ -48,10 +48,13 @@ def main():
             "Action to perform:\n"
             "\n"
             "'set': set Redis <key> to the given <value> argument or data\n"
-            "       read from STDIN if the [-x] option is set\n"
+            "       read from STDIN if the [-x] option is set.\n"
             "\n"
             "'get': echo value in Redis for <key> to STDOUT.\n"
-            "       Returns ERRORLEVEL 100 if there is no such key in Redis\n"
+            "       Returns ERRORLEVEL 100 if there is no such key in Redis.\n"
+            "\n"
+            "'delete': delete <key> value from Redis. The <key> value does\n"
+            "       not need to exist.\n"
             "\n"
             "'match': return ERRORLEVEL 0 if Redis has a value for\n"
             "       <key> matching the given <value> argument or STDIN,\n"
@@ -68,7 +71,7 @@ def main():
         nargs='?',
         help=(
             'Value to set in cache, valid only for actions: %s'
-            % ', '.join(ACTION_CHOICES[:-1])
+            % ', '.join(ACTION_CHOICES[:-2])
         )
     )
     parser.add_argument(
@@ -100,7 +103,7 @@ def main():
 
     # Read input data from <value> argument or STDIN as requested, and
     # sanity-check argument values and combinations
-    if args.action in ACTION_CHOICES[:-1]:  # Set actions
+    if args.action in ACTION_CHOICES[:-2]:  # Set actions
         if args.read_from_stdin:
             input_data = sys.stdin.read()
         elif not args.value:
@@ -111,7 +114,7 @@ def main():
             )
         else:
             input_data = args.value
-    else:  # Get action
+    else:  # Get/delete actions
         if args.value or args.read_from_stdin:
             fault(
                 parser,
@@ -131,6 +134,8 @@ def main():
             sys.exit(100)
         else:
             sys.stdout.write(cached_data + "\n")
+    elif args.action == 'delete':
+        conn.delete(args.key)
     elif args.action == 'match':
         # Read cached data
         cached_data = redis_get(conn, args.key)
