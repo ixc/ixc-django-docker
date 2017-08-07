@@ -21,7 +21,7 @@ manage.py migrate --list > "$DIR/migrate.txt"
 
 # Is local listing of migrations the same as one cached in Redis
 # (i.e. as has already been completed and cached by another server instance)?
-if ! redis-cache.py -x match ixc-django-docker:migrate-list < "$DIR/migrate.txt" > /dev/null 2>&1; then
+if ! redis-cache.py -v -x match ixc-django-docker:migrate-list < "$DIR/migrate.txt"; then
 	echo 'Migrations are out of date.'
 
 	# Skip initial migration if all tables created by the initial migration
@@ -35,5 +35,5 @@ if ! redis-cache.py -x match ixc-django-docker:migrate-list < "$DIR/migrate.txt"
 	manage.py migrate --list > "$DIR/migrate.txt"
 
 	# Cache listing of up-to-date migrations
-	redis-cache.py -x set ixc-django-docker:migrate-list < "$DIR/migrate.txt"
+	redis-cache.py -vv -x set ixc-django-docker:migrate-list < "$DIR/migrate.txt"
 fi
