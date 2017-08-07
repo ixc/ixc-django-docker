@@ -17,10 +17,11 @@ if [[ $(python -c 'import django; print(django.get_version());') < 1.7 ]]; then
 	manage.py syncdb --noinput
 fi
 
-touch "$DIR/migrate.txt.md5"
 manage.py migrate --list > "$DIR/migrate.txt"
 
-if [[ ! -s "$DIR/migrate.txt.md5" ]] || ! md5sum --status -c "$DIR/migrate.txt.md5" > /dev/null 2>&1; then
+# Is local listing of migrations the same as one cached in Redis
+# (i.e. as has already been completed and cached by another server instance)?
+if ! redis-cache.py -v -x match ixc-django-docker:migrate-list < "$DIR/migrate.txt"; then
 	echo 'Migrations are out of date.'
 
 	# Skip initial migration if all tables created by the initial migration
@@ -32,5 +33,7 @@ if [[ ! -s "$DIR/migrate.txt.md5" ]] || ! md5sum --status -c "$DIR/migrate.txt.m
 	fi
 
 	manage.py migrate --list > "$DIR/migrate.txt"
-	md5sum "$DIR/migrate.txt" > "$DIR/migrate.txt.md5"
+
+	# Cache listing of up-to-date migrations
+	redis-cache.py -vv -x set ixc-django-docker:migrate-list < "$DIR/migrate.txt"
 fi
