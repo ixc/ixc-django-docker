@@ -44,6 +44,30 @@ def main():
         formatter_class=argparse.RawTextHelpFormatter,
     )
     parser.add_argument(
+        '-q',
+        '--quiet',
+        action='store_true',
+        help='Silence standard output',
+    )
+    parser.add_argument(
+        '-v',
+        '--verbose',
+        action='count',
+        default=0,
+        dest='verbosity',
+        help='Increase verbosity for each occurrence',
+    )
+    parser.add_argument(
+        '--redis-host',
+        default=REDIS_HOST,
+        help='Host of redis server (default: %s)' % REDIS_HOST,
+    )
+    parser.add_argument(
+        '--redis-port',
+        default=REDIS_PORT,
+        help='Port of redis server (default: %s)' % REDIS_PORT,
+    )
+    parser.add_argument(
         'action',
         choices=ACTION_CHOICES,
         help=(
@@ -70,24 +94,6 @@ def main():
         help='Cache key name',
     )
     parser.add_argument(
-        'value',
-        nargs='?',
-        help=(
-            'Value to set in cache, valid only for actions: %s'
-            % ', '.join(ACTION_CHOICES[:-2])
-        )
-    )
-    parser.add_argument(
-        '--redis-host',
-        default=REDIS_HOST,
-        help='Host of redis server (default: %s)' % REDIS_HOST,
-    )
-    parser.add_argument(
-        '--redis-port',
-        default=REDIS_PORT,
-        help='Port of redis server (default: %s)' % REDIS_PORT,
-    )
-    parser.add_argument(
         '--expire-secs',
         default=DEFAULT_EXPIRE_TIMEOUT_SECS,
         help=(
@@ -95,26 +101,21 @@ def main():
             % DEFAULT_EXPIRE_TIMEOUT_SECS
         ),
     )
-    parser.add_argument(
+    input_group = parser.add_mutually_exclusive_group()
+    input_group.add_argument(
+        'value',
+        nargs='?',
+        help=(
+            'Value to set in cache, valid only for actions: %s'
+            % ', '.join(ACTION_CHOICES[:-2])
+        )
+    )
+    input_group.add_argument(
         '-x',
         dest='read_from_stdin',
         action='store_true',
         default=False,
         help='Read last argument from STDIN',
-    )
-    parser.add_argument(
-        '-q',
-        '--quiet',
-        action='store_true',
-        help='Silence standard output',
-    )
-    parser.add_argument(
-        '-v',
-        '--verbose',
-        action='count',
-        default=0,
-        dest='verbosity',
-        help='Increase verbosity for each occurrence',
     )
     args = parser.parse_args()
 
@@ -138,17 +139,17 @@ def main():
     # Read input data from <value> argument or STDIN as requested, and
     # sanity-check argument values and combinations
     if args.action in ACTION_CHOICES[:-2]:  # Set actions
-        if args.read_from_stdin:
+        if args.value:
+            input_data = args.value
+        elif args.read_from_stdin:
             input_data = sys.stdin.read()
-        elif not args.value:
+        else:
             fault(
                 parser,
                 logger,
-                "You must provide <value> as a third argument or read from"
-                " STDIN by setting the [-x] option"
+                "You must provide one of <value> as a third argument or"
+                " [-x] to read from STDIN"
             )
-        else:
-            input_data = args.value
     else:  # Get/delete actions
         if args.value or args.read_from_stdin:
             fault(
