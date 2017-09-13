@@ -23,7 +23,7 @@ fi
 if [[ DJANGO_VERSION_LESS_THAN_1_10 == 'True' ]]; then
     manage.py migrate --list > "$DIR/migrate.txt"
 else
-    manage.py showmigrations
+    manage.py showmigrations > "$DIR/migrate.txt"
 fi
 
 # Is local listing of migrations the same as one cached in Redis
@@ -42,7 +42,7 @@ if ! redis-cache.py -v -x match ixc-django-docker:migrate-list < "$DIR/migrate.t
     if [[ DJANGO_VERSION_LESS_THAN_1_10 == 'True' ]]; then
         manage.py migrate --list > "$DIR/migrate.txt"
     else
-        manage.py showmigrations
+        manage.py showmigrations > "$DIR/migrate.txt"
     fi
 
 	# Cache listing of up-to-date migrations
