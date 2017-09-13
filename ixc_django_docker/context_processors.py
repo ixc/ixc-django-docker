@@ -6,11 +6,11 @@ def environment(request=None):
     Return any settings listed in ``CONTEXT_PROCESSOR_SETTINGS`` as context,
     plus any additional context returned by `project.context_processors.environment`.
     """
-    context = {
-    }
+    context = {}
 
-    for key in settings.CONTEXT_PROCESSOR_SETTINGS:
-        context[key] = getattr(settings, key, None)
+    if hasattr(settings, 'CONTEXT_PROCESSOR_SETTINGS'):
+        for key in settings.CONTEXT_PROCESSOR_SETTINGS:
+            context[key] = getattr(settings, key, None)
 
     try:
         from project.context_processors import environment
