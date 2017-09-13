@@ -12,12 +12,19 @@ DIR="${1:-$PROJECT_DIR/var}"
 
 mkdir -p "$DIR"
 
-if [[ $(python -c 'import django; print(django.get_version());') < 1.7 ]]; then
+DJANGO_VERSION_LESS_THAN_1_7=$(python -c 'import django; print(django.VERSION < (1, 7))')
+DJANGO_VERSION_LESS_THAN_1_10=$(python -c 'import django; print(django.VERSION < (1, 10))')
+
+if [[ DJANGO_VERSION_LESS_THAN_1_7 == 'True' ]]; then
 	echo 'Always sync database, because Django version is less than 1.7.'
 	manage.py syncdb --noinput
 fi
 
-manage.py migrate --list > "$DIR/migrate.txt"
+if [[ DJANGO_VERSION_LESS_THAN_1_10 == 'True' ]]; then
+    manage.py migrate --list > "$DIR/migrate.txt"
+else
+    manage.py showmigrations
+fi
 
 # Is local listing of migrations the same as one cached in Redis
 # (i.e. as has already been completed and cached by another server instance)?
@@ -32,7 +39,11 @@ if ! redis-cache.py -v -x match ixc-django-docker:migrate-list < "$DIR/migrate.t
 		manage.py migrate --fake-initial --noinput
 	fi
 
-	manage.py migrate --list > "$DIR/migrate.txt"
+    if [[ DJANGO_VERSION_LESS_THAN_1_10 == 'True' ]]; then
+        manage.py migrate --list > "$DIR/migrate.txt"
+    else
+        manage.py showmigrations
+    fi
 
 	# Cache listing of up-to-date migrations
 	redis-cache.py -vv -x set ixc-django-docker:migrate-list < "$DIR/migrate.txt"
