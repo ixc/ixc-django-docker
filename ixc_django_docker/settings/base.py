@@ -195,6 +195,8 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
+import django
+
 TEMPLATES = (
     # Django templates backend.
     {
@@ -211,15 +213,22 @@ TEMPLATES = (
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
 
-                # Extra.
-                'django.core.context_processors.i18n',
-                'django.core.context_processors.media',
-                'django.core.context_processors.static',
-                'django.core.context_processors.tz',
-
                 # Project.
                 'ixc_django_docker.context_processors.environment',
-            ],
+            ] + (
+                # Extra.
+                [
+                    'django.core.context_processors.i18n',
+                    'django.core.context_processors.media',
+                    'django.core.context_processors.static',
+                    'django.core.context_processors.tz',
+                ] if django.VERSION < (1, 8) else [
+                    'django.template.context_processors.i18n',
+                    'django.template.context_processors.media',
+                    'django.template.context_processors.static',
+                    'django.template.context_processors.tz',
+                ]
+            ),
             'loaders': [
                 # Default.
                 'django.template.loaders.filesystem.Loader',
