@@ -15,9 +15,15 @@ try:
     try:
         # Local project settings.
         from project_settings_local import *
-    except ImportError:
+    except ImportError, err:
+        # Re-raise import error if it's inside, not just, the top-level module
+        if not unicode(err).endswith('project_settings_local'):
+            raise
         # Project settings.
         from project_settings import *
-except ImportError:
+except ImportError, err:
+    # Re-raise import error if it's inside, not just, the top-level module
+    if not unicode(err).endswith('project_settings'):
+        raise
     # Calculated settings.
     from .calculated import *
