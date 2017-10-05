@@ -49,14 +49,28 @@ CACHES = {
     }
 }
 
-# Use SQLite, because it has no external dependencies.
-DATABASES = {
-    'default': {
-        'ATOMIC_REQUESTS': True,
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(VAR_DIR, 'db.sqlite3'),
-    },
-}
+if os.environ.get('PGDATABASE'):
+    # Use PostgreSQL database settings if they are provided in environment
+    DATABASES = {
+        'default': {
+            'ATOMIC_REQUESTS': True,
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('PGDATABASE'),
+            'USER': os.environ.get('PGUSER'),
+            'PASSWORD': os.environ.get('PGPASSWORD'),
+            'HOST': os.environ.get('PGHOST'),
+            'PORT': os.environ.get('PGPORT'),
+        },
+    }
+else:
+    # Use SQLite, because it has no external dependencies.
+    DATABASES = {
+        'default': {
+            'ATOMIC_REQUESTS': True,
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(VAR_DIR, 'db.sqlite3'),
+        },
+    }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
