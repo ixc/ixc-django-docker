@@ -47,7 +47,7 @@ Here is a list of frequently used commands you might want to run:
 		run.
 
 	pydevd.sh <COMMAND>
-		Enable a `pydevd` trace found in the `ixc_django_docker` package and
+		Enable a 'pydevd' trace found in the 'ixc_django_docker' package and
 		execute a command.
 
 		You can reconfigure the host and port for the remote debug server with
