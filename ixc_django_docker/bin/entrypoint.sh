@@ -82,7 +82,7 @@ else
 	done
 
 	# Fail loudly when required programs are missing.
-	for cmd in md5sum nginx npm psql python pv redis-server; do # elasticsearch
+	for cmd in md5sum nginx npm psql python pv redis-server git-secret gpg2; do # elasticsearch
 		hash $cmd 2>/dev/null || {
 			>&2 echo "ERROR: Missing program: $cmd"
 			>&2 echo 'See: https://github.com/ic-labs/django-icekit/blob/develop/docs/intro/manual-setup.md'
