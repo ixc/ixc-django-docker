@@ -20,7 +20,7 @@ if [[ -z "$WITHOUT_COMPRESSOR" ]]; then
 fi
 
 # Run tests, collecting coverage data and generate a coverage report.
-if [[ -z "$WITHOUT_COMPRESSOR" ]]; then
+if [[ -z "$WITHOUT_COVERAGE" ]]; then
     coverage run "$IXC_DJANGO_DOCKER_DIR/bin/manage.py" test --noinput --verbosity=2 "${@:-.}"
     coverage report
 
@@ -28,4 +28,6 @@ if [[ -z "$WITHOUT_COMPRESSOR" ]]; then
     if [[ -n "$TRAVIS" ]]; then
         coveralls || true  # Don't exit if we can't submit data
     fi
+else
+    "$IXC_DJANGO_DOCKER_DIR/bin/manage.py" test --noinput --verbosity=2 "${@:-.}"
 fi
