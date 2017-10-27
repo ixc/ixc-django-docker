@@ -10,6 +10,10 @@ import string
 from django.core.urlresolvers import reverse_lazy
 from django.utils.text import slugify
 
+# Get project directory from environment. This MUST already be defined.
+# Copied from __init__.py I'm not sure why it's needed here as well
+PROJECT_DIR = os.environ['PROJECT_DIR']
+
 PROJECT_SLUG = re.sub(r'[^0-9A-Za-z]+', '-', slugify(
     unicode(os.path.basename(PROJECT_DIR)).lower()))
 
