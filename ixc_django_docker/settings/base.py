@@ -132,6 +132,11 @@ CONN_MAX_AGE = 60  # Default: 0
 # ERROR REPORTING
 #
 
+# Create logfile directory if necessary
+LOGFILE_DIR = os.path.join(VAR_DIR, 'logs')
+if not os.path.exists(LOGFILE_DIR):
+    os.mkdir(LOGFILE_DIR)
+
 # Add a root logger and change level for console handler to `DEBUG`.
 LOGGING = {
     'version': 1,
@@ -158,7 +163,7 @@ LOGGING = {
         'logfile': {
             'level': 'DEBUG',
             'class': 'cloghandler.ConcurrentRotatingFileHandler',
-            'filename': os.path.join(VAR_DIR, 'logs', '%s.log' % PROJECT_SLUG),
+            'filename': os.path.join(LOGFILE_DIR, '%s.log' % PROJECT_SLUG),
             'maxBytes': 20 * 1024 * 1024,  # 20 MiB
             'backupCount': 10,
             'formatter': 'logfile',
