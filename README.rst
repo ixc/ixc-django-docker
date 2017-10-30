@@ -205,4 +205,3 @@ How to dockerize an existing project
 * Add `.env.{FOO}` and `docker-cloud.{FOO}.yml` for each environment. These may
   contain secrets, and must not be committed to the repository unencrypted. See
   [About secrets], above.
->>>>>>> dockerize-legacy-projects
