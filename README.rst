@@ -60,7 +60,9 @@ module:
 
   * ``test`` - install additional test apps, etc.
 
-Settings for old projects typically need to address the following:
+
+Settings for old projects typically need to address these issues
+----------------------------------------------------------------
 
 * Compress CSS/JS offline, so each container in a multi-node configuration has
   immediate access to all compressed assets.
@@ -147,10 +149,7 @@ How to dockerize an existing project
 
 * Install ``pip-tools``::
 
-    $ pip install 'git+https://github.com/blueyed/pip-tools.git@no-download_dir-for-editable#egg=pip-tools'
-
-  This fork works with editable installs that use ``setuptools_scm``, which many
-  of our packages do. See: https://github.com/jazzband/pip-tools/pull/385
+    $ pip install pip-tools
 
 * Run ``pip-compile -v``, resolving any conflicts that may arise.
 
