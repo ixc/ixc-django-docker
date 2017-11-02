@@ -41,13 +41,13 @@ setuptools.setup(
     ],
     include_package_data=True,
     install_requires=[
+        'ConcurrentLogHandler',
         'django-split-settings',
         'Django',
     ],
     extras_require={
         'project_template': [
             'celery[django]',
-            'ConcurrentLogHandler',
             'django-celery',
             'django-celery-email',
             'django-compressor',
