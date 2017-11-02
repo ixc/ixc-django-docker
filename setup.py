@@ -41,6 +41,7 @@ setuptools.setup(
     ],
     include_package_data=True,
     install_requires=[
+        'django-split-settings',
         'Django',
     ],
     extras_require={
@@ -55,7 +56,6 @@ setuptools.setup(
             'django-master-password',
             'django-nose',
             'django-post-office',
-            'django-split-settings',
             'django-storages',
             'ixc-django-compressor',
             'ixc-whitenoise',
