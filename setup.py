@@ -47,6 +47,7 @@ setuptools.setup(
         'django-split-settings',
         'django-storages',
         'Django',
+        'jinja2',
         'ixc-django-compressor',
         'ixc-whitenoise',
         'logentries',
