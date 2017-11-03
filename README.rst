@@ -169,7 +169,7 @@ How to dockerize an existing project
 * Use the AWS CLI to sync the production media directory to a new S3 bucket:
 
     $ pip install awscli
-    $ AWS_ACCESS_KEY_ID='' AWS_SECRET_ACCESS_KEY='' AWS_DEFAULT_REGION='us-west-2' aws s3 sync {path/to/media} s3://{bucket-name}/media/ > aws-s3-sync.log & tail -f aws-s3-sync.log
+    $ AWS_ACCESS_KEY_ID='' AWS_SECRET_ACCESS_KEY='' AWS_DEFAULT_REGION='us-west-2' aws s3 sync {path/to/media} s3://{bucket-name}/media/ > aws-s3-sync.log 2>&1 & tail -f aws-s3-sync.log
 
 * Update project settings. See [About settings modules], above.
 
