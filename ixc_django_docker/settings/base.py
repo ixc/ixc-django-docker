@@ -17,6 +17,12 @@ REDIS_ADDRESS = os.environ.get('REDIS_ADDRESS', 'localhost:6379')
 SITE_DOMAIN = os.environ.get('SITE_DOMAIN', '%s.lvh.me' % PROJECT_SLUG)
 VAR_DIR = os.path.join(PROJECT_DIR, 'var')
 
+# Create missing runtime directories.
+try:
+    os.makedirs(VIR_DIR)
+except OSError:
+    pass
+
 # DJANGO CHECKLIST ############################################################
 
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
