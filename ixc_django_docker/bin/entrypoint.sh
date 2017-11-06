@@ -102,9 +102,6 @@ if [[ -f "$PROJECT_DIR/.env.local" ]]; then
 	set +o allexport
 fi
 
-# Set default base settings module.
-export BASE_SETTINGS_MODULE="${BASE_SETTINGS_MODULE:-develop}"
-
 # Get number of CPU cores, so we know how many processes to run.
 export CPU_CORES=$(python -c "import multiprocessing; print(multiprocessing.cpu_count());")
 
@@ -120,8 +117,8 @@ export PYTHONHASHSEED=random
 export PYTHONWARNINGS=ignore
 export PYTHONPATH="$PROJECT_DIR:$PYTHONPATH"
 
-# Derive 'PGDATABASE' from 'PROJECT_NAME' and git branch or
-# 'BASE_SETTINGS_MODULE', if not already defined.
+# Derive 'PGDATABASE' from 'PROJECT_NAME' and git branch or 'DOTENV', if not
+# already defined.
 if [[ -z "$PGDATABASE" ]]; then
 	if [[ -d .git ]]; then
 		export PGDATABASE="${PROJECT_NAME}_$(git rev-parse --abbrev-ref HEAD | sed 's/[^0-9A-Za-z]/_/g')"
@@ -129,9 +126,6 @@ if [[ -z "$PGDATABASE" ]]; then
 	elif [[ -n "$DOTENV" ]]; then
 		export PGDATABASE="${PROJECT_NAME}_$DOTENV"
 		echo "Derived database name '$PGDATABASE' from 'PROJECT_NAME' and 'DOTENV' environment variables."
-	elif [[ -n "$BASE_SETTINGS_MODULE" ]]; then
-		export PGDATABASE="${PROJECT_NAME}_$BASE_SETTINGS_MODULE"
-		echo "Derived database name '$PGDATABASE' from 'PROJECT_NAME' and 'BASE_SETTINGS_MODULE' environment variables."
 	else
 		export PGDATABASE="$PROJECT_NAME"
 		echo "Derived database name '$PGDATABASE' from 'PROJECT_NAME' environment variable."
