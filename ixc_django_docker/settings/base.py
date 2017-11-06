@@ -19,7 +19,7 @@ VAR_DIR = os.path.join(PROJECT_DIR, 'var')
 
 # Create missing runtime directories.
 try:
-    os.makedirs(VIR_DIR)
+    os.makedirs(VAR_DIR)
 except OSError:
     pass
 
