@@ -74,14 +74,6 @@ export IXC_DJANGO_DOCKER_DIR=$(python -c "import ixc_django_docker, os; print(os
 # Add project and `ixc-django-docker` bin directories to PATH.
 export PATH="$PROJECT_DIR/bin:$IXC_DJANGO_DOCKER_DIR/bin:$PATH"
 
-# Source local dotenv file first, because it probably includes the password
-# needed to decrypt other dotenv files.
-set -o allexport
-if [[ -f "$PROJECT_DIR/.env.local" ]]; then
-	source "$PROJECT_DIR/.env.local"
-fi
-set +o allexport
-
 if [[ -d "$PROJECT_DIR/.gitsecret" ]]; then
 	# Set location of GPG home directory.
 	export GNUPGHOME="$PROJECT_DIR/.gnupg"
@@ -97,18 +89,18 @@ if [[ -n "$TRANSCRYPT_PASSWORD" ]]; then
 fi
 
 # Source dotenv file.
-set -o allexport
 if [[ -f "$PROJECT_DIR/.env.${DOTENV}" ]]; then
+	set -o allexport
 	source "$PROJECT_DIR/.env.${DOTENV}"
+	set +o allexport
 fi
-set +o allexport
 
-# Source local dotenv file again, to ensure it overrides any other dotenv file.
-set -o allexport
+# Source local dotenv file, if it exists.
 if [[ -f "$PROJECT_DIR/.env.local" ]]; then
+	set -o allexport
 	source "$PROJECT_DIR/.env.local"
+	set +o allexport
 fi
-set +o allexport
 
 # Set default base settings module.
 export BASE_SETTINGS_MODULE="${BASE_SETTINGS_MODULE:-develop}"
