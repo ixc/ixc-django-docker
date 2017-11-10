@@ -29,7 +29,7 @@ def debug_task(self):
 
 # See: https://docs.sentry.io/clients/python/integrations/celery/
 
-if settings.RAVEN_CONFIG.get('dsn'):
+if getattr(settings, 'RAVEN_CONFIG', {}).get('dsn'):
 
     from raven import Client
     from raven.contrib.celery import register_signal, register_logger_signal

@@ -126,8 +126,12 @@ fi
 # Source dotenv file.
 if [[ -n "$DOTENV" ]]; then
 	set -o allexport
-	source "$PROJECT_DIR/.env.${DOTENV}"
+	DOTENV_FILE="$PROJECT_DIR/.env.${DOTENV}"
+	echo "Sourcing file $DOTENV_FILE for DOTENV=$DOTENV"
+	source $DOTENV_FILE
 	set +o allexport
+else
+	echo "Not sourcing any DOTENV file because DOTENV is empty or unset"
 fi
 
 # Set default base settings module.

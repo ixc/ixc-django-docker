@@ -1,0 +1,57 @@
+version: "3.2"
+services:
+  base:
+    environment:
+      BASE_SETTINGS_MODULES: base.py develop.py calculated.py
+      DOTENV: local
+      TRANSCRYPT_PASSWORD: # Get from environment
+      MASTER_PASSWORD: # Get from environment
+      TERM: # Get from environment
+    image: interaction/icekit:local
+    volumes:
+      - ./:/opt/project_template
+  celery:
+    command: setup-django.sh celery.sh
+    extends: base
+    links:
+      # - elasticsearch
+      - postgres
+      - redis
+  celerybeat:
+    command: setup-django.sh celerybeat.sh
+    extends: base
+    links:
+      - redis
+  celeryflower:
+    command: setup-django.sh celeryflower.sh
+    extends: base
+    links:
+      - redis
+    ports:
+      - 5555
+  django:
+    build: .
+    command: setup-django.sh bash.sh
+    extends: base
+    links:
+      - celery
+      - celerybeat
+      - celeryflower
+      # - elasticsearch
+      - postgres
+      - redis
+    ports:
+      - 8000:8000
+  # elasticsearch:
+  #   image: interaction/elasticsearch-icu:1-alpine
+  #   ports:
+  #     - 9200
+  postgres:
+    image: postgres:9.4-alpine
+    ports:
+      - 5432
+  redis:
+    command: redis-server --appendonly yes
+    image: redis:3-alpine
+    ports:
+      - 6379

@@ -13,11 +13,13 @@ export BASE_SETTINGS_MODULE=test
 export REUSE_DB=1
 export SRC_PGDATABASE="${SRC_PGDATABASE:-$PROJECT_DIR/test_initial_data.sql}"
 
+DJANGO_VERSION_LESS_THAN_1_7=$(python -c 'import django; print(django.VERSION < (1, 7))')
+
 # Only drop existing database when QUICK is not set.
 [[ -z "$QUICK" ]] && export SETUP_POSTGRES_FORCE=1
 
 PGDATABASE="test_$PGDATABASE" setup-postgres.sh
-if [[ $(python -c 'import django; print(django.get_version());') < 1.7 ]]; then
+if [[ DJANGO_VERSION_LESS_THAN_1_7 == 'True' ]]; then
 	echo 'Always sync database, because Django version is less than 1.7.'
 	manage.py syncdb --noinput
 fi
