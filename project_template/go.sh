@@ -26,5 +26,13 @@ if [[ ! -s requirements.txt.md5 ]] || ! md5sum --status -c requirements.txt.md5 
 	md5sum requirements.txt > requirements.txt.md5
 fi
 
+# Source local environment variables.
+if [[ -f "$PROJECT_DIR/.env.local" ]]; then
+	source "$PROJECT_DIR/.env.local"
+else
+	>&2 echo 'ERROR: You must create a `.env.local` file. See: `.env.local.sample`.'
+	exit 1
+fi
+
 # Execute entrypoint and command.
 exec "$PROJECT_VENV_DIR/bin/entrypoint.sh" ${@:-setup-django.sh bash.sh}

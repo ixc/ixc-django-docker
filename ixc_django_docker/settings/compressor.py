@@ -15,7 +15,7 @@ COMPRESS_PRECOMPILERS = (
     ),
     (
         'text/x-scss',
-        '"%s" {infile} {outfile} --autoprefix --include-path %s' % (
+        '"%s" {infile} {outfile} --include-path "%s"' % (
             os.path.join(PROJECT_DIR, 'node_modules', '.bin', 'node-sass'),
             STATIC_ROOT,
         ),

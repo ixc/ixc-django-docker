@@ -88,7 +88,9 @@ module:
 
   * ``test`` - install additional test apps, etc.
 
-Settings for old projects typically need to address the following:
+
+Settings for old projects typically need to address these issues
+----------------------------------------------------------------
 
 * Compress CSS/JS offline, so each container in a multi-node configuration has
   immediate access to all compressed assets.
@@ -175,10 +177,7 @@ How to dockerize an existing project
 
 * Install ``pip-tools``::
 
-    $ pip install 'git+https://github.com/blueyed/pip-tools.git@no-download_dir-for-editable#egg=pip-tools'
-
-  This fork works with editable installs that use ``setuptools_scm``, which many
-  of our packages do. See: https://github.com/jazzband/pip-tools/pull/385
+    $ pip install pip-tools
 
 * Run ``pip-compile -v``, resolving any conflicts that may arise.
 
@@ -198,7 +197,7 @@ How to dockerize an existing project
 * Use the AWS CLI to sync the production media directory to a new S3 bucket:
 
     $ pip install awscli
-    $ AWS_ACCESS_KEY_ID='' AWS_SECRET_ACCESS_KEY='' AWS_DEFAULT_REGION='us-west-2' aws s3 sync {path/to/media} s3://{bucket-name}/media/ > aws-s3-sync.log & tail -f aws-s3-sync.log
+    $ AWS_ACCESS_KEY_ID='' AWS_SECRET_ACCESS_KEY='' AWS_DEFAULT_REGION='us-west-2' aws s3 sync {path/to/media} s3://{bucket-name}/media/ > aws-s3-sync.log 2>&1 & tail -f aws-s3-sync.log
 
 * Update project settings. See [About settings modules], above.
 

@@ -25,6 +25,12 @@ VAR_DIR = os.path.join(PROJECT_DIR, 'var')
 if not os.path.exists(VAR_DIR):
     os.mkdir(VAR_DIR)
 
+# Create missing runtime directories.
+try:
+    os.makedirs(VAR_DIR)
+except OSError:
+    pass
+
 # DJANGO CHECKLIST ############################################################
 
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/

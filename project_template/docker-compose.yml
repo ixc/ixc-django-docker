@@ -1,15 +1,20 @@
-version: "3.2"
+version: "2.3"
 services:
   base:
+    env_file: .env.local
     environment:
-      BASE_SETTINGS_MODULES: base.py develop.py calculated.py
-      DOTENV: local
-      TRANSCRYPT_PASSWORD: # Get from environment
-      MASTER_PASSWORD: # Get from environment
       TERM: # Get from environment
     image: interaction/icekit:local
     volumes:
       - ./:/opt/project_template
+  bash:
+    command: setup-django.sh bash.sh
+    extends: base
+    links:
+      - postgres
+      - redis
+    ports:
+      - 8000:8000
   celery:
     command: setup-django.sh celery.sh
     extends: base
@@ -21,31 +26,51 @@ services:
     command: setup-django.sh celerybeat.sh
     extends: base
     links:
+      - postgres
       - redis
   celeryflower:
-    command: setup-django.sh celeryflower.sh
+    command: setup-django.sh supervisor.sh
+    environment:
+      SUPERVISORD_PROGRAM: celeryflower
+      VIRTUAL_HOST_WEIGHT: 1
+      VIRTUAL_HOST: flower.*
     extends: base
     links:
+      - postgres
       - redis
     ports:
-      - 5555
+      - 8000
   django:
     build: .
-    command: setup-django.sh bash.sh
+    command: setup-django.sh supervisor.sh
+    environment:
+      VIRTUAL_HOST: '*'
     extends: base
     links:
-      - celery
-      - celerybeat
-      - celeryflower
+      # - celery
+      # - celerybeat
+      # - celeryflower
       # - elasticsearch
       - postgres
       - redis
     ports:
-      - 8000:8000
+      - 8000
   # elasticsearch:
   #   image: interaction/elasticsearch-icu:1-alpine
   #   ports:
   #     - 9200
+  haproxy:
+    image: 'dockercloud/haproxy:1.6.3'
+    links:
+      - celeryflower
+      - django
+    ports:
+      # - 80:80
+      # - 443:443
+      - 1936:1936
+      - 8000:80
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
   postgres:
     image: postgres:9.4-alpine
     ports:
