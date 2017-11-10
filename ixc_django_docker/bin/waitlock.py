@@ -78,7 +78,7 @@ def waitlock(cmd, block=False):
     conn = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT)
 
     # Create lock object.
-    lock = redis_lock.Lock(conn, name=cmd, expire=5, auto_renewal=True)
+    lock = redis_lock.Lock(conn, name=cmd, expire=60, auto_renewal=True)
 
     # Attempt to acquire lock.
     if lock.acquire(blocking=False):
