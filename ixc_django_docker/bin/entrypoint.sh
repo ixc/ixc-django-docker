@@ -41,6 +41,9 @@ if [[ -f /.dockerenv ]]; then
 	# Add userbase bin directory to PATH.
 	export PATH="$PYTHONUSERBASE/bin:$PATH"
 
+	# Install editable packages into userbase directory.
+	export PIP_SRC="$PYTHONUSERBASE/src"
+
 	# For some reason pip allows us to install sdist packages, but not editable
 	# packages, when this directory doesn't exist. So make sure it does.
 	mkdir -p "$PYTHONUSERBASE/lib/python2.7/site-packages"
@@ -146,7 +149,6 @@ export CPU_CORES=$(python -c "import multiprocessing; print(multiprocessing.cpu_
 
 # Configure Pip.
 export PIP_DISABLE_PIP_VERSION_CHECK=on
-export PIP_SRC="$PROJECT_DIR/var/src"
 
 # Get project name from the project directory.
 export PROJECT_NAME=$(basename "$PROJECT_DIR")
