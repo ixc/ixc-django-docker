@@ -32,14 +32,10 @@ if [[ ! -s package.json.md5 ]] || ! md5sum --status -c package.json.md5 > /dev/n
 		echo 'Removing old Node modules directory.'
 		rm -rf node_modules
 	fi
-
-	# Install flattened packages via `yarn` instead of `npm`, if available.
-	# Yarn is faster and a flattened package tree takes up less space.
-	if hash yarn 2>/dev/null; then
+	if [[ -f yarn.lock ]]; then
 		yarn --non-interactive
 	else
 		npm install
 	fi
-
 	md5sum package.json > package.json.md5
 fi
