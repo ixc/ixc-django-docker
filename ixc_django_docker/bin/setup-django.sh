@@ -24,19 +24,19 @@ cat <<EOF
 EOF
 
 # Install Node modules.
-waitlock.py -b npm-install.sh "$PROJECT_DIR"
+waitlock.py -b "npm-install.sh '$PROJECT_DIR'"
 
 # Install Bower components.
-waitlock.py -b bower-install.sh "$PROJECT_DIR"
+waitlock.py -b "bower-install.sh '$PROJECT_DIR'"
 
 # Install Python requirements.
-waitlock.py -b pip-install.sh "$PROJECT_DIR"
+waitlock.py -b "pip-install.sh '$PROJECT_DIR'"
 
 # Create a database.
 waitlock.py -b setup-postgres.sh
 
 # Apply migrations.
-waitlock.py -b migrate.sh "$PROJECT_DIR/var"
+waitlock.py -b "migrate.sh '$PROJECT_DIR/var'"
 
 # Execute command.
 exec "$@"
