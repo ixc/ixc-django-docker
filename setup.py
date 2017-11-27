@@ -52,6 +52,8 @@ setuptools.setup(
         'ixc-django-compressor',
         'ixc-whitenoise',
         'logentries',
+        'psycopg2',
+        'python-redis-lock[django]',
     ],
     extras_require={
         'project_template': [
@@ -62,8 +64,6 @@ setuptools.setup(
             'django-master-password',
             'django-nose',
             'django-post-office',
-            'psycopg2',
-            'python-redis-lock[django]',
             'pydevd',
         ],
     },
