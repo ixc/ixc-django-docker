@@ -43,6 +43,7 @@ setuptools.setup(
     include_package_data=True,
     install_requires=[
         'ConcurrentLogHandler',
+        'decorator',
         'django-compressor',
         'django-extensions',
         'django-split-settings',
