@@ -4,7 +4,7 @@ ELASTICSEARCH_ADDRESS = os.environ.get(
 
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE': 'haystack.backends.elasticsearch2_backend.ElasticsearchSearchBackend',
+        'ENGINE': 'haystack.backends.elasticsearch2_backend.Elasticsearch2SearchEngine',
         'INDEX_NAME': 'haystack-%s' % PROJECT_SLUG,
         'URL': 'http://%s/' % ELASTICSEARCH_ADDRESS,
     },
