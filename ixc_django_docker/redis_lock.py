@@ -1,11 +1,12 @@
 import datetime
 import logging
 
-from django.conf import settings
 from django.core.cache.backends import dummy
 import decorator
 import redis
 import redis_lock
+
+from ixc_django_docker import appsettings
 
 logger = logging.getLogger(__name__)
 
@@ -26,8 +27,8 @@ def lock(
         expire=60,
         auto_renewal=True,
         blocking=True,
-        host=settings.REDIS_HOST,
-        port=settings.REDIS_PORT):
+        host=appsettings.REDIS_HOST,
+        port=appsettings.REDIS_PORT):
     """
     A variation of `redis_lock.Lock()` that can be used as a context manager or
     decorator, can be blocking or non-blocking, and produces additional logging,
