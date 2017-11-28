@@ -31,14 +31,7 @@ def lock(
         blocking=True,
         host=appsettings.REDIS_HOST,
         port=appsettings.REDIS_PORT):
-    """
-    A variation of `redis_lock.Lock()` that can be used as a context manager or
-    decorator, can be blocking or non-blocking, and produces additional logging,
-    such as the number of seconds taken to acquire a lock.
 
-    When a non-blocking lock cannot be acquired, the wrapped code block or
-    function does not execute.
-    """
     conn = redis.StrictRedis(host=host, port=port)
 
     # Create lock object.
@@ -61,14 +54,14 @@ def lock(
                 name,
             ))
 
+    # Raise an exception when a non-blocking lock cannot be acquired.
     else:
-        logger.info('Unable to acquire lock.')
+        raise redis_lock.NotAcquired('Unable to acquire lock.')
 
-    if lock._held:
-        yield
+    yield
 
-        # Attempt to release lock.
-        try:
-            lock.release()
-        except redis_lock.NotAcquired:
-            pass
+    # Attempt to release lock.
+    try:
+        lock.release()
+    except redis_lock.NotAcquired:
+        pass
