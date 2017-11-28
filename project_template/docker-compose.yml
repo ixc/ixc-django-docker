@@ -56,7 +56,7 @@ services:
     ports:
       - 8000
   # elasticsearch:
-  #   image: interaction/elasticsearch-icu:1-alpine
+  #   image: elasticsearch:2.4.6-alpine
   #   ports:
   #     - 9200
   haproxy:

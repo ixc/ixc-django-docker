@@ -77,7 +77,7 @@ django:
     - /opt/project_template/var
 # elasticsearch:
 #   # autoredeploy: true
-#   image: 'interaction/elasticsearch-icu:1-alpine'
+#   image: 'elasticsearch:2.4.6-alpine'
 #   restart: on-failure
 #   tags:
 #     - elasticsearch
