@@ -85,7 +85,7 @@ else
 	done
 
 	# Fail loudly when required programs are missing.
-	for cmd in md5sum nginx npm psql python pv redis-server yarn; do # elasticsearch
+	for cmd in md5sum nginx npm psql python pv redis-server yarn; do  # TODO: elasticsearch git-secret transcrypt
 		hash $cmd 2>/dev/null || {
 			>&2 echo "ERROR: Missing program: $cmd"
 			>&2 echo 'See: https://github.com/ixc/ixc-django-docker/blob/develop/README.rst#requirements-when-running-without-docker'
