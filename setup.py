@@ -67,6 +67,7 @@ setuptools.setup(
             'django-nose',
             'django-post-office',
             'elasticsearch<3.0',  # For Elasticsearch 2.x
+            'flower',
             'pydevd',
         ],
     },
