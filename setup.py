@@ -55,6 +55,7 @@ setuptools.setup(
         'logentries',
         'psycopg2',
         'python-redis-lock[django]',
+        'supervisor',
     ],
     extras_require={
         'project_template': [
