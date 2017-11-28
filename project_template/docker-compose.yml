@@ -4,7 +4,7 @@ services:
     env_file: .env.local
     environment:
       TERM: # Get from environment
-    image: interaction/icekit:local
+    image: interaction/project_template:local
     volumes:
       - ./:/opt/project_template
   bash:

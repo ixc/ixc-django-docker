@@ -88,7 +88,7 @@ else
 	for cmd in md5sum nginx npm psql python pv redis-server yarn; do # elasticsearch
 		hash $cmd 2>/dev/null || {
 			>&2 echo "ERROR: Missing program: $cmd"
-			>&2 echo 'See: https://github.com/ic-labs/django-icekit/blob/develop/docs/intro/manual-setup.md'
+			>&2 echo 'See: https://github.com/ixc/ixc-django-docker/blob/develop/README.rst#requirements-when-running-without-docker'
 			exit 1
 		}
 	done

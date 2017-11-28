@@ -4,7 +4,7 @@ ELASTICSEARCH_ADDRESS = os.environ.get(
 
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE': 'icekit.utils.search.backends.ICEkitConfigurableElasticSearchEngine',
+        'ENGINE': 'haystack.backends.elasticsearch2_backend.ElasticsearchSearchBackend',
         'INDEX_NAME': 'haystack-%s' % PROJECT_SLUG,
         'URL': 'http://%s/' % ELASTICSEARCH_ADDRESS,
     },

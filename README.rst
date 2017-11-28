@@ -167,6 +167,57 @@ To enable, set the ``TRANSCRYPT_PASSWORD`` environment variable in
   makes it surprisingly easy to accidentally commit unencrypted secrets.
 
 
+Requirements when running without Docker
+----------------------------------------
+
+* md5sum
+* Nginx
+* NPM
+* Pipe Viewer
+* PostgreSQL
+* Python 2.7
+* Redis
+* Yarn
+
+Optional:
+
+* Elasticsearch 2.x (5.x is not compatible with ``django-haystack``)
+* git-secret (not recommended)
+* Transcrypt
+
+
+## macOS
+
+Install Xcode command line tools::
+
+    $ xcode-select --install
+
+Install `Homebrew <http://brew.sh/>`__::
+
+    $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+Install `Postgres.app <http://postgresapp.com/>`__.
+
+Install required system packages::
+
+    $ brew install md5sha1sum nginx npm pv python redis yarn
+
+Start Redis::
+
+    $ brew services start redis
+
+Install optional system packages::
+
+    $ brew install elasticsearch@2.4
+    $ brew link elasticsearch@2.4 --force
+    $ brew install git-secret
+    $ brew install transcrypt
+
+Start Elasticsearch::
+
+    $ brew services start elasticsearch
+
+
 How to dockerize an existing project
 ------------------------------------
 

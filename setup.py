@@ -60,7 +60,7 @@ setuptools.setup(
             'celery[django]',
             'django-celery',
             'django-celery-email',
-            'django-haystack',
+            'django-haystack>=2.6.0',
             'django-master-password',
             'django-nose',
             'django-post-office',
