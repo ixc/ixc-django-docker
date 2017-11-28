@@ -29,34 +29,6 @@ About the included Django project
   etc.
 
 
-Remote debug server with `pydevd` (e.g. PyCharm)
-------------------------------------------------
-
-* Add a `Python Remote Debug` run configuration to PyCharm with the following
-  options:
-
-  * Name: `pydevd`
-  * Local host name: `localhost`
-  * Port: `5678`
-
-* Select the `pydevd` configuration and click the `Debug` icon (`^D`) to start
-  the debug server.
-
-* Run the project from your terminal via Docker or `go.sh`.
-
-* Execute your command with remote debugging enabled:
-
-    $ pydevd.sh runserver.sh
-
-You can reconfigure the default host and port for the remote debug server with
-the follow environment variables:
-
-    PYDEVD_HOST=localhost
-    PYDEVD_PORT=5678
-
-**NOTE:** When running via Docker you will need to specify your LAN IP address
-as `PYENVD_HOST` to establish a connection from the container to PyCharm.
-=======
 About settings modules
 ----------------------
 
@@ -89,8 +61,8 @@ module:
   * ``test`` - install additional test apps, etc.
 
 
-Settings for old projects typically need to address these issues
-----------------------------------------------------------------
+Settings typically need to address these scaling issues
+-------------------------------------------------------
 
 * Compress CSS/JS offline, so each container in a multi-node configuration has
   immediate access to all compressed assets.
@@ -130,9 +102,9 @@ Secrets should only be stored in ``.env.*`` and ``docker-cloud.*.yml`` files,
 which must be encrypted by ``git-secret`` or ``transcrypt``.
 
 
-## Git-Secret
+## Git-Secret (not recommended)
 
-To enable, set the ``GPG_PASSPHRASE`` environment variable in ``.env.local`` or
+To enable, set the ``GPG_PASSPHRASE`` environment variable in ``.env.local`` and
 ``docker-cloud.*.yml`` files.
 
 * Uses GPG for encryption, which can be painful, especially when running via
@@ -153,7 +125,7 @@ To enable, set the ``GPG_PASSPHRASE`` environment variable in ``.env.local`` or
 ## Transcrypt (recommended)
 
 To enable, set the ``TRANSCRYPT_PASSWORD`` environment variable in
-``.env.local`` or ``docker-cloud.*.yml`` files.
+``.env.local`` and ``docker-cloud.*.yml`` files.
 
 * Much simpler in concept and implementation. Bash and OpenSSH are the only
   requirements.
@@ -165,6 +137,34 @@ To enable, set the ``TRANSCRYPT_PASSWORD`` environment variable in
 
 * Committing changes with a git client that does not support git attributes
   makes it surprisingly easy to accidentally commit unencrypted secrets.
+
+
+How to run with Docker
+----------------------
+
+Run an interactive shell::
+
+    $ docker-compose run --rm --service-ports bash
+
+Start all services::
+
+    $ docker-compose up -d haproxy
+
+View logs for all services::
+
+    $ docker-compose logs -f
+
+Stop all services::
+
+    $ docker-compose stop
+
+
+How to run without Docker
+-------------------------
+
+Run an interactive shell::
+
+    $ ./go.sh
 
 
 Requirements when running without Docker
@@ -216,6 +216,35 @@ Install optional system packages::
 Start Elasticsearch::
 
     $ brew services start elasticsearch
+
+
+How to run a remote debug server with `pydevd` (e.g. PyCharm)
+-------------------------------------------------------------
+
+* Add a `Python Remote Debug` run configuration to PyCharm with the following
+  options:
+
+  * Name: `pydevd`
+  * Local host name: `localhost`
+  * Port: `5678`
+
+* Select the `pydevd` configuration and click the `Debug` icon (`^D`) to start
+  the debug server.
+
+* Run the project from your terminal via Docker or `go.sh`.
+
+* Execute your command with remote debugging enabled:
+
+    $ pydevd.sh runserver.sh
+
+You can reconfigure the default host and port for the remote debug server with
+the follow environment variables:
+
+    PYDEVD_HOST=localhost
+    PYDEVD_PORT=5678
+
+**NOTE:** When running via Docker you will need to specify your LAN IP address
+as `PYENVD_HOST` to establish a connection from the container to PyCharm.
 
 
 How to dockerize an existing project
