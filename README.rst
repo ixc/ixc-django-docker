@@ -37,16 +37,31 @@ that can be combined as required with ``django-split-settings``.
 
 Define the following environment variables to configure::
 
-    BASE_SETTINGS_MODULES
-        Relative to the ``ixc_django_docker/settings`` directory.
-        Default: ``base.py calculated.py``
+    BASE_SETTINGS
 
-    PROJECT_SETTINGS_MODULES
-        Relative to the project directory.
-        Default ``project_settings.py project_settings_local.py``
+        A space separated list of settings modules to be loaded from the
+        ``ixc_django_docker/settings`` directory.
 
-Separate modules with a space. Generally, break down settings into two types of
-module:
+        Default: base.py compressor.py logentries.py storages.py whitenoise.py
+
+    PROJECT_SETTINGS
+
+        A single settings module to be loaded from the project directory.
+
+        Default: ``project_settings.py``
+
+    OVERRIDE_SETTINGS
+
+        A single settings module to be loaded from both the base and project
+        settings modules directories, if it exists.
+
+        Default: Same as ``DOTENV`` with a ``.py`` extension appended.
+
+All settings modules should be given as relative file system paths, not dotted
+path module names.
+
+Separate base settings modules with a space. Generally, break down settings into
+two types of module:
 
 * Enable a specific app or feature, e.g. ``compressor``, ``haystack``,
   ``logentries``, etc.
