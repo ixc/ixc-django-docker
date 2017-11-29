@@ -5,7 +5,7 @@ from split_settings.tools import include, optional
 # Get project directory from environment. This MUST already be defined.
 PROJECT_DIR = os.environ['PROJECT_DIR']
 
-# Get base settings.
+# Base settings.
 BASE_SETTINGS = os.environ.get(
     'BASE_SETTINGS', ' '.join([
         'base.py',
@@ -24,14 +24,13 @@ BASE_SETTINGS = os.environ.get(
         'whitenoise.py',
     ])).split()
 
-# Get project settings.
+# Project settings.
 PROJECT_SETTINGS = [os.path.join(
     PROJECT_DIR, os.environ.get('PROJECT_SETTINGS') or 'project_settings.py',
 )]
 PROJECT_SETTINGS_DIR = os.path.dirname(PROJECT_SETTINGS[0])
 
-# Get override settings.
-# Tell users where base and project settings are coming from.
+# Override settings.
 OVERRIDE_SETTINGS = os.environ.get('OVERRIDE_SETTINGS')
 if not OVERRIDE_SETTINGS and 'DOTENV' in os.environ:
     OVERRIDE_SETTINGS = '%s.py' % os.environ['DOTENV']
@@ -44,6 +43,7 @@ if OVERRIDE_SETTINGS:
 PROJECT_SETTINGS.append(
     optional(os.path.join(PROJECT_SETTINGS_DIR, 'local.py')))
 
+# Tell users where settings are coming from.
 print('BASE_SETTINGS:\n  %s' % '\n  '.join(BASE_SETTINGS))
 print('PROJECT_SETTINGS:\n  %s' % '\n  '.join(
     os.path.relpath(s, PROJECT_DIR) for s in PROJECT_SETTINGS))
