@@ -32,7 +32,6 @@ BASE_SETTINGS_MODULES = os.environ.get(
         'logentries.py',
         'storages.py',
         'whitenoise.py',
-        'calculated.py',
     ])).split()
 
 # Get project settings modules from environment.
@@ -56,3 +55,10 @@ print('PROJECT_SETTINGS_MODULES:\n  %s' % '\n  '.join(PROJECT_SETTINGS_MODULES))
 
 # Combine all settings modules.
 include(*SETTINGS_MODULES)
+
+# Create missing runtime directories.
+for dirname in getattr(locals(), 'RUNTIME_DIRS', ()):
+    try:
+        os.makedirs(dirname)
+    except OSError:
+        pass

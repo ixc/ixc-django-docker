@@ -319,3 +319,12 @@ USE_L10N = True  # Default: False
 USE_TZ = True  # Default: False
 
 WSGI_APPLICATION = 'ixc_django_docker.wsgi.application'
+
+# IXC-DJANGO-DOCKER ###########################################################
+
+RUNTIME_DIRS = STATICFILES_DIRS + (
+    MEDIA_ROOT,
+    os.path.join(PROJECT_DIR, 'templates'),
+    os.path.join(VAR_DIR, 'logs'),
+    # os.path.join(VAR_DIR, 'run'),
+)
