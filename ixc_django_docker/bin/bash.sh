@@ -44,6 +44,8 @@ For more info on each script, run:
 
 EOF
 
+export PS1="($PROJECT_NAME)\w\$ "
+
 # Run bash by default without any user customisations from rc or profile files
 # to reduce the chance of user customisations clashing with our paths etc.
 exec bash --norc --noprofile
