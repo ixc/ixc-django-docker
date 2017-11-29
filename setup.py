@@ -63,11 +63,11 @@ setuptools.setup(
             'django-celery',
             'django-celery-email',
             'django-extensions',
-            'django-haystack>=2.6.0',  # For Elasticsearch 2.x
+            'django-haystack'
             'django-master-password',
             'django-nose',
             'django-post-office',
-            'elasticsearch<3.0',  # For Elasticsearch 2.x
+            'elasticsearch',  # For Elasticsearch 2.x
             'flower',
             'nose-progressive',
             'pydevd',
