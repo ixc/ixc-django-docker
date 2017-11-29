@@ -9,7 +9,7 @@ EOF
 
 set -e
 
-export BASE_SETTINGS_MODULE=test
+export BASE_SETTINGS_MODULES="$BASE_SETTINGS_MODULES test.py"
 export REUSE_DB=1
 export SRC_PGDATABASE="${SRC_PGDATABASE:-$PROJECT_DIR/test_initial_data.sql}"
 
