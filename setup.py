@@ -45,7 +45,6 @@ setuptools.setup(
         'ConcurrentLogHandler',
         'decorator',
         'django-compressor',
-        'django-extensions',
         'django-split-settings',
         'django-storages',
         'Django',
@@ -62,6 +61,7 @@ setuptools.setup(
             'celery[django]',
             'django-celery',
             'django-celery-email',
+            'django-extensions',
             'django-haystack>=2.6.0',  # For Elasticsearch 2.x
             'django-master-password',
             'django-nose',

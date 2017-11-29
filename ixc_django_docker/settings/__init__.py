@@ -28,7 +28,7 @@ BASE_SETTINGS_MODULES = os.environ.get(
         'base.py',
         # 'celery.py',
         'compressor.py',
-        'extensions.py',
+        # 'extensions.py',
         'logentries.py',
         'storages.py',
         'whitenoise.py',
