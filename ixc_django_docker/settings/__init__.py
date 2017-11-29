@@ -27,11 +27,21 @@ BASE_SETTINGS_MODULES = os.environ.get(
     'BASE_SETTINGS_MODULES', ' '.join([
         'base.py',
         # 'celery.py',
+        # 'celery_email.py',
         'compressor.py',
         # 'extensions.py',
+        # 'haystack.py',
         'logentries.py',
+        # 'master_password.py',
+        # 'nose.py',
+        # 'post_office.py',
+        # 'redis_cache.py',
+        # 'sentry.py',
         'storages.py',
         'whitenoise.py',
+        # 'develop.py',
+        # 'production.py',
+        # 'test.py',
     ])).split()
 
 # Get project settings modules from environment.
