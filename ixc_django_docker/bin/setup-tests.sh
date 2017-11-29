@@ -9,7 +9,7 @@ EOF
 
 set -e
 
-export BASE_SETTINGS_MODULES="$BASE_SETTINGS_MODULES test.py"
+export OVERRIDE_SETTINGS="test.py"
 export REUSE_DB=1
 export PS1="($PROJECT_NAME:test)\w\$ "
 export SETUP_TESTS=1
