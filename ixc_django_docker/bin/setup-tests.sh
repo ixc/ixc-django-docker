@@ -27,5 +27,7 @@ if [[ DJANGO_VERSION_LESS_THAN_1_7 == 'True' ]]; then
 fi
 [[ -z "$QUICK" ]] && manage.py migrate --noinput
 
-# Execute command.
-exec "${@:-bash}"
+# Execute command, only if not sourced.
+if [[ "$0" = "$BASH_SOURCE" ]]; then
+	exec "${@:-bash}"
+fi
