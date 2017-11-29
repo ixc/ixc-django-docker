@@ -31,15 +31,19 @@ PROJECT_SETTINGS = [os.path.join(
 PROJECT_SETTINGS_DIR = os.path.dirname(PROJECT_SETTINGS[0])
 
 # Get override settings.
-OVERRIDE_SETTINGS = os.environ.get(
-    'OVERRIDE_SETTINGS', '%s.py' % os.environ.get('DOTENV', 'develop'))
-BASE_SETTINGS.append(optional(OVERRIDE_SETTINGS))
-PROJECT_SETTINGS.extend([
-    optional(os.path.join(PROJECT_SETTINGS_DIR, OVERRIDE_SETTINGS)),
-    optional(os.path.join(PROJECT_SETTINGS_DIR, 'local.py')),
-])
-
 # Tell users where base and project settings are coming from.
+OVERRIDE_SETTINGS = os.environ.get('OVERRIDE_SETTINGS')
+if not OVERRIDE_SETTINGS and 'DOTENV' in os.environ:
+    OVERRIDE_SETTINGS = '%s.py' % os.environ['DOTENV']
+if OVERRIDE_SETTINGS:
+    BASE_SETTINGS.append(optional(OVERRIDE_SETTINGS))
+    PROJECT_SETTINGS.append(
+        optional(os.path.join(PROJECT_SETTINGS_DIR, OVERRIDE_SETTINGS)))
+
+# Local settings.
+PROJECT_SETTINGS.append(
+    optional(os.path.join(PROJECT_SETTINGS_DIR, 'local.py')))
+
 print('BASE_SETTINGS:\n  %s' % '\n  '.join(BASE_SETTINGS))
 print('PROJECT_SETTINGS:\n  %s' % '\n  '.join(
     os.path.relpath(s, PROJECT_DIR) for s in PROJECT_SETTINGS))
