@@ -32,7 +32,7 @@ PROJECT_SETTINGS_DIR = os.path.dirname(PROJECT_SETTINGS[0])
 
 # Get override settings.
 OVERRIDE_SETTINGS = os.environ.get(
-    'OVERRIDE_SETTINGS', '%s.py' % os.environ['DOTENV'])
+    'OVERRIDE_SETTINGS', '%s.py' % os.environ.get('DOTENV', 'develop'))
 BASE_SETTINGS.append(optional(OVERRIDE_SETTINGS))
 PROJECT_SETTINGS.extend([
     optional(os.path.join(PROJECT_SETTINGS_DIR, OVERRIDE_SETTINGS)),
