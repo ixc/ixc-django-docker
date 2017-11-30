@@ -53,7 +53,7 @@ include(*BASE_SETTINGS)
 include(*PROJECT_SETTINGS)
 
 # Create missing runtime directories.
-for dirname in getattr(locals(), 'RUNTIME_DIRS', ()):
+for dirname in RUNTIME_DIRS:
     try:
         os.makedirs(dirname)
     except OSError:
