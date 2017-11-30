@@ -126,16 +126,20 @@ if [[ -n "$TRANSCRYPT_PASSWORD" ]]; then
 	transcrypt --force -c "${TRANSCRYPT_CIPHER:-aes-256-cbc}" -p "$TRANSCRYPT_PASSWORD" -y || true  # Don't exit if we can't decrypt secrets
 fi
 
-# Source global, environment and local dotenv files.
-for ENV in global "$DOTENV" local; do
-	DOTENV_FILE="$PROJECT_DIR/.env.$ENV"
-	if [[ -f "$DOTENV_FILE" ]]; then
-		set -o allexport
-		echo "Sourcing DOTENV file: $DOTENV_FILE"
-		source "$DOTENV_FILE"
-		set +o allexport
-	fi
-done
+# Source global, environment and local dotenv files, if decrypted.
+if [[ -n "$GPG_PASSPHRASE" || -n "$TRANSCRYPT_PASSWORD" ]]; then
+	for ENV in global "$DOTENV" local; do
+		DOTENV_FILE="$PROJECT_DIR/.env.$ENV"
+		if [[ -f "$DOTENV_FILE" ]]; then
+			set -o allexport
+			echo "Sourcing DOTENV file: $DOTENV_FILE"
+			source "$DOTENV_FILE"
+			set +o allexport
+		fi
+	done
+else
+	echo "Not sourcing any DOTENV files. Neither 'GPG_PASSPHRASE' nor 'TRANSCRYPT_PASSWORD' is defined."
+fi
 
 # Get number of CPU cores, so we know how many processes to run.
 export CPU_CORES=$(python -c "import multiprocessing; print(multiprocessing.cpu_count());")
