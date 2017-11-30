@@ -2,6 +2,15 @@ import os
 
 from split_settings.tools import include, optional
 
+
+def _(module, from_dir):
+    relpath = os.path.relpath(
+        os.path.abspath(module), os.path.abspath(from_dir))
+    if not os.path.exists(module):
+        return '%s (MISSING)' % relpath
+    return relpath
+
+
 # Get project directory from environment. This MUST already be defined.
 PROJECT_DIR = os.environ['PROJECT_DIR']
 
@@ -44,9 +53,11 @@ PROJECT_SETTINGS.append(
     optional(os.path.join(PROJECT_SETTINGS_DIR, 'local.py')))
 
 # Tell users where settings are coming from.
-print('BASE_SETTINGS:\n  %s' % '\n  '.join(BASE_SETTINGS))
+print('BASE_SETTINGS:\n  %s' % '\n  '.join(
+    _(os.path.join(os.path.dirname(__file__), s), os.path.dirname(__file__))
+    for s in BASE_SETTINGS))
 print('PROJECT_SETTINGS:\n  %s' % '\n  '.join(
-    os.path.relpath(s, PROJECT_DIR) for s in PROJECT_SETTINGS))
+    _(os.path.join(PROJECT_DIR, s), PROJECT_DIR) for s in PROJECT_SETTINGS))
 
 # Include base and project settings modules.
 include(*BASE_SETTINGS)
