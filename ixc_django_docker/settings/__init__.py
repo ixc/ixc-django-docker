@@ -7,7 +7,7 @@ def _(module, from_dir):
     relpath = os.path.relpath(
         os.path.abspath(module), os.path.abspath(from_dir))
     if not os.path.exists(module):
-        return '%s (MISSING)' % relpath
+        return '%s (NOT FOUND)' % relpath
     return relpath
 
 
