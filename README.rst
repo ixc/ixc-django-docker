@@ -1,5 +1,5 @@
 Overview
---------
+========
 
 A collection of scripts and config files that make it easier to run Django
 projects consistently with and without Docker (for Mac/Windows, Cloud, etc.)
@@ -17,7 +17,7 @@ It includes:
 
 
 About the included Django project
----------------------------------
+=================================
 
 * Adds an ``environment`` context processor that returns settings referenced in
   the ``CONTEXT_PROCESSOR_SETTINGS`` setting.
@@ -30,7 +30,7 @@ About the included Django project
 
 
 About settings modules
-----------------------
+======================
 
 The ``ixc_django_docker.settings`` package includes many small settings modules
 that can be combined as required with ``django-split-settings``.
@@ -76,8 +76,9 @@ two types of module:
   * ``test`` - install additional test apps, etc.
 
 
+
 Settings typically need to address these scaling issues
--------------------------------------------------------
+=======================================================
 
 * Compress CSS/JS offline, so each container in a multi-node configuration has
   immediate access to all compressed assets.
@@ -111,13 +112,14 @@ Cloudfront.
 
 
 About secrets
--------------
+=============
 
 Secrets should only be stored in ``.env.*`` and ``docker-cloud.*.yml`` files,
 which must be encrypted by ``git-secret`` or ``transcrypt``.
 
 
-## Git-Secret (not recommended)
+Git-Secret (not recommended)
+----------------------------
 
 To enable, set the ``GPG_PASSPHRASE`` environment variable in ``.env.local`` and
 ``docker-cloud.*.yml`` files.
@@ -137,7 +139,8 @@ To enable, set the ``GPG_PASSPHRASE`` environment variable in ``.env.local`` and
   individual hunks.
 
 
-## Transcrypt (recommended)
+Transcrypt (recommended)
+------------------------
 
 To enable, set the ``TRANSCRYPT_PASSWORD`` environment variable in
 ``.env.local`` and ``docker-cloud.*.yml`` files.
@@ -155,7 +158,7 @@ To enable, set the ``TRANSCRYPT_PASSWORD`` environment variable in
 
 
 How to run with Docker
-----------------------
+======================
 
 Run an interactive shell::
 
@@ -175,7 +178,7 @@ Stop all services::
 
 
 How to run without Docker
--------------------------
+=========================
 
 Run an interactive shell::
 
@@ -183,7 +186,7 @@ Run an interactive shell::
 
 
 Requirements when running without Docker
-----------------------------------------
+========================================
 
 * md5sum
 * Nginx
@@ -201,7 +204,8 @@ Optional:
 * Transcrypt
 
 
-## macOS
+macOS
+-----
 
 Install Xcode command line tools::
 
@@ -234,7 +238,7 @@ Start Elasticsearch::
 
 
 How to run a remote debug server with `pydevd` (e.g. PyCharm)
--------------------------------------------------------------
+=============================================================
 
 * Add a `Python Remote Debug` run configuration to PyCharm with the following
   options:
@@ -263,7 +267,7 @@ as `PYENVD_HOST` to establish a connection from the container to PyCharm.
 
 
 How to dockerize an existing project
-------------------------------------
+====================================
 
 * Rename ``requirements.txt`` to ``requirements.in``.
 
