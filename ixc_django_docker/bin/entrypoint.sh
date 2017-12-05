@@ -127,7 +127,7 @@ if [[ -n "$TRANSCRYPT_PASSWORD" ]]; then
 fi
 
 # Source global, environment and local dotenv files, if decrypted.
-for dotenv in base "secret.$DOTENV" local; do
+for dotenv in base "$DOTENV.secret" local; do
 	DOTENV_FILE="$PROJECT_DIR/.env.$dotenv"
 	if [[ -f "$DOTENV_FILE" ]]; then
 		echo "Sourcing DOTENV file: $DOTENV_FILE"
