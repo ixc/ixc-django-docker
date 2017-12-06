@@ -1,4 +1,3 @@
-# DEFAULT_FILE_STORAGE = 'ixc_whitenoise.HashedMediaStorage'
 IXC_WHITENOISE_HASHED_MEDIA_ORIGINAL_PREFIX = False
 MIDDLEWARE_CLASSES += ('ixc_whitenoise.WhiteNoiseMiddleware', )
 STATICFILES_STORAGE = 'ixc_whitenoise.CompressedManifestStaticFilesStorage'
