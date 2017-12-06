@@ -71,6 +71,7 @@ setuptools.setup(
             'flower',
             'nose-progressive',
             'pydevd',
+            'raven',
         ],
     },
     setup_requires=['setuptools_scm'],
