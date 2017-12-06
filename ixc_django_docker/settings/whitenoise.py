@@ -1,3 +1,4 @@
+INSTALLED_APPS += ('ixc_whitenoise', )
 MIDDLEWARE_CLASSES += ('ixc_whitenoise.WhiteNoiseMiddleware', )
 STATICFILES_STORAGE = 'ixc_whitenoise.CompressedManifestStaticFilesStorage'
 WHITENOISE_AUTOREFRESH = True
