@@ -161,6 +161,26 @@ letsencrypt:
     - production
   volumes:
     - /var/run/docker.sock:/var/run/docker.sock
+logentries:
+  command: -t {DOCKER_LOGENTRIES_TOKEN}
+  deployment_strategy: every_node
+  image: logentries/docker-logentries:0.2.1
+  tags:
+    - logentries
+    - production
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+logspout:
+  command: syslog+tcp://data.logentries.com:10000
+  deployment_strategy: every_node
+  environment:
+    - SYSLOG_STRUCTURED_DATA={DOCKER_LOGSPOUT_TOKEN}
+  image: gliderlabs/logspout:v3.2.2
+  tags:
+    - logspout
+    - production
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
 # postgres:
 #   # autoredeploy: true
 #   image: 'postgres:9.4-alpine'
