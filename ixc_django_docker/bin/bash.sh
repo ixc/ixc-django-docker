@@ -18,6 +18,7 @@ frequently used scripts you might want to run:
     celerybeat.sh
     celeryflower.sh
     gunicorn.sh
+    logentries.sh
     manage.py [COMMAND [ARGS]]
     migrate.sh
     nginx.sh

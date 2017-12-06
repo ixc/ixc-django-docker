@@ -26,6 +26,10 @@ Here is a list of frequently used commands you might want to run:
 		Start Gunicorn. This is normally managed by Docker or Supervisord, and
 		is not normally used interactively.
 
+	logentries.sh
+		Start LogEntries Agent. This is normally managed by Supervisord, and is
+		not normally used interactively.
+
 	manage.py [COMMAND [ARGS]]
 		Run a Django management command.
 
