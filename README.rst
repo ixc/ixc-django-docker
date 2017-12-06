@@ -164,7 +164,7 @@ Docker containers are often run on ephemeral infrastructure with no persistent
 storage for logs. We can send and aggregate container stdout, Python logs, and
 file based logs to LogEntries in realtime.
 
-1. Create a new log set for your project and environment. E.g. `FOO.staging`.
+1. Create a new log set named `{PROJECT_NAME}.{DOTENV}`.
 
 2. Create manual (token TCP) logs named `docker-logentries`, `docker-logspout`
    and `python` in that log set.
