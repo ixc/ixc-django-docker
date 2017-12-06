@@ -11,7 +11,7 @@ if [[ -z "$NEW_RELIC_LICENSE_KEY" ]]; then
 	exec "$@"
 fi
 
-export HOSTNAME
+export NEW_RELIC_APP_NAME="${NEW_RELIC_APP_NAME:-$PROJECT_NAME (${NEW_RELIC_ENVIRONMENT:-${DOTENV:-$HOSTNAME}})}"
 export NEW_RELIC_CONFIG_FILE="$IXC_DJANGO_DOCKER_DIR/etc/newrelic.ini"
 
 # Render new relic config template.
