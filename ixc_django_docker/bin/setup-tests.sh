@@ -12,7 +12,7 @@ set -e
 export OVERRIDE_SETTINGS="test.py"
 export REUSE_DB=1
 export PGDATABASE="test_$PGDATABASE"
-export PS1="($PROJECT_NAME:test)\w\$ "
+export PS1="($PROJECT_NAME:test) \u@\h:\w\\$ "
 export SETUP_TESTS=1
 export SRC_PGDATABASE="${SRC_PGDATABASE:-$PROJECT_DIR/test_initial_data.sql}"
 
