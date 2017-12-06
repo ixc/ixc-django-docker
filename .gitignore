@@ -3,6 +3,7 @@
 /**/*.pyc
 /**/*.pyo
 /**/dist/
+/ixc_django_docker/etc/newrelic.ini
 /ixc_django_docker/etc/nginx.conf
 /ixc_django_docker/etc/nginx.htpasswd
 /ixc_django_docker/etc/supervisord.conf

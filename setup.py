@@ -71,6 +71,7 @@ setuptools.setup(
             'django-post-office',
             'elasticsearch',  # For Elasticsearch 2.x
             'flower',
+            'newrelic',
             'nose-progressive',
             'pydevd',
             'raven',

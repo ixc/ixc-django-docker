@@ -21,6 +21,7 @@ frequently used scripts you might want to run:
     logentries.sh
     manage.py [COMMAND [ARGS]]
     migrate.sh
+    newrelic.sh <COMMAND>
     nginx.sh
     npm-install.sh <DIR>
     pip-install.sh <DIR>

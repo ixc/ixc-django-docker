@@ -37,6 +37,9 @@ Here is a list of frequently used commands you might want to run:
 		Apply Django migrations, *if* the migrations on disk have been updated
 		since the last time it was run.
 
+	newrelic.sh <COMMAND>
+		Execute a command via 'newrelic-admin run-program'.
+
 	nginx.sh
 		Start Nginx. This is normally managed by Docker or Supervisord, and is
 		not normally used interactively.
