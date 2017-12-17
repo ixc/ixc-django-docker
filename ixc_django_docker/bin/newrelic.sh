@@ -17,4 +17,6 @@ export NEW_RELIC_CONFIG_FILE="$IXC_DJANGO_DOCKER_DIR/etc/newrelic.ini"
 # Render new relic config template.
 dockerize -template "$IXC_DJANGO_DOCKER_DIR/etc/newrelic.tmpl.ini:$NEW_RELIC_CONFIG_FILE"
 
+echo "Run via New Relic. App name: $NEW_RELIC_APP_NAME"
+
 exec newrelic-admin run-program "$@"
