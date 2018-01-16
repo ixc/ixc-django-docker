@@ -15,6 +15,6 @@ fi
 # Render nginx config template.
 dockerize -template "${NGINX_TMPL_CONF:-$IXC_DJANGO_DOCKER_DIR/etc/nginx.tmpl.conf}:$PROJECT_DIR/var/etc/nginx.conf"
 
-# `error_log` needs to be set via command line to avoid a permissions error when
-# run as an unprivileged user. See: https://stackoverflow.com/a/24423319
+# Set `error_log` via command line to avoid a permissions error when run as an
+# unprivileged user. See: https://stackoverflow.com/a/24423319
 exec nginx -c "$PROJECT_DIR/var/etc/nginx.conf" -g "error_log /dev/stderr;" "$@"
