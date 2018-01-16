@@ -14,6 +14,7 @@ if [[ -n "$NGINX_BASIC_AUTH" ]]; then
 fi
 
 # Render nginx config template.
+mkdir -p "$PROJECT_DIR/var/etc"
 dockerize -template "${NGINX_TMPL_CONF:-$IXC_DJANGO_DOCKER_DIR/etc/nginx.tmpl.conf}:$PROJECT_DIR/var/etc/nginx.conf"
 
 # Set `error_log` via command line to avoid a permissions error when run as an

@@ -12,6 +12,7 @@ set -e
 export SUPERVISORD_PORT="${SUPERVISORD_PORT:-59$(python -c "import hashlib; print('%03d' % (int(hashlib.md5('$PROJECT_DIR').hexdigest()[:3], 16) % 1000));")}"
 
 # Render config templates.
+mkdir -p "$PROJECT_DIR/var/etc"
 dockerize -template "${SUPERVISORD_TMPL_CONF:-$IXC_DJANGO_DOCKER_DIR/etc/supervisord.tmpl.conf}:$PROJECT_DIR/var/etc/supervisord.conf"
 dockerize -template "${SUPERVISORD_INCLUDE_TMPL_CONF:-$IXC_DJANGO_DOCKER_DIR/etc/supervisord.include.tmpl.conf}:$PROJECT_DIR/var/etc/supervisord.include.conf"
 
