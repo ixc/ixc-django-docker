@@ -14,4 +14,4 @@ if [[ -n "${DOCKER_FOR_MAC+1}" ]]; then
 	set -- --noreload "$@"
 fi
 
-exec manage.py runserver "$@" 0.0.0.0:8000
+exec manage.py runserver "$@" 0.0.0.0:${NGINX_PORT:-8000}
