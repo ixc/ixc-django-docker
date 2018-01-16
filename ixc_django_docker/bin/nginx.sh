@@ -8,6 +8,7 @@ set -e
 
 # Generate htpasswd file if credentials are set.
 if [[ -n "$NGINX_BASIC_AUTH" ]]; then
+	# Split on `:`.
 	IFS=: read BASIC_AUTH_USERNAME BASIC_AUTH_PASSWORD <<< "$NGINX_BASIC_AUTH"
 	echo "$BASIC_AUTH_PASSWORD" | htpasswd -ci "$PROJECT_DIR/var/etc/nginx.htpasswd" "$BASIC_AUTH_USERNAME"
 fi
