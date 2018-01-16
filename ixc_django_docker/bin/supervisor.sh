@@ -18,5 +18,5 @@ dockerize -template "${SUPERVISORD_INCLUDE_TMPL_CONF:-$IXC_DJANGO_DOCKER_DIR/etc
 if [[ -z "$@" ]]; then
 	exec supervisord --configuration "$PROJECT_DIR/var/etc/supervisord.conf"
 else
-	exec supervisorctl --configuration "$PROJECT_DIR/var/etc/supervisord.conf" "$@"
+	exec supervisorctl --configuration "$PROJECT_DIR/var/etc/supervisord.conf" --serverurl "http://localhost:$SUPERVISORD_PORT" "$@"
 fi
