@@ -139,7 +139,7 @@ CONN_MAX_AGE = 60  # Default: 0
 #
 
 # Create logfile directory if necessary
-LOGFILE_DIR = os.path.join(VAR_DIR, 'logs')
+LOGFILE_DIR = os.path.join(VAR_DIR, 'log')
 if not os.path.exists(LOGFILE_DIR):
     os.mkdir(LOGFILE_DIR)
 
@@ -327,6 +327,5 @@ WSGI_APPLICATION = 'ixc_django_docker.wsgi.application'
 RUNTIME_DIRS = STATICFILES_DIRS + (
     MEDIA_ROOT,
     os.path.join(PROJECT_DIR, 'templates'),
-    os.path.join(VAR_DIR, 'logs'),
     # os.path.join(VAR_DIR, 'run'),
 )
