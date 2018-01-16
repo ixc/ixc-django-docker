@@ -13,7 +13,7 @@ export SUPERVISORD_PORT="${SUPERVISORD_PORT:-59$(python -c "import hashlib; prin
 
 # Render config templates.
 dockerize -template "${SUPERVISORD_TMPL_CONF:-$IXC_DJANGO_DOCKER_DIR/etc/supervisord.tmpl.conf}:$PROJECT_DIR/var/etc/supervisord.conf"
-dockerize -template "${SUPERVISORD_INCLUDE_TMPL_CONF:-$IXC_DJANGO_DOCKER_DIR/etc/supervisord.nginx-proxy.tmpl.conf}:$PROJECT_DIR/var/etc/supervisord.include.conf"
+dockerize -template "${SUPERVISORD_INCLUDE_TMPL_CONF:-$IXC_DJANGO_DOCKER_DIR/etc/supervisord.include.tmpl.conf}:$PROJECT_DIR/var/etc/supervisord.include.conf"
 
 if [[ -z "$@" ]]; then
 	exec supervisord --configuration "$PROJECT_DIR/var/etc/supervisord.conf"
