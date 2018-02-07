@@ -67,6 +67,7 @@ setuptools.setup(
             'celery[django]',
             'django-celery',
             'django-celery-email',
+            'django-debug-toolbar',
             'django-extensions',
             'django-haystack',
             'django-master-password',
