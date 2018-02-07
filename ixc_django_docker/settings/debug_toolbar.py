@@ -1,4 +1,4 @@
-import os
+import sys
 
 # Remove `INTERNAL_IPS` check.
 DEBUG_TOOLBAR_CONFIG = {'SHOW_TOOLBAR_CALLBACK': lambda r: not r.is_ajax()}
