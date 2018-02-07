@@ -9,6 +9,7 @@ import string
 
 from django.core.urlresolvers import reverse_lazy
 from django.utils.text import slugify
+import django
 
 # Get project directory from environment. This MUST already be defined.
 # Copied from __init__.py I'm not sure why it's needed here as well
@@ -221,20 +222,32 @@ LOGIN_REDIRECT_URL = '/'  # Default: '/accounts/profile/'
 LOGIN_URL = reverse_lazy('login')  # Default: '/accounts/signin/'
 LOGOUT_URL = reverse_lazy('logout')  # Default: '/accounts/signout/'
 
-MIDDLEWARE_CLASSES = (
-    # Default.
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
+if django.VERSION < (1, 10):
+    MIDDLEWARE_CLASSES = (
+        # Default.
+        'django.contrib.sessions.middleware.SessionMiddleware',
+        'django.middleware.common.CommonMiddleware',
+        'django.middleware.csrf.CsrfViewMiddleware',
+        'django.contrib.auth.middleware.AuthenticationMiddleware',
+        'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+        'django.contrib.messages.middleware.MessageMiddleware',
+        'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        'django.middleware.security.SecurityMiddleware',
 
-    # Extra.
-    'django.contrib.admindocs.middleware.XViewMiddleware',
-)
+        # Extra.
+        'django.contrib.admindocs.middleware.XViewMiddleware',
+    )
+else:
+    MIDDLEWARE = (
+        # Default.
+        'django.middleware.security.SecurityMiddleware',
+        'django.contrib.sessions.middleware.SessionMiddleware',
+        'django.middleware.common.CommonMiddleware',
+        'django.middleware.csrf.CsrfViewMiddleware',
+        'django.contrib.auth.middleware.AuthenticationMiddleware',
+        'django.contrib.messages.middleware.MessageMiddleware',
+        'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    )
 
 ROOT_URLCONF = 'ixc_django_docker.urls'
 
