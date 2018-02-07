@@ -100,8 +100,8 @@ fi
 # Get absolute directory for the `ixc_django_docker` package.
 export IXC_DJANGO_DOCKER_DIR=$(python -c "import ixc_django_docker, os; print(os.path.dirname(ixc_django_docker.__file__));")
 
-# Add project and `ixc-django-docker` bin directories to PATH.
-export PATH="$PROJECT_DIR/bin:$IXC_DJANGO_DOCKER_DIR/bin:$PATH"
+# Add project, `node_modules`, and `ixc-django-docker` bin directories to PATH.
+export PATH="$PROJECT_DIR/bin:$PROJECT_DIR/node_modules/.bin:$IXC_DJANGO_DOCKER_DIR/bin:$PATH"
 
 # Source local dotenv file, which is not encrypted or version controlled, and
 # may contain the password needed to decrypt secret files.
