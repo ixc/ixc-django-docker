@@ -45,40 +45,71 @@ setuptools.setup(
     ],
     include_package_data=True,
     install_requires=[
-        'boto3',
-        'ConcurrentLogHandler',
-        'coverage',
-        'decorator',
-        'django-compressor',
-        'django-split-settings',
-        'django-storages',
-        'Django',
-        'gunicorn',
-        'ixc-django-compressor',
-        'ixc-whitenoise',
-        'jinja2',
-        'logentries',
-        'psycopg2',
-        'python-redis-lock[django]',
-        'supervisor',
+            'ConcurrentLogHandler',
+            'coverage',
+            'decorator',
+            'Django',
+            'django-split-settings',
+            'gunicorn',
+            'jinja2',
+            'python-redis-lock[django]',
+            'supervisor',
     ],
     extras_require={
-        'project_template': [
+        'celery': [
             'celery[django]',
             'django-celery',
-            'django-celery-email',
-            'django-debug-toolbar',
-            'django-extensions',
-            'django-haystack',
-            'django-master-password',
-            'django-nose',
-            'django-post-office',
-            'elasticsearch',  # For Elasticsearch 2.x
             'flower',
+        ],
+        'celery-email': [
+            'django-celery-email',
+        ],
+        'compressor': [
+            'django-compressor',
+            'ixc-django-compressor',
+        ],
+        'debug-toolbar': [
+            'django-debug-toolbar',
+        ],
+        'extensions': [
+            'django-extensions',
+        ],
+        'haystack': [
+            'django-haystack',
+            'elasticsearch',  # For Elasticsearch 2.x
+        ],
+        'logentries': [
+            'logentries',
+        ],
+        'master-password': [
+            'django-master-password',
+        ],
+        'newrelic': [
             'newrelic',
+        ],
+        'nose': [
+            'django-nose',
+            'nose-exclude',
             'nose-progressive',
+        ],
+        'post-office': [
+            'django-post-office',
+        ],
+        'postgres': [
+            'psycopg2',
+        ],
+        'pydevd': [
             'pydevd',
+        ],
+        'sentry': [
             'raven',
+        ],
+        'storages': [
+            'boto3',
+            'django-storages',
+        ],
+        'whitenoise': [
+            'ixc-whitenoise',
         ],
     },
     setup_requires=['setuptools_scm'],
