@@ -40,7 +40,7 @@ def get_local_file_path(file_obj, keep=False):
             )
             if not os.path.exists(name):
                 try:
-                    os.path.makedirs(os.path.dirname(name))
+                    os.makedirs(os.path.dirname(name))
                 except:
                     pass
                 with open(name, 'w+b') as local_file:
