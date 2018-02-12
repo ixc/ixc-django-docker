@@ -1,3 +1,7 @@
+from __future__ import absolute_import
+
+from celery.task import task
+from django.core import management
 import decorator
 import redis_lock
 
@@ -38,3 +42,8 @@ def skip_concurrent(f, *args, **kwargs):
             return f(*args, **kwargs)
     except redis_lock.NotAcquired:
         pass
+
+
+@task
+def call_command(*args, **kwargs):
+    return management.call_command(*args, **kwargs)
