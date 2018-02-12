@@ -1,3 +1,4 @@
+from celery.schedules import crontab
 from kombu import Exchange, Queue
 
 BROKER_URL = 'redis://%s/0' % REDIS_ADDRESS
@@ -15,7 +16,15 @@ CELERY_QUEUES = (
 CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
-CELERYBEAT_SCHEDULE = {}
+
+CELERYBEAT_SCHEDULE = {
+    'cleanup': {
+        'task': 'ixc_django_docker.celery.tasks.call_command',
+        'schedule': crontab(hour=0, minute=0),
+        'args': ('cleanup', ),
+    },
+}
+
 CELERYD_MAX_TASKS_PER_CHILD = 20
 
 INSTALLED_APPS += (
