@@ -89,7 +89,7 @@ Settings typically need to address these scaling issues
 
 * Use service host names instead of ``localhost`` for ElasticSearch, Redis, etc.
 
-* Use a service like [LogEntries](https://logentries.com) to store logs, to
+* Use a service like `LogEntries <https://logentries.com>`__ to store logs, to
   avoid data loss when ephemeral nodes are terminated and as a bonus, make log
   analysis much easier.
 
