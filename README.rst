@@ -1,5 +1,6 @@
-Overview
-========
+===========================================================================
+ixc-django-docker: Run Django projects consistently with and without Docker
+===========================================================================
 
 A collection of scripts and config files that make it easier to run Django
 projects consistently with and without Docker (for Mac/Windows, Cloud, etc.)
@@ -8,39 +9,75 @@ It includes:
 
 * Entrypoint, setup, and program wrapper scripts. See ``help.sh``.
 
-* A Django project with safe default settings and hooks to integrate context
-  processors, settings, static files, templates, URLs, etc., from your
+* A Django project template with safe default settings and hooks to integrate
+  context processors, settings, static files, templates, URLs, etc., from your
   project.
 
 * Supervisord config that runs Gunicorn behind a buffering proxy (Nginx) and
   logs to stderr/stdout.
 
 
-About the included Django project
-=================================
+Django Project Template
+=======================
 
-* Adds an ``environment`` context processor that returns settings referenced in
+The ``project_template`` directory contains scripts and configurations files
+that you copy into the root directory of a new or existing project to quickly
+gain features including:
+
+* example settings to create and run a Docker development environment that will
+  correspond closely to real Docker-based site deployments. See
+  `Run with Docker`_
+
+* a ``go.sh`` script to create a Docker-like development environment in which
+  the collected the scripts and configurations can be applied as closely as
+  possible to a real Docker environment. See `Run without Docker`_.
+
+* project settings and hooks for context processors, settings, static files,
+  templates, etc.
+
+* an ``environment`` context processor that returns settings referenced in
   the ``CONTEXT_PROCESSOR_SETTINGS`` setting.
 
-* Adds ``static`` and ``url`` functions to the Jinja2 environment, that
+* ``static`` and ``url`` functions in the Jinja2 environment, that
   correspond with the built in Django template tags of the same names.
 
-* Has project hooks for context processors, settings, static files, templates,
-  etc.
+To apply the template to an existing project see
+`How to dockerize an existing project`_.
 
 
-About settings modules
-======================
+Apply and Customise Settings
+============================
 
 The ``ixc_django_docker.settings`` package includes many small settings modules
-that can be combined as required with ``django-split-settings``.
+that can be combined as required, which you apply in your project via
+configuration conventions and the template project scripts.
 
-Define the following environment variables to configure::
+The settings modules are loaded using features of
+`django-split-settings <https://github.com/sobolevn/django-split-settings>`_.
+
+Think of project settings as a three-level hierarchy:
+
+* **base** settings are included in `ixc-django-docker` for complex and
+  commonly-used project features.
+
+* **project** settings are specific to your project, and either add to or
+  modify *base* settings.
+
+* **environment** settings are specific to a particular environment in which
+  your project runs, such as local development, a staging server, or the final
+  production environment. These settings add to or modify *base* and *project*
+  settings.
+
+  Note that `ixc-django-docker` also includes some base settings with common
+  customisations for different environments.
+
+To configure an `ixc-django-docker` project's settings configure the following
+environment variables::
 
     BASE_SETTINGS
 
-        A space separated list of settings modules to be loaded from the
-        ``ixc_django_docker/settings`` directory.
+        A space separated list of **base** settings modules to be loaded from
+        the ``ixc_django_docker/settings`` directory.
 
         Default: base.py compressor.py logentries.py storages.py whitenoise.py
 
@@ -50,35 +87,106 @@ Define the following environment variables to configure::
 
         Default: ``project_settings.py``
 
+    DOTENV
+
+        The name of the desired runtime environment, used primarily to find and
+        load text files that contain further environment variables and arel
+        named as ``.env.<DOTENV>``. These environment variable files are loaded
+        by ``entrypoint.sh``.
+
+        Default: NONE; ``.env.local`` and ``.env.base`` files are found and
+                 loaded in all cases.
+
     OVERRIDE_SETTINGS
 
-        A single settings module to be loaded from both the base and project
+        A single settings module to be loaded from either the base and project
         settings modules directories, if it exists.
 
         Default: Same as ``DOTENV`` with a ``.py`` extension appended.
 
-All settings modules should be given as relative file system paths, not dotted
-path module names.
+All settings modules should be given as file system paths relative to the
+installed location of `ixc-django-docker` for **base** settings, or relative
+to your project's home directory for all other modules.
 
-Separate base settings modules with a space. Generally, break down settings into
-two types of module:
-
-* Enable a specific app or feature, e.g. ``compressor``, ``haystack``,
-  ``logentries``, etc.
-
-* Reconfigure settings appropriately for a specific environment, for example:
-
-  * ``develop`` - don't send emails, disable caching, relax security
-    restrictions, etc.
-
-  * ``production`` - do send emails, enable aggressive caching, etc.
-
-  * ``test`` - install additional test apps, etc.
+Do not use dotted path module names.
 
 
+Base Settings Modules in ixc-django-docker
+------------------------------------------
 
-Settings typically need to address these scaling issues
-=======================================================
+The base settings modules included in ``ixc-django-docker.settings``, and which
+are be applied via ``BASE_SETTINGS``, can provide either feature settings or
+settings that are suitable for a particular run-time environment.
+
+Environment settings modules:
+
+* ``develop.py`` - set ``DEBUG`` mode, don't send emails, disable caching,
+  relax security restrictions, etc.
+
+* ``test.py`` - install additional test apps, etc.
+
+* ``staging.py`` - don't send emails, enable logging, aggressive caching, etc.
+
+* ``production.py`` - **do** send emails, enable logging, aggressive caching,
+    etc.
+
+Feature settings modules (this list is probably incomplete):
+
+* ``base.py`` - a **required** settings module that is the base for all
+  subsequent settings modules. Applies default settings needed by all projects,
+  often using values from environment variables set for a specific runtime
+  environment (or set as default values by `ixc-django-docker` shell scripts).
+
+* ``celery.py`` - use Celery and CeleryBeat for processing scheduled tasks.
+
+* ``celery_email.py`` - use CeleryEmail for out-of-band email messaging.
+
+* ``compressor.py`` - use Compressor to compile and compress static files
+  including CSS, Less, SaSS
+
+* ``debug_toolbar.py`` - **for development only** enable ``debug_toolbar`` for
+  easier debugging.
+
+* ``extensions.py`` - **for development only** enable `django_extensions
+  <https://django-extensions.readthedocs.io/en/latest/>`_ for a richer Django
+  dev environment
+
+* ``haystack.py`` - enable the ElasticSearch Haystack backend for search.
+
+* ``logentries.py`` - enable logging to the `LogEntries
+  <https://logentries.com/>`_ service and format log messages. Requires the
+  ``LOGENTRIES_TOKEN`` environment variable.
+
+* ``master_password.py`` - **for development only** enable the
+  ``master_password`` authentication override, to always accept a master
+  password set with the ``MASTER_PASSWORD`` environment variable.
+
+* ``nose.py`` - **for development or test environments only** enable and
+  configure the Nose unit test runner
+
+* ``post_office.py`` - enable the `Django Post Office
+  <https://pypi.python.org/pypi/django-post_office>`_ for monitoring,
+  background sending, and templating of email messages.
+
+* ``redis_cache.py`` - enable a read Redis cache. Requires the
+  ``REDIS_ADDRESS`` environment variable as processed by ``base.py``.
+
+* ``sentry.py`` - enable Sentry/Raven error reporting. Requires the
+  ``SENTRY_DSN`` environment variable.
+
+* ``storages.py`` - enable and configure Amazon S3 as the site's storage
+  backend. Requires the ``MEDIA_AWS_ACCESS_KEY_ID``,
+  ``MEDIA_AWS_SECRET_ACCESS_KEY``, and (optional)
+  ``MEDIA_AWS_STORAGE_BUCKET_NAME`` environment variables.
+
+* ``whitenoise.py`` - enable `IC's improvements
+  <https://github.com/ixc/ixc-whitenoise>`_ to `WhiteNoise
+  <http://whitenoise.evans.io/>`_ for simplified static file serving.
+
+
+
+Settings typically need to address scaling issues
+-------------------------------------------------
 
 * Compress CSS/JS offline, so each container in a multi-node configuration has
   immediate access to all compressed assets.
@@ -118,6 +226,24 @@ Secrets should only be stored in ``.env.*`` and ``docker-cloud.*.yml`` files,
 which must be encrypted by ``git-secret`` or ``transcrypt``.
 
 
+Transcrypt (recommended)
+------------------------
+
+To enable, set the ``TRANSCRYPT_PASSWORD`` environment variable in
+``.env.local`` and ``docker-cloud.*.yml`` files.
+
+* Much simpler in concept and implementation. Bash and OpenSSH are the only
+  requirements.
+
+* Needs only a password (no personal or other keys) to decrypt.
+
+* Automated encryption and decryption via git attributes. Easy to view diffs and
+  stage individual hunks.
+
+* Committing changes with a git client that does not support git attributes
+  makes it surprisingly easy to accidentally commit unencrypted secrets.
+
+
 Git-Secret (not recommended)
 ----------------------------
 
@@ -139,26 +265,8 @@ To enable, set the ``GPG_PASSPHRASE`` environment variable in ``.env.local`` and
   individual hunks.
 
 
-Transcrypt (recommended)
-------------------------
-
-To enable, set the ``TRANSCRYPT_PASSWORD`` environment variable in
-``.env.local`` and ``docker-cloud.*.yml`` files.
-
-* Much simpler in concept and implementation. Bash and OpenSSH are the only
-  requirements.
-
-* Needs only a password (no personal or other keys) to decrypt.
-
-* Automated encryption and decryption via git attributes. Easy to view diffs and
-  stage individual hunks.
-
-* Committing changes with a git client that does not support git attributes
-  makes it surprisingly easy to accidentally commit unencrypted secrets.
-
-
-About LogEntries
-================
+LogEntries for Log Capture
+==========================
 
 Docker containers are often run on ephemeral infrastructure with no persistent
 storage for logs. We can send and aggregate container stdout, Python logs, and
@@ -179,8 +287,18 @@ file based logs to LogEntries in realtime.
 5. Add `logentries.py` to `BASE_SETTINGS` in your `.env.base` file.
 
 
-How to run with Docker
-======================
+How to Run an ixc-django-docker Project
+=======================================
+
+Run with Docker
+---------------
+
+Running a project in a full Docker environment will give a development
+environment that is the closest with real production sites, with less need to
+install and configure supporting services.
+
+The main drawback of doing this, however, is that it tends to be monumentally
+slow.
 
 Run an interactive shell::
 
@@ -199,16 +317,24 @@ Stop all services::
     $ docker-compose stop
 
 
-How to run without Docker
-=========================
+Run without Docker
+------------------
 
-Run an interactive shell::
+Running a project in a simulated Docker environment will give a development
+envifonment that is not too far from real sites, though you will need to
+install and configure supporting services.
+
+Although this environment isn't as close to real sites using Docker directly,
+it will run quickly.
+
+To set up (on first time) and run a Docker-like interactive shell::
 
     $ ./go.sh
 
 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Requirements when running without Docker
-========================================
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * md5sum
 * Nginx
@@ -222,12 +348,12 @@ Requirements when running without Docker
 Optional:
 
 * Elasticsearch 2.x (5.x is not compatible with ``django-haystack``)
-* git-secret (not recommended)
 * Transcrypt
+* git-secret (not recommended)
 
 
 macOS
------
+^^^^^
 
 Install Xcode command line tools::
 
