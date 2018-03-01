@@ -340,5 +340,5 @@ WSGI_APPLICATION = 'ixc_django_docker.wsgi.application'
 RUNTIME_DIRS = STATICFILES_DIRS + (
     MEDIA_ROOT,
     os.path.join(PROJECT_DIR, 'templates'),
-    # os.path.join(VAR_DIR, 'run'),
+    os.path.join(VAR_DIR, 'run'),
 )
