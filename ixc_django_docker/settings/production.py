@@ -1,5 +1,7 @@
 # Actually send emails.
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# for servers that use celery as the backend
+CELERY_EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # Keep more log backups. Enable LogEntries log handler.
 LOGGING['handlers']['logfile']['backupCount'] = 100
