@@ -53,11 +53,22 @@ PROJECT_SETTINGS.append(
     optional(os.path.join(PROJECT_SETTINGS_DIR, 'local.py')))
 
 # Tell users where settings are coming from.
-print('BASE_SETTINGS:\n  %s' % '\n  '.join(
-    _(os.path.join(os.path.dirname(__file__), s), os.path.dirname(__file__))
-    for s in BASE_SETTINGS))
-print('PROJECT_SETTINGS:\n  %s' % '\n  '.join(
-    _(os.path.join(PROJECT_DIR, s), PROJECT_DIR) for s in PROJECT_SETTINGS))
+if os.environ.get('DONT_PRINT_SETTINGS'):
+    print(
+        'NOT printing actual base and project settings. Unset '
+        '`DONT_PRINT_SETTINGS` to change.')
+else:
+    print('BASE_SETTINGS (%s):\n  %s' % (
+        os.path.dirname(__file__),
+        '\n  '.join(
+            _(os.path.join(os.path.dirname(__file__), s), os.path.dirname(__file__))
+            for s in BASE_SETTINGS),
+    ))
+    print('PROJECT_SETTINGS (%s):\n  %s' % (
+        PROJECT_DIR,
+        '\n  '.join(
+            _(os.path.join(PROJECT_DIR, s), PROJECT_DIR) for s in PROJECT_SETTINGS),
+    ))
 
 # Include base and project settings modules.
 include(*BASE_SETTINGS)
