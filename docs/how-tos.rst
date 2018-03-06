@@ -61,10 +61,6 @@ How to dockerize an existing project
 
 * Run ``pip-compile -v``, resolving any conflicts that may arise.
 
-* Re-derive your ``requirements.txt`` file from ``requirements.in`` with::
-
-    $ pip-compile --output-file requirements.txt requirements.in
-
 * Make ``go.sh`` executable::
 
     $ chmod 755 go.sh
