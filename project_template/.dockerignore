@@ -1,3 +1,5 @@
+# This file should match `.gitignore`, with the exception that there should NOT
+# be a leading forward slash on absolute patterns.
 **/*.md5
 **/*.orig
 **/*.pyc
@@ -9,6 +11,8 @@
 **/pubring.gpg~
 **/random_seed
 **/requirements-local.txt
+.coverage
+.env.local
 .gnupg/gpg.conf
 .idea/
 bower_components/
