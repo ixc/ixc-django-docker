@@ -144,44 +144,58 @@ LOGFILE_DIR = os.path.join(VAR_DIR, 'log')
 if not os.path.exists(LOGFILE_DIR):
     os.mkdir(LOGFILE_DIR)
 
-# Add a root logger and change level for console handler to `DEBUG`.
+LOGLEVEL = os.environ.get('LOGLEVEL', 'info').upper()
+
+# Add a root logger and change level for console handler.
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
-        'logfile': {
+        'default': {
             'format': '%(asctime)s '
                       '%(levelname)s '
                       '%(module)s.%(funcName)s:%(lineno)d '
                       '%(message)s',
         },
     },
-    'filters': {
-        'require_debug_true': {
-            '()': 'django.utils.log.RequireDebugTrue',
-        },
-    },
     'handlers': {
         'console': {
-            'level': 'DEBUG',
-            'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
+            'formatter': 'default',
         },
         'logfile': {
-            'level': 'DEBUG',
+            'backupCount': 10,
             'class': 'cloghandler.ConcurrentRotatingFileHandler',
             'filename': os.path.join(LOGFILE_DIR, '%s.log' % PROJECT_SLUG),
+            'formatter': 'default',
             'maxBytes': 20 * 1024 * 1024,  # 20 MiB
-            'backupCount': 10,
-            'formatter': 'logfile',
+        },
+        'null': {
+            'class': 'logging.NullHandler',
         },
     },
     'loggers': {
         '': {
-            'handlers': ['console'],
+            'handlers': ['console', 'logfile'],
+            'level': LOGLEVEL,  # Default: WARNING
         },
     },
 }
+
+# Silence the given loggers.
+for logger in os.environ.get('NULL_LOGGERS', '').split():
+    if logger:
+        LOGGING['loggers'][logger] = {
+            'handlers': ['null'],
+            'propagate': False,
+        }
+
+# Override level for the given loggers.
+for level in ('EXCEPTION', 'ERROR', 'WARNING', 'INFO', 'DEBUG'):
+    for logger in os.environ.get('%s_LOGGERS' % level, '').split():
+        if logger:
+            LOGGING['loggers'].setdefault(logger, {})
+            LOGGING['loggers'][logger]['level'] = level
 
 ADMINS = (
     ('Admin', 'admin@%s' % SITE_DOMAIN),
