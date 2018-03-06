@@ -1,2 +1,2 @@
-# See ``ixc_django_docker/settings/__init__.py`` for details on how base and
-# project settings are combined.
+# See https://github.com/ixc/ixc-django-docker/README.rst#composable-settings
+# for details on how base and project settings are combined.
