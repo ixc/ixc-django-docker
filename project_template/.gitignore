@@ -11,8 +11,8 @@
 **/requirements-local.txt
 /.coverage
 /.env.local
-/.idea/
 /.gnupg/gpg.conf
+/.idea/
 /bower_components/
 /docker-compose.override.yml
 /node_modules/
