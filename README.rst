@@ -132,9 +132,10 @@ The main drawback is that it can be significantly slower on macOS due to
 performance issues with ``osxfs`` shared volumes. See:
 https://forums.docker.com/t/file-access-in-mounted-volumes-extremely-slow-cpu-bound/8076/1
 
-Build or re-build the project's Docker container::
+Build or re-build the project's Docker image, with ``--pulll`` if/when you want
+to get the latest version of any base images::
 
-    $ docker-compose build
+    $ docker-compose build [--pull]
 
 Run an interactive shell::
 
