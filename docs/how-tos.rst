@@ -30,16 +30,40 @@ as `PYENVD_HOST` to establish a connection from the container to PyCharm.
 How to dockerize an existing project
 ====================================
 
-* Rename ``requirements.txt`` to ``requirements.in``.
+* Rename ``requirements.txt`` to ``requirements.in`` and trim the contents down
+  to only the specific project requirements you need to specify; the rest of
+  the project requirements will be populated into ``requirements.txt`` by
+  ``pip-compile``
+
+* Include in ``requirements.in`` a reference to this project along with all the
+  supporting features you will use, for example::
+
+      ixc-django-docker[postgres,sentry,whitenoise,storages,compressor,celery,celery-email]
+
+  **NOTE:** See this project's ``setup.py`` for a list of potential extra
+  modules.
 
 * Add to, or update all files in, your project directory with changes from the
   corresponding files in the ``project_template`` directory.
+
+  * Be sure to replace all occurrences of ``project_template`` in these copied
+    files with your project name.
+
+
+* Configure environemnt variables
+
+* Create an ``.env.local`` file and set at least the ``DOTENV`` and
+  ``TRANSCRYPT_PASSWORD`` variables
 
 * Install ``pip-tools``::
 
     $ pip install pip-tools
 
 * Run ``pip-compile -v``, resolving any conflicts that may arise.
+
+* Re-derive your ``requirements.txt`` file from ``requirements.in`` with::
+
+    $ pip-compile --output-file requirements.txt requirements.in
 
 * Make ``go.sh`` executable::
 

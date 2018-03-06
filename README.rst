@@ -70,9 +70,10 @@ To create a new project from the template:
 To upgrade an existing ``ixc-django-docker`` project with the currently
 installed version of the template:
 
+    # TODO This command does not yet exist
     $ manage.py update_ixc_django_docker_project_template
 
-Otherwise, see `How to dockerize an existing project`_.
+Otherwise, see `How to dockerize an existing project <docs/how-tos.rst>`
 
 See the `Django project template <docs/project-template.rst>`_ documentation
 for more details.
@@ -130,6 +131,10 @@ almost identical to production, with no need to manage service dependencies.
 The main drawback is that it can be significantly slower on macOS due to
 performance issues with ``osxfs`` shared volumes. See:
 https://forums.docker.com/t/file-access-in-mounted-volumes-extremely-slow-cpu-bound/8076/1
+
+Build or re-build the project's Docker container::
+
+    $ docker-compose build
 
 Run an interactive shell::
 

@@ -9,8 +9,10 @@
 **/pubring.gpg~
 **/random_seed
 **/requirements-local.txt
-/.gnupg/gpg.conf
+/.coverage
+/.env.local
 /.idea/
+/.gnupg/gpg.conf
 /bower_components/
 /docker-compose.override.yml
 /node_modules/
