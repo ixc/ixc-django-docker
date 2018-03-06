@@ -3,9 +3,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # for servers that use celery as the backend
 CELERY_EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-# Keep more log backups. Enable LogEntries log handler.
+# Keep more log backups.
 LOGGING['handlers']['logfile']['backupCount'] = 100
-LOGGING['loggers']['']['handlers'].append('logentries')
 
 # Enable the per-site cache.
 if django.VERSION < (1, 10):

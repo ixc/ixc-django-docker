@@ -1,6 +1,5 @@
-# Keep more log backups. Enable LogEntries log handler.
+# Keep more log backups.
 LOGGING['handlers']['logfile']['backupCount'] = 100
-LOGGING['loggers']['']['handlers'].append('logentries')
 
 # Enable the per-site cache.
 if django.VERSION < (1, 10):
