@@ -86,6 +86,7 @@ CMD ["bash.sh"]
 COPY . ${PROJECT_DIR}
 
 # Fix password pass-through for git-secret and gpg2
+RUN mkdir -p .gnupg/
 RUN echo "allow-loopback-pinentry" > .gnupg/gpg-agent.conf
 RUN echo "pinentry-mode loopback" > .gnupg/gpg.conf
 
