@@ -111,9 +111,16 @@ if [[ -f "$PROJECT_DIR/.env.local" ]]; then
 	set +o allexport
 fi
 
-# Configure git secret.
+# Configure project directory as GPG home directory.
 export GNUPGHOME="$PROJECT_DIR/.gnupg"
-export SECRETS_GPG_COMMAND=gpg2
+
+# Some systems (Homebrew/macOS) install gnupg2 as `gpg` while others
+# (buildpack-deps:xenial) install it as `gpg2` alongside gnupg (1.x) as `gpg`.
+if hash gpg2 2>/dev/null; then
+	export SECRETS_GPG_COMMAND=gpg2
+else
+	export SECRETS_GPG_COMMAND=gpg
+fi
 
 # Decrypt files with git secret.
 if [[ -d "$PROJECT_DIR/.gitsecret" ]]; then

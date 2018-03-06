@@ -85,11 +85,6 @@ CMD ["bash.sh"]
 
 COPY . ${PROJECT_DIR}
 
-# Fix password pass-through for git-secret and gpg2
-RUN mkdir -p .gnupg/
-RUN echo "allow-loopback-pinentry" > .gnupg/gpg-agent.conf
-RUN echo "pinentry-mode loopback" > .gnupg/gpg.conf
-
 RUN manage.py collectstatic --noinput --verbosity=0
 
 RUN manage.py compress --verbosity=0

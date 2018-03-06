@@ -17,12 +17,18 @@ export GPG_EMAIL="${GPG_EMAIL:-git-secret@$PROJECT_NAME}"
 # Generate a strong random passphrase.
 export GPG_PASSPHRASE="${GPG_PASSPHRASE:-$(openssl rand -base64 48)}"
 
+# Configure loopback pinentry to fix interactive password input.
+mkdir -p .gnupg
+chmod 700 .gnupg
+echo "allow-loopback-pinentry" > .gnupg/gpg-agent.conf
+echo "pinentry-mode loopback" > .gnupg/gpg.conf
+
 if [[ -d .git && ! -d .gitsecret ]]; then
 	# Initialise git-secret.
 	git secret init >/dev/null
 
 	# Generate an encryption key for unattended decryption.
-	gpg2 --batch --gen-key <<-EOF 2>/dev/null
+	$SECRETS_GPG_COMMAND --batch --gen-key <<-EOF 2>/dev/null
 		Key-Type: RSA
 		Key-Usage: encrypt
 		Passphrase: $GPG_PASSPHRASE
