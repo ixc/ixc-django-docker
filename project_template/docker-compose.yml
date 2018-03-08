@@ -3,14 +3,16 @@ services:
   base:
     env_file: .env.local
     environment:
-      TERM: # Get from environment
+      TERM:  # Get from environment
     image: interaction/project_template:local
     volumes:
-      - ./:/opt/project_template
+      - './:/opt/project_template'
   bash:
+    build: .
     command: setup-django.sh bash.sh
     extends: base
     links:
+      # - elasticsearch
       - postgres
       - redis
     ports:
@@ -29,28 +31,14 @@ services:
       - postgres
       - redis
   celeryflower:
-    command: setup-django.sh supervisor.sh
+    command: setup-django.sh celeryflower.sh
     environment:
-      SUPERVISORD_PROGRAM: celeryflower
       VIRTUAL_HOST_WEIGHT: 1
-      VIRTUAL_HOST: flower.*
+      VIRTUAL_HOST: 'flower.*'
     extends: base
     links:
-      - postgres
-      - redis
-    ports:
-      - 8000
-  django:
-    build: .
-    command: setup-django.sh supervisor.sh
-    environment:
-      VIRTUAL_HOST: '*'
-    extends: base
-    links:
-      # - celery
-      # - celerybeat
-      # - celeryflower
-      # - elasticsearch
+      - celery
+      - celerybeat
       - postgres
       - redis
     ports:
@@ -59,24 +47,32 @@ services:
   #   image: elasticsearch:2.4.6-alpine
   #   ports:
   #     - 9200
+  gunicorn:
+    command: setup-django.sh supervisor.sh
+    environment:
+      VIRTUAL_HOST: '*'
+    extends: base
+    links:
+      # - elasticsearch
+      - postgres
+      - redis
+    ports:
+      - 8000
   haproxy:
     image: 'dockercloud/haproxy:1.6.3'
     links:
       - celeryflower
-      - django
+      - gunicorn
     ports:
-      # - 80:80
-      # - 443:443
       - 1936:1936
       - 8000:80
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - '/var/run/docker.sock:/var/run/docker.sock'
   postgres:
     image: postgres:9.4-alpine
     ports:
       - 5432
   redis:
-    command: redis-server --appendonly yes
     image: redis:3-alpine
     ports:
       - 6379

@@ -62,7 +62,7 @@ setuptools.setup(
             'flower',
         ],
         'celery-email': [
-            'django-celery-email',
+            'django-celery-email<2.0',
         ],
         'compressor': [
             'django-compressor',

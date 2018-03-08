@@ -1,20 +1,21 @@
+#
+# PROJECT
+#
 celery:
   # autoredeploy: true
   command: 'setup-django.sh celery.sh'
-  deployment_strategy: high_availability
+  deployment_strategy: every_node
   environment:
     - DOTENV=production
-    - TRANSCRYPT_PASSWORD= # Get from 1Password
+    - TRANSCRYPT_PASSWORD=  # 1Password: `TRANSCRYPT_PASSWORD - project_template`
   image: 'interaction/project_template:master'
   links:
     # - elasticsearch
     # - postgres
     - redis
-  restart: on-failure
+  restart: always
   tags:
-    - celery
-    - production
-    - project_template
+    - project_template-{DOTENV}
   volumes:
     - /opt/project_template/var
 celerybeat:
@@ -23,15 +24,13 @@ celerybeat:
   deployment_strategy: high_availability
   environment:
     - DOTENV=production
-    - TRANSCRYPT_PASSWORD= # Get from 1Password
+    - TRANSCRYPT_PASSWORD=  # 1Password: `TRANSCRYPT_PASSWORD - project_template`
   image: 'interaction/project_template:master'
   links:
     - redis
-  restart: on-failure
+  restart: always
   tags:
-    - celerybeat
-    - production
-    - project_template
+    - project_template-{DOTENV}
   volumes:
     - /opt/project_template/var
 celeryflower:
@@ -40,28 +39,32 @@ celeryflower:
   deployment_strategy: high_availability
   environment:
     - DOTENV=production
-    - TRANSCRYPT_PASSWORD= # Get from 1Password
-    - VIRTUAL_HOST=https://flower.project_template.lvh.me
+    - TRANSCRYPT_PASSWORD=  # 1Password: `TRANSCRYPT_PASSWORD - project_template`
+    - VIRTUAL_HOST=https://flower.example.com
   expose:
     - '5555'
   image: 'interaction/project_template:master'
   links:
     - redis
-  restart: on-failure
+  restart: always
   tags:
-    - celeryflower
-    - production
-    - project_template
+    - project_template-{DOTENV}
   volumes:
     - /opt/project_template/var
-django:
+# elasticsearch:
+#   # autoredeploy: true
+#   image: 'elasticsearch:2.4.6-alpine'
+#   restart: always
+#   tags:
+#     - project_template-{DOTENV}
+gunicorn:
   # autoredeploy: true
   command: 'setup-django.sh supervisor.sh'
   deployment_strategy: every_node
   environment:
     - DOTENV=production
-    - TRANSCRYPT_PASSWORD= # Get from 1Password
-    - VIRTUAL_HOST=https://www.project_template.lvh.me
+    - TRANSCRYPT_PASSWORD=  # 1Password: `TRANSCRYPT_PASSWORD - project_template`
+    - VIRTUAL_HOST=https://www.example.com
   expose:
     - '8000'
   image: 'interaction/project_template:master'
@@ -72,26 +75,51 @@ django:
     # - elasticsearch
     # - postgres
     - redis
-  restart: on-failure
+  restart: always
   tags:
-    - django
-    - production
-    - project_template
+    - project_template-{DOTENV}
   volumes:
     - /opt/project_template/var
-# elasticsearch:
+# postgres:
 #   # autoredeploy: true
-#   image: 'elasticsearch:2.4.6-alpine'
-#   restart: on-failure
+#   image: 'postgres:9.4-alpine'
+#   restart: always
 #   tags:
-#     - elasticsearch
-#     - production
-#     - project_template
+#     - project_template-{DOTENV}
+redis:
+  # autoredeploy: true
+  image: 'redis:3-alpine'
+  restart: always
+  tags:
+    - project_template-{DOTENV}
+#
+# DATADOG
+#
+datadog:
+  autoredeploy: true
+  deployment_strategy: every_node
+  environment:
+    - API_KEY={DATADOG_API_KEY}
+    - DD_HOSTNAME={DOCKERCLOUD_ORG}-$DOCKERCLOUD_NODE_FQDN
+  image: 'datadog/docker-dd-agent:latest-alpine'
+  privileged: true
+  restart: always
+  tags:
+    - datadog
+  volumes:
+    - '/proc:/host/proc:ro'
+    - '/sys/fs/cgroup:/host/sys/fs/cgroup:ro'
+    - '/var/run/docker.sock:/var/run/docker.sock'
+#
+# HAPROXY
+#
 haproxy:
   # autoredeploy: true
   environment:
+    - BALANCE=source
     - |
-      DEFAULT_SSL_CERT=-----BEGIN RSA PRIVATE KEY-----
+      DEFAULT_SSL_CERT=
+      -----BEGIN RSA PRIVATE KEY-----
       MIIEpQIBAAKCAQEA3cp1UqMNJMWoHsFXWYGV080Rg8jLnhLMRFYHuF8ER56TOEi0
       YAkEQ0uuhDzmeqjfOBWvq7UN0n/EQ1RkLaILp+De01qC4DpsEi9fa47OlSYnkffL
       rvumJQugevruphnE9hRPd8wTXwT9Psr9qpj/6o/YmlqIBo5AhWH+TKZpoYdczuKP
@@ -137,73 +165,59 @@ haproxy:
       s3KYY2u5A8AT6CJoeYFKdB38ydKA0OusVDR/9Ply+30EO8OfCB1jCY8hyXFjGtpb
       HCbQSupHz2fuF5ka
       -----END CERTIFICATE-----
+    - STATS_AUTH=stats:{HAPROXY_STATS_PASSWORD}
   image: 'dockercloud/haproxy:1.6.3'
   links:
     - celeryflower
-    - django
+    - gunicorn
   ports:
     - '443:443'
-  restart: on-failure
+    - '1936:1936'
+  restart: always
   roles:
     - global
   tags:
-    - haproxy
-    - production
-    - project_template
+    - haproxy-{REGION}
   volumes_from:
     - letsencrypt
 letsencrypt:
   environment:
-    - DOMAINS=www.example.com,flower.example.com
+    - |
+      DOMAINS=
+      example.com,flower.example.com,www.example.com
     - EMAIL=admins@interaction.net.au
     - 'HAPROXY_IMAGE=dockercloud/haproxy:1.6.3'
-  image: 'interaction/letsencrypt:standalone'
+  image: 'interaction/letsencrypt'
   ports:
     - '80:80'
   roles:
     - global
   tags:
-    - letsencrypt
-    - production
-    - project_template
+    - haproxy-{REGION}
   volumes:
     - /var/run/docker.sock:/var/run/docker.sock
+#
+# LOGENTRIES
+#
 logentries:
-  command: -t {DOCKER_LOGENTRIES_TOKEN}
+  autoredeploy: true
+  command: '-k {DOCKER_STATS_TOKEN} -e {DOCKER_EVENTS_TOKEN}'
   deployment_strategy: every_node
-  image: logentries/docker-logentries:0.2.1
+  image: 'logentries/docker-logentries'
+  restart: always
   tags:
     - logentries
-    - production
-    - project_template
   volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
+    - '/var/run/docker.sock:/var/run/docker.sock'
 logspout:
+  autoredeploy: true
   command: syslog+tcp://data.logentries.com:10000
   deployment_strategy: every_node
   environment:
     - SYSLOG_STRUCTURED_DATA={DOCKER_LOGSPOUT_TOKEN}
-  image: gliderlabs/logspout:v3.2.2
+  image: 'gliderlabs/logspout'
+  restart: always
   tags:
-    - logspout
-    - production
-    - project_template
+    - logentries
   volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
-# postgres:
-#   # autoredeploy: true
-#   image: 'postgres:9.4-alpine'
-#   restart: on-failure
-#   tags:
-#     - postgres
-#     - production
-#     - project_template
-redis:
-  # autoredeploy: true
-  command: 'redis-server --appendonly yes'
-  image: 'redis:3-alpine'
-  restart: on-failure
-  tags:
-    - production
-    - project_template
-    - redis
+    - '/var/run/docker.sock:/var/run/docker.sock'

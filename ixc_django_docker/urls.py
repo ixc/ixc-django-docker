@@ -11,18 +11,19 @@ urlpatterns = [
     url(r'^500/$', TemplateView.as_view(template_name='500.html')),
 ]
 
-# Django Debug Toolbar.
+# Django Debug Toolbar URLs.
 if 'debug_toolbar' in settings.INSTALLED_APPS:
     import debug_toolbar
     urlpatterns += [
         url(r'^__debug__/', include(debug_toolbar.urls)),
     ]
 
-# Auto-include `project` URLs if they are available
+# Project URLs.
 try:
-    from project import urls as project_urls
-    urlpatterns += [
-        url(r'^', include(project_urls)),
-    ]
+    import ixcproject.urls
 except ImportError:
     pass
+else:
+    urlpatterns += [
+        url(r'^', include(ixcproject.urls.urlpatterns)),
+    ]

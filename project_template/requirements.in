@@ -1,2 +1,1 @@
-# -e ..[project_template]
-ixc-django-docker[project_template]
+-e git+https://github.com/ixc/ixc-django-docker.git@master#egg=ixc-django-docker[celery,celery-email,compressor,debug-toolbar,extensions,logentries,master-password,newrelic,nose,post-office,postgres,pydevd,sentry,storages,whitenoise]  # haystack,
