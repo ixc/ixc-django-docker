@@ -3,7 +3,7 @@ Logging with LogEntries
 
 Docker containers are often run on ephemeral infrastructure with no persistent
 storage for logs. You can send and aggregate container stdout, Python logs, and
-file based logs to LogEntries in realtime.
+file based logs to [LogEntries](https://logentries.com/) in realtime.
 
 1. Create a new log set named `{PROJECT_NAME}.{DOTENV}`.
 
@@ -18,4 +18,3 @@ file based logs to LogEntries in realtime.
    https://docs.logentries.com/v1.0/docs/accountkey/
 
 5. Add `logentries.py` to `BASE_SETTINGS` in your `.env.base` file.
-
