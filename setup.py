@@ -53,7 +53,6 @@ setuptools.setup(
             'gunicorn',
             'jinja2',
             'python-redis-lock[django]',
-            'supervisor',
     ],
     extras_require={
         'celery': [
