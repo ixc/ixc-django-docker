@@ -38,7 +38,7 @@ def execute(cmd):
     def read_async(fd):
         try:
             return fd.read()
-        except IOError, e:
+        except IOError as e:
             if e.errno != errno.EAGAIN:
                 raise e
             else:
@@ -58,8 +58,8 @@ def execute(cmd):
         select.select([process.stdout, process.stderr], [], [])
 
         # Try reading some data from each
-        stdoutPiece = read_async(process.stdout)
-        stderrPiece = read_async(process.stderr)
+        stdoutPiece = str(read_async(process.stdout))
+        stderrPiece = str(read_async(process.stderr))
 
         if stdoutPiece:
             sys.stdout.write(stdoutPiece)
