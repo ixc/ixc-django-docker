@@ -58,9 +58,9 @@ def execute(cmd):
         select.select([process.stdout, process.stderr], [], [])
 
         # Try reading some data from each
-        stdoutPiece = str(read_async(process.stdout))
-        stderrPiece = str(read_async(process.stderr))
-
+        stdoutPiece = (read_async(process.stdout) or b'').decode('utf-8')
+        stderrPiece = (read_async(process.stderr) or b'').decode('utf-8')
+        
         if stdoutPiece:
             sys.stdout.write(stdoutPiece)
         if stderrPiece:
