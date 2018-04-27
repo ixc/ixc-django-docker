@@ -18,8 +18,17 @@ To enable, set the ``TRANSCRYPT_PASSWORD`` environment variable in
 
 * Automated encryption and decryption via git attribute filters.
 
-**WARNING:** Committing changes with a git client that does not support git
+**WARNING**
+
+Committing changes with a git client that does not support git
 attribute filters makes it easy to accidentally commit unencrypted secrets.
+
+To make absolutely sure that files you are about to push have been
+transparently encrypted, disable git's text conversion processing of
+`.gitattributes` settings when viewing git log patches to confirm that secret
+files are listed as binary diffs, not the usual plain text diffs::
+
+     git log --patch --no-textconv
 
 
 Git-Secret (not recommended)

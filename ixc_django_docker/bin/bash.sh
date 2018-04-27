@@ -44,6 +44,10 @@ For more info on each script, run:
 
     help.sh
 
+See more detailed documentation about commands at:
+
+    https://github.com/ixc/ixc-django-docker/docs/commands.rst
+
 EOF
 
 export PS1="($PROJECT_NAME) \u@\h:\w\\$ "

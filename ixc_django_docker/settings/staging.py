@@ -1,12 +1,17 @@
-# Keep more log backups. Enable LogEntries log handler.
+# Keep more log backups.
 LOGGING['handlers']['logfile']['backupCount'] = 100
-LOGGING['loggers']['']['handlers'].append('logentries')
 
 # Enable the per-site cache.
-MIDDLEWARE_CLASSES = \
-    ('django.middleware.cache.UpdateCacheMiddleware', ) + \
-    MIDDLEWARE_CLASSES + \
-    ('django.middleware.cache.FetchFromCacheMiddleware', )
+if django.VERSION < (1, 10):
+    MIDDLEWARE_CLASSES = \
+        ('django.middleware.cache.UpdateCacheMiddleware', ) + \
+        MIDDLEWARE_CLASSES + \
+        ('django.middleware.cache.FetchFromCacheMiddleware', )
+else:
+    MIDDLEWARE = \
+        ('django.middleware.cache.UpdateCacheMiddleware', ) + \
+        MIDDLEWARE + \
+        ('django.middleware.cache.FetchFromCacheMiddleware', )
 
 # Enable the cached template loader.
 TEMPLATES[0]['OPTIONS']['loaders'] = [

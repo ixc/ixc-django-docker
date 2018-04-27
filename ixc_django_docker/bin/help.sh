@@ -122,4 +122,8 @@ Here is a list of frequently used commands you might want to run:
 	waitlock.py [-b] <COMMAND>
 		Serialize the execution of a command with a Redis lock.
 
+See more detailed documentation about commands at:
+
+    https://github.com/ixc/ixc-django-docker/docs/commands.rst
+
 EOF

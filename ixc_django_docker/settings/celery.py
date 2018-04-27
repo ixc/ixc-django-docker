@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from celery.schedules import crontab
 from kombu import Exchange, Queue
 
