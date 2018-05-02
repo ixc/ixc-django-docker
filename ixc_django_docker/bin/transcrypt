@@ -15,7 +15,7 @@
 ##### CONSTANTS
 
 # the release version of this script
-readonly VERSION='1.0.1'
+readonly VERSION='1.0.3'
 
 # the default cipher to utilize
 readonly DEFAULT_CIPHER='aes-256-cbc'
@@ -46,14 +46,24 @@ readonly IS_BARE=$(git rev-parse --is-bare-repository 2> /dev/null)
 # print a canonicalized absolute pathname
 realpath() {
 	local path=$1
-	local dirname=$(cd "${path%/*}" 2> /dev/null; pwd -P)
-	local basename=${path##*/}
-	local abspath=$(printf '%s/%s\n' "$dirname" "$basename")
+
+	# make path absolute
+	local abspath=$path
+	if [[ -n ${abspath##/*} ]]; then
+		abspath=$(pwd -P)/$abspath
+	fi
+
+	# canonicalize path
+	local dirname=
 	if [[ -d $abspath ]]; then
-		printf '%s\n' "$(cd "$abspath"; pwd -P)"
-	elif [[ -d $path ]]; then
-		printf '%s\n' "$dirname"
+		dirname=$(cd "$abspath" && pwd -P)
+		abspath=$dirname
 	elif [[ -e $abspath ]]; then
+		dirname=$(cd "${abspath%/*}/" 2> /dev/null && pwd -P)
+		abspath=$dirname/${abspath##*/}
+	fi
+
+	if [[ -d $dirname && -e $abspath ]]; then
 		printf '%s\n' "$abspath"
 	else
 		printf 'invalid path: %s\n' "$path" >&2
@@ -63,7 +73,7 @@ realpath() {
 
 # the current git repository's .git directory
 RELATIVE_GIT_DIR=$(git rev-parse --git-dir 2> /dev/null)
-readonly GIT_DIR=$(realpath "$RELATIVE_GIT_DIR")
+readonly GIT_DIR=$(realpath "$RELATIVE_GIT_DIR" 2> /dev/null)
 
 # the current git repository's gitattributes file
 readonly CORE_ATTRIBUTES=$(git config --get --local --path core.attributesFile)
@@ -126,15 +136,22 @@ run_safety_checks() {
 
 # unset the cipher variable if it is not supported by openssl
 validate_cipher() {
-	local supported=$(openssl list-cipher-commands | grep --line-regexp "$cipher")
+	# Support for OpenSSL versions after and before 1.1.0
+	local list_cipher_commands="openssl list-cipher-commands"
+	if [[ $($list_cipher_commands 2> /dev/null) ]]; then
+		local supported=$(openssl list-cipher-commands | grep --line-regexp "$cipher")
+	else
+		list_cipher_commands="openssl list -cipher-commands"
+		local supported=$(openssl list -cipher-commands | tr -s ' ' '\n' | grep --line-regexp "$cipher")
+	fi
 	if [[ ! $supported ]]; then
 		if [[ $interactive ]]; then
 			printf '"%s" is not a valid cipher; choose one of the following:\n\n' "$cipher"
-			openssl list-cipher-commands | column -c 80
+			$list_cipher_commands | column -c 80
 			printf '\n'
 			unset cipher
 		else
-			die 1 '"%s" is not a valid cipher; see `openssl list-cipher-commands`' "$cipher"
+			die 1 '"%s" is not a valid cipher; see `%s`' "$cipher" "$list_cipher_commands"
 		fi
 	fi
 }
@@ -274,7 +291,7 @@ save_helper_scripts() {
 		    cipher=$(git config --get --local transcrypt.cipher)
 		    password=$(git config --get --local transcrypt.password)
 		    salt=$(openssl dgst -hmac "${filename}:${password}" -sha256 "$filename" | tail -c 16)
-		    ENC_PASS=$password openssl enc -$cipher -pass env:ENC_PASS -e -a -S "$salt" -in "$tempfile"
+		    ENC_PASS=$password openssl enc -$cipher -md MD5 -pass env:ENC_PASS -e -a -S "$salt" -in "$tempfile"
 		  fi
 		fi
 	EOF
@@ -285,7 +302,7 @@ save_helper_scripts() {
 		trap 'rm -f "$tempfile"' EXIT
 		cipher=$(git config --get --local transcrypt.cipher)
 		password=$(git config --get --local transcrypt.password)
-		tee "$tempfile" | ENC_PASS=$password openssl enc -$cipher -pass env:ENC_PASS -d -a 2> /dev/null || cat "$tempfile"
+		tee "$tempfile" | ENC_PASS=$password openssl enc -$cipher -md MD5 -pass env:ENC_PASS -d -a 2> /dev/null || cat "$tempfile"
 	EOF
 
 	cat <<-'EOF' > "${GIT_DIR}/crypt/textconv"
@@ -295,7 +312,7 @@ save_helper_scripts() {
 		if [[ -s $filename ]]; then
 		  cipher=$(git config --get --local transcrypt.cipher)
 		  password=$(git config --get --local transcrypt.password)
-		  ENC_PASS=$password openssl enc -$cipher -pass env:ENC_PASS -d -a -in "$filename" 2> /dev/null || cat "$filename"
+		  ENC_PASS=$password openssl enc -$cipher -md MD5 -pass env:ENC_PASS -d -a -in "$filename" 2> /dev/null || cat "$filename"
 		fi
 	EOF
 
@@ -540,13 +557,13 @@ import_gpg() {
 	fi
 
 	local configuration
-	local saftey_counter  # fix for intermittent 'no secret key' decryption failures
+	local safety_counter  # fix for intermittent 'no secret key' decryption failures
 	while [[ ! $configuration ]]
 	do
 		configuration=$(gpg --batch --quiet --decrypt "$path")
 
-		saftey_counter=$((saftey_counter + 1))
-		if [[ $saftey_counter -eq 3 ]]; then
+		safety_counter=$((safety_counter + 1))
+		if [[ $safety_counter -eq 3 ]]; then
 			die 1 'unable to decrypt the file "%s"' "$path"
 		fi
 	done
@@ -845,4 +862,3 @@ fi
 printf 'The repository has been successfully configured by transcrypt.\n'
 
 exit 0
-0
