@@ -99,8 +99,11 @@ Here is a list of frequently used commands you might want to run:
 		Create a PostgreSQL database with a name derived from the project
 		directory and current Git branch.
 
-		Seed the new database it with data from the 'SRC_PG*' environment
+		Seed the new database with data from the 'SRC_PG*' environment
 		variables, if defined.
+		
+		Additional 'pg_dump' args can be specified in the 'SRC_PGDUMP_EXTRA'
+		environment variable. E.g. '--exclude-table-data django_session'
 
 		Drop and recreate the database if 'SETUP_POSTGRES_FORCE' is defined.
 
