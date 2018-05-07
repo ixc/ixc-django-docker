@@ -9,7 +9,9 @@ import logging
 import os
 import subprocess
 import sys
+import time
 
+from redis.exceptions import ConnectionError
 import redis
 import redis_lock
 
@@ -80,25 +82,48 @@ def waitlock(cmd, block=False):
     # Create lock object.
     lock = redis_lock.Lock(conn, name=cmd, expire=60, auto_renewal=True)
 
-    # Attempt to acquire lock.
-    if lock.acquire(blocking=False):
-        logger.debug('Acquired lock. Executing command: %s' % cmd)
+    # Retry on connection errors, when told to block.
+    while True:
+        try:
+            # Attempt to acquire lock.
+            if lock.acquire(blocking=False):
+                logger.debug('Acquired lock. Executing command: %s' % cmd)
 
-    # Block until lock is available, then execute.
-    elif block:
-        logger.info('Waiting to acquire lock for command: %s' % cmd)
-        when = datetime.datetime.now()
-        lock.acquire()
-        duration = datetime.datetime.now() - when
-        logger.info(
-            'Waited %s seconds to acquire lock. Executing command: %s' % (
-                duration.seconds,
-                cmd,
-            ))
+            # Block until lock is available, then execute.
+            elif block:
+                logger.info('Waiting to acquire lock for command: %s' % cmd)
+                when = datetime.datetime.now()
+                lock.acquire()
+                duration = datetime.datetime.now() - when
+                logger.info(
+                    'Waited %s seconds to acquire lock. Executing command: %s' % (
+                        duration.seconds,
+                        cmd,
+                    ))
 
-    else:
-        logger.info('Unable to acquire lock.')
-        return 0
+            # Abort.
+            else:
+                logger.info('Unable to acquire lock.')
+                return 0
+        except ConnectionError:
+            # Retry.
+            if block:
+                logger.warning(
+                    "Unable to connect to Redis at '%s:%s'. Retrying in 1 "
+                    'second.' % (
+                        REDIS_HOST,
+                        REDIS_PORT,
+                    ))
+                time.sleep(1)
+                continue
+            logger.info(
+                'Unable to acquire lock. Unable to connect to Redis at '
+                "'%s:%s'." % (
+                    REDIS_HOST,
+                    REDIS_PORT,
+                ))
+            return 0
+        break
 
     # Execute command and get exit code from subprocess.
     exit_code = execute(cmd)[0]
