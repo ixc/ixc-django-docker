@@ -19,6 +19,7 @@ RUN apt-get update \
         python-dev \
         pv \
         vim-tiny \
+        bsdmainutils \
     && rm -rf /var/lib/apt/lists/*
 
 RUN locale-gen en_US.UTF-8
