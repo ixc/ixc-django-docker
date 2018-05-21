@@ -89,7 +89,8 @@ An ``ixc_django_docker`` project must set at least the following environment
 variables: ``DOTENV`` and ``TRANSCRYPT_PASSWORD`` (or ``GPG_PASSPHRASE``).
 You will likely also need to set project-specific ``BASE_SETTINGS`` and
 ``PROJECT_SETTINGS`` variables, as well as additional variables depending on
-the features used in your project.
+the features used in your project. The ``VAR_DIR`` environment variable is
+also available if you'd like to specify where the var folder gets created.
 
 See the `Composable settings <docs/composable-settings.rst>`_ documentation
 for more details on how to set environment variables based on how you will
