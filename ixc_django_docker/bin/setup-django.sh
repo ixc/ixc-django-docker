@@ -23,6 +23,8 @@ cat <<EOF
 #
 EOF
 
+dockerize -timeout 1m -wait "tcp://$REDIS_ADDRESS"
+
 # Install Node modules.
 waitlock.py -b "npm-install.sh '$PROJECT_DIR'"
 
