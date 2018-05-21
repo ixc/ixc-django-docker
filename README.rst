@@ -209,6 +209,7 @@ System requirements when running without Docker
 * Python 2.7
 * Redis
 * Yarn
+* Dockerize : install from https://github.com/jwilder/dockerize
 
 Optional:
 
