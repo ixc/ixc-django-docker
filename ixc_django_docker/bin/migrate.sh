@@ -21,35 +21,30 @@ if [[ DJANGO_VERSION_LESS_THAN_1_7 == 'True' ]]; then
 fi
 
 if [[ DJANGO_VERSION_LESS_THAN_1_10 == 'True' ]]; then
-    manage.py migrate --list > "$DIR/migrate.txt" 2>/dev/null
+    manage.py migrate --list > "$DIR/migrate.txt"
 else
-    manage.py showmigrations > "$DIR/migrate.txt" 2>/dev/null
+    manage.py showmigrations > "$DIR/migrate.txt"
 fi
 
-# Rely on the formatted text output of Django's migration listing to tell us
-# whether there are any pending migrations, which are flagged with an empty
-# ASCII checkbox versus a checked one. Grep for the unapplied migration '[ ]'
-# text as a flag for when migrations need to be applied, and when grep returns
-# an **error** status we know there are **no unapplied migrations**
-#
-# Here is an example of the output of 'showmigrations' etc:
-#
-#     wagtailusers
-#      [X] 0001_initial
-#      [ ] 0002_add_verbose_name_on_userprofile
-set +e
-grep '\[ \]' "$DIR/migrate.txt" > /dev/null
-HAS_ALL_MIGRATIONS_APPLIED=$?
-set -e
+# Is local listing of migrations the same as one cached in Redis
+# (i.e. as has already been completed and cached by another server instance)?
+if ! redis-cache.py -v -x match ixc-django-docker:migrate-list < "$DIR/migrate.txt"; then
+	echo 'Migrations are out of date.'
 
-if [[ HAS_ALL_MIGRATIONS_APPLIED -ne 0 ]]; then
-	echo 'Migrations are up-to-date - no migration listing items contain "[ ]"'
-else
-    echo 'Migrations are out of date - one or more migration listing items contain "[ ]"'
-
-	if [[ DJANGO_VERSION_LESS_THAN_1_7 == 'True' ]]; then
+	# Skip initial migration if all tables created by the initial migration
+	# already exist.
+	if [[ $(python -c 'import django; print(django.get_version());') < 1.7 ]]; then
 		manage.py migrate --noinput  # South has no `--fake-initial` option
 	else
 		manage.py migrate --fake-initial --noinput
 	fi
+
+    if [[ DJANGO_VERSION_LESS_THAN_1_10 == 'True' ]]; then
+        manage.py migrate --list > "$DIR/migrate.txt"
+    else
+        manage.py showmigrations > "$DIR/migrate.txt"
+    fi
+
+	# Cache listing of up-to-date migrations
+	redis-cache.py -vv -x set ixc-django-docker:migrate-list < "$DIR/migrate.txt"
 fi
