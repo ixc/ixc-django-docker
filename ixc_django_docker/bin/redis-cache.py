@@ -30,12 +30,17 @@ def fault(parser, logger, message=None):
     sys.exit(1)
 
 
-def redis_set(conn, key, value, expiry_secs):
+def redis_set(conn, key, value, expiry_secs, encoding='utf-8'):
+    if encoding:
+        value = value.encode(encoding)
     return conn.set(key, value, ex=expiry_secs)
 
 
-def redis_get(conn, key):
-    return conn.get(key)
+def redis_get(conn, key, encoding='utf-8'):
+    value = conn.get(key)
+    if encoding:
+        value = value.decode('utf-8')
+    return value
 
 
 def main():
