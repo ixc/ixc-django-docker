@@ -22,6 +22,9 @@ Here is a list of frequently used commands you might want to run:
 		Start Celery Flower. This is normally managed by Docker or Supervisord,
 		and is not normally used interactively.
 
+	ddtrace.sh <COMMAND>
+		Execute a command via 'ddtrace-run' (Datadog APM).
+
 	gunicorn.sh
 		Start Gunicorn. This is normally managed by Docker or Supervisord, and
 		is not normally used interactively.

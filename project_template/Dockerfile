@@ -75,6 +75,7 @@ RUN md5sum requirements.txt > requirements.txt.md5
 COPY setup.py ${PROJECT_DIR}
 RUN pip install --no-cache-dir -e .
 
+ENV DATADOG_TRACE_AGENT_HOSTNAME=datadog
 ENV ELASTICSEARCH_ADDRESS=elasticsearch:9200
 ENV PATH=${PROJECT_DIR}bin:$PATH
 ENV PGHOST=postgres
