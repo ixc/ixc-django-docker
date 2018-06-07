@@ -71,7 +71,7 @@ if django.VERSION[:2] < (1, 7):
         # Instrument rest_framework app to trace custom exception handling.
         if 'rest_framework' in django.conf.settings.INSTALLED_APPS:
             try:
-                from .restframework import patch_restframework
+                from ddtrace.contrib.django.restframework import patch_restframework
                 patch_restframework(tracer)
             except Exception:
                 log.exception('error patching rest_framework app')
