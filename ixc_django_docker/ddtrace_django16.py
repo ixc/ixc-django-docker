@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 import logging
+import os
 import sys
 
 # 3rd party
@@ -20,9 +21,7 @@ from ddtrace.ext import AppTypes
 
 log = logging.getLogger(__name__)
 
-
-if django.VERSION[:2] < (1, 7):
-
+def django16_ready():
     print('# Configure ddtrace.contrib.django for Django 1.6', file=sys.stderr)
 
     tracer = settings.TRACER
@@ -75,3 +74,7 @@ if django.VERSION[:2] < (1, 7):
                 patch_restframework(tracer)
             except Exception:
                 log.exception('error patching rest_framework app')
+
+
+if os.environ.get('APM') == 'ddtrace' and django.VERSION[:2] < (1, 7):
+    django16_ready()
