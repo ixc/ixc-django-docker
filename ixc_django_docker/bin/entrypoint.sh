@@ -125,6 +125,9 @@ fi
 # Decrypt files with transcrypt.
 if [[ -n "$TRANSCRYPT_PASSWORD" ]]; then
 	git status  # See: https://github.com/elasticdog/transcrypt/issues/37
+	# Use `--force` to overwrite "missing" secrets that are listed in
+	# `.dockerignore` to avoid accidentally copying decrypted secrets into an
+	# image.
 	transcrypt --force -c "${TRANSCRYPT_CIPHER:-aes-256-cbc}" -p "$TRANSCRYPT_PASSWORD" -y || true  # Don't exit if we can't decrypt secrets
 fi
 

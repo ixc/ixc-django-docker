@@ -25,7 +25,7 @@ PROJECT_SLUG = re.sub(r'[^0-9A-Za-z]+', '-', slugify(
 REDIS_ADDRESS = os.environ.get('REDIS_ADDRESS', 'localhost:6379')
 SITE_DOMAIN = os.environ.get('SITE_DOMAIN', '%s.lvh.me' % PROJECT_SLUG)
 
-VAR_DIR = os.path.join(PROJECT_DIR, 'var')
+VAR_DIR = os.environ.get('VAR_DIR', os.path.join(PROJECT_DIR, 'var'))
 # Create VAR_DIR if necessary
 if not os.path.exists(VAR_DIR):
     os.mkdir(VAR_DIR)
