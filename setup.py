@@ -20,6 +20,7 @@ setuptools.setup(
         'ixc_django_docker/bin/celery.sh',
         'ixc_django_docker/bin/celerybeat.sh',
         'ixc_django_docker/bin/celeryflower.sh',
+        'ixc_django_docker/bin/clear-cache.sh',
         'ixc_django_docker/bin/entrypoint.sh',
         'ixc_django_docker/bin/gunicorn.sh',
         'ixc_django_docker/bin/help.sh',

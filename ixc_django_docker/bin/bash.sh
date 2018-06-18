@@ -17,6 +17,7 @@ frequently used scripts you might want to run:
     celery.sh
     celerybeat.sh
     celeryflower.sh
+    clear-cache.sh
     gunicorn.sh
     logentries.sh
     manage.py [COMMAND [ARGS]]
