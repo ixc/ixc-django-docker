@@ -38,7 +38,7 @@ def redis_set(conn, key, value, expiry_secs, encoding='utf-8'):
 
 def redis_get(conn, key, encoding='utf-8'):
     value = conn.get(key)
-    if encoding:
+    if encoding and value:
         value = value.decode('utf-8')
     return value
 
