@@ -52,7 +52,7 @@ See more detailed documentation about commands at:
 
 EOF
 
-export PS1="($PROJECT_NAME) \u@\h:\w\\$ "
+export PS1="($PROJECT_NAME) \u@\h:\w\\n\$ "
 
 # Run bash by default without any user customisations from rc or profile files
 # to reduce the chance of user customisations clashing with our paths etc.
