@@ -40,3 +40,7 @@ TEMPLATES[0]['OPTIONS']['loaders'] = [
 COMPRESS_CSS_FILTERS = ()
 COMPRESS_ENABLED = False
 COMPRESS_PRECOMPILERS = ()
+
+# STORAGE #####################################################################
+
+ENABLE_S3_STORAGE = False
