@@ -25,6 +25,12 @@ Here is a list of frequently used commands you might want to run:
 	clear-cache.sh
 		Clear all Django caches and execute a command.
 
+	compile-sass.sh [ARGS]
+		Compile all SASS/SCSS files in the 'static' directory, saving output to
+		the 'static/COMPILED' directory.
+
+		Pass '--watch' to detect changes and recompile automatically.
+
 	gunicorn.sh
 		Start Gunicorn. This is normally managed by Docker or Supervisord, and
 		is not normally used interactively.
