@@ -113,5 +113,6 @@ RUN mkdir -p .gnupg/
 RUN echo "allow-loopback-pinentry" > .gnupg/gpg-agent.conf
 RUN echo "pinentry-mode loopback" > .gnupg/gpg.conf
 
+RUN entrypoint.sh compile-sass.sh  # Must come before collectstatic
 RUN entrypoint.sh manage.py collectstatic --noinput --verbosity=0
-RUN entrypoint.sh manage.py compress --verbosity=2
+RUN entrypoint.sh manage.py compress --verbosity=0

@@ -9,11 +9,14 @@
 **/pubring.gpg~
 **/random_seed
 **/requirements-local.txt
+.coverage
+.env.local
 .gnupg/gpg.conf
 .idea/
 bower_components/
 docker-compose.override.yml
 node_modules/
 project_settings_local.py
+static/COMPILED/
 static_root/
 var/
