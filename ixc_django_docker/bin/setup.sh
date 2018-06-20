@@ -30,6 +30,9 @@ migrate.sh "$PROJECT_DIR/var"
 # Clear caches.
 clear-cache.sh
 
+# Compile SASS.
+compile-sass.sh
+
 # Cache git commit.
 redis-cache.py -vv set ixc-django-docker:setup-git-commit "$(git rev-parse HEAD)"
 
