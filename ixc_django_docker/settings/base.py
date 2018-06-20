@@ -7,16 +7,20 @@ import random
 import re
 import string
 
-from django.core.urlresolvers import reverse_lazy
-from django.utils.text import slugify
 import django
+if django.VERSION < (2,):
+    from django.core.urlresolvers import reverse_lazy
+else:
+    from django.urls import reverse_lazy
+from django.utils.text import slugify
+from django.utils.six import text_type
 
 # Get project directory from environment. This MUST already be defined.
 # Copied from __init__.py I'm not sure why it's needed here as well
 PROJECT_DIR = os.environ['PROJECT_DIR']
 
 PROJECT_SLUG = re.sub(r'[^0-9A-Za-z]+', '-', slugify(
-    unicode(os.path.basename(PROJECT_DIR)).lower()))
+    text_type(os.path.basename(PROJECT_DIR)).lower()))
 
 REDIS_ADDRESS = os.environ.get('REDIS_ADDRESS', 'localhost:6379')
 SITE_DOMAIN = os.environ.get('SITE_DOMAIN', '%s.lvh.me' % PROJECT_SLUG)

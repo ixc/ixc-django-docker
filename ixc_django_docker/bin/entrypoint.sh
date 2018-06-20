@@ -47,6 +47,8 @@ if [[ -f /.dockerenv ]]; then
 	# For some reason pip allows us to install sdist packages, but not editable
 	# packages, when this directory doesn't exist. So make sure it does.
 	mkdir -p "$PYTHONUSERBASE/lib/python2.7/site-packages"
+	# There's no harm in having both for compatibility
+	mkdir -p "$PYTHONUSERBASE/lib/python3.5/site-packages"
 
 	# On Docker for Mac, osxfs has performance issues when watching file system
 	# events. Detect Docker for Mac and export an environment variable that we
@@ -85,10 +87,10 @@ else
 	done
 
 	# Fail loudly when required programs are missing.
-	for cmd in md5sum nginx npm psql python pv redis-server yarn; do  # TODO: elasticsearch git-secret transcrypt
+	for cmd in md5sum nginx npm psql python pv redis-server yarn dockerize; do  # TODO: elasticsearch git-secret transcrypt
 		hash $cmd 2>/dev/null || {
 			>&2 echo "ERROR: Missing program: $cmd"
-			>&2 echo 'See: https://github.com/ixc/ixc-django-docker/blob/develop/README.rst#requirements-when-running-without-docker'
+			>&2 echo 'See: https://github.com/ixc/ixc-django-docker/blob/master/README.rst#system-requirements-when-running-without-docker'
 			exit 1
 		}
 	done
@@ -130,7 +132,7 @@ if [[ -n "$TRANSCRYPT_PASSWORD" ]]; then
 fi
 
 # Source global, environment and local dotenv files, if decrypted.
-for dotenv in base "$DOTENV.secret" local; do
+for dotenv in base "$DOTENV" "$DOTENV.secret" local; do
 	DOTENV_FILE="$PROJECT_DIR/.env.$dotenv"
 	if [[ -f "$DOTENV_FILE" ]]; then
 		echo "Sourcing DOTENV file: $DOTENV_FILE"

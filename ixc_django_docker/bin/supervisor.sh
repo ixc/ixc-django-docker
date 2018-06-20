@@ -9,7 +9,7 @@ EOF
 set -e
 
 # Get a random-ish port in the 59000-59999 range. See: https://github.com/rfk/django-supervisor/blob/be2013c4826ae49730664b359ee285fa03b16c09/djsupervisor/config.py#L107-L111
-export SUPERVISORD_PORT="${SUPERVISORD_PORT:-59$(python -c "import hashlib; print('%03d' % (int(hashlib.md5('$PROJECT_DIR').hexdigest()[:3], 16) % 1000));")}"
+export SUPERVISORD_PORT="${SUPERVISORD_PORT:-59$(python -c "import hashlib; print('%03d' % (int(hashlib.md5(u'$PROJECT_DIR'.encode('utf-8')).hexdigest()[:3], 16) % 1000));")}"
 
 # Render config templates.
 mkdir -p "$PROJECT_DIR/var/etc"

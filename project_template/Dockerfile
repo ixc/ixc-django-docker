@@ -4,41 +4,61 @@ FROM buildpack-deps:xenial
 ENV PROJECT_NAME=project_template
 ENV PROJECT_DIR=/opt/${PROJECT_NAME}/
 
+# Set the Python 3 version here; it should match the one from buildpack-deps:xenial
+ENV PY3_VER=3.5
+
 RUN apt-get update \
     && apt-get upgrade -y --no-install-recommends \
     && apt-get install -y --no-install-recommends \
+        apache2-utils \
         apt-utils \
-        gettext \
         gnupg2 \
         jq \
+        bsdmainutils \
+        gettext  \
+        htop \
+        less \
         locales \
         nano \
         nginx \
-        apache2-utils \
         postgresql-client \
-        python-dev \
+        python2.7-dev \
+        python${PY3_VER}-dev \
         pv \
         vim-tiny \
-        bsdmainutils \
+        build-essential \
+        unixodbc unixodbc-dev \
+        freetds-dev \
+        tdsodbc\
     && rm -rf /var/lib/apt/lists/*
+RUN rm /usr/bin/python
+RUN ln -s /usr/bin/python${PY3_VER} /usr/bin/python
 
 RUN locale-gen en_US.UTF-8
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
 
-ENV DOCKERIZE_VERSION=0.4.0
+ENV DOCKERIZE_VERSION=0.5.0
 RUN wget -nv -O - "https://github.com/jwilder/dockerize/releases/download/v${DOCKERIZE_VERSION}/dockerize-linux-amd64-v${DOCKERIZE_VERSION}.tar.gz" | tar -xz -C /usr/local/bin/ -f -
 
-ENV NODE_VERSION=4.4.2
+ENV LOGENTRIES_VERSION="1.4.41"
+RUN echo 'deb http://rep.logentries.com/ xenial main' > /etc/apt/sources.list.d/logentries.list
+RUN apt-get update \
+    && apt-get install -y --allow-unauthenticated --no-install-recommends \
+        logentries="${LOGENTRIES_VERSION}" \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV NODE_VERSION=6.12.0
 RUN wget -nv -O - "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" | tar -Jx -C /opt/ -f -
 RUN ln -s "/opt/node-v${NODE_VERSION}-linux-x64/bin/node" /usr/local/bin/
 RUN ln -s "/opt/node-v${NODE_VERSION}-linux-x64/bin/npm" /usr/local/bin/
 
 ENV PYTHON_PIP_VERSION=9.0.1
-RUN wget -nv -O - https://bootstrap.pypa.io/get-pip.py | python - "pip==${PYTHON_PIP_VERSION}"
+RUN wget -nv -O - https://bootstrap.pypa.io/get-pip.py | python${PY3_VER} - "pip==${PYTHON_PIP_VERSION}"
+RUN wget -nv -O - https://bootstrap.pypa.io/get-pip.py | python2.7 - "pip==${PYTHON_PIP_VERSION}"
 
-ENV TINI_VERSION=0.14.0
+ENV TINI_VERSION=0.16.1
 RUN wget -nv -O /usr/local/bin/tini "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-static"
 RUN chmod +x /usr/local/bin/tini
 
@@ -68,7 +88,8 @@ ENV PYTHONHASHSEED=random
 ENV PYTHONWARNINGS=ignore
 
 COPY requirements.txt ${PROJECT_DIR}
-RUN bash -c 'pip install --no-cache-dir -r <(grep -v setuptools requirements.txt)'  # Unpin setuptools dependencies. See: https://github.com/pypa/pip/issues/4264
+RUN pip2 install supervisor
+RUN bash -c 'pip3 install --no-cache-dir -r <(grep -v setuptools requirements.txt)'  # Unpin setuptools dependencies. See: https://github.com/pypa/pip/issues/4264
 RUN md5sum requirements.txt > requirements.txt.md5
 
 
@@ -76,10 +97,11 @@ COPY setup.py ${PROJECT_DIR}
 RUN pip install --no-cache-dir -e .
 
 ENV ELASTICSEARCH_ADDRESS=elasticsearch:9200
-ENV PATH=${PROJECT_DIR}bin:$PATH
 ENV PGHOST=postgres
 ENV PGUSER=postgres
 ENV REDIS_ADDRESS=redis:6379
+
+ENV PATH=${PROJECT_DIR}bin:$PATH
 
 ENTRYPOINT ["tini", "--", "entrypoint.sh"]
 CMD ["bash.sh"]
