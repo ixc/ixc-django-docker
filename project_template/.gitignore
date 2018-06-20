@@ -17,5 +17,6 @@
 /docker-compose.override.yml
 /node_modules/
 /project_settings_local.py
+/static/COMPILED/
 /static_root/
 /var/
