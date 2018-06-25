@@ -12,7 +12,6 @@
 /.coverage
 /.env.local
 /.idea/
-/.gnupg/gpg.conf
 /bower_components/
 /docker-compose.override.yml
 /node_modules/

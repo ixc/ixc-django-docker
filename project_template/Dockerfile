@@ -14,7 +14,6 @@ RUN apt-get update \
         apt-utils \
         bsdmainutils \
         gettext  \
-        gnupg2 \
         htop \
         jq \
         less \
@@ -59,14 +58,6 @@ ENV TINI_VERSION=0.16.1
 RUN wget -nv -O /usr/local/bin/tini "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-static"
 RUN chmod +x /usr/local/bin/tini
 
-WORKDIR /opt/git-secret/
-
-ENV GIT_SECRET_VERSION=0.2.1
-RUN git clone https://github.com/sobolevn/git-secret.git /opt/git-secret/ \
-    && git checkout "v$GIT_SECRET_VERSION" \
-    && make build \
-    && PREFIX=/usr/local make install
-
 WORKDIR ${PROJECT_DIR}
 
 COPY package.json ${PROJECT_DIR}
@@ -99,11 +90,6 @@ ENTRYPOINT ["tini", "--", "entrypoint.sh"]
 CMD ["bash.sh"]
 
 COPY . ${PROJECT_DIR}
-
-# Fix password pass-through for git-secret and gpg2
-RUN mkdir -p .gnupg/
-RUN echo "allow-loopback-pinentry" > .gnupg/gpg-agent.conf
-RUN echo "pinentry-mode loopback" > .gnupg/gpg.conf
 
 RUN entrypoint.sh compile-sass.sh  # Must come before collectstatic
 RUN entrypoint.sh manage.py collectstatic --noinput --verbosity=0

@@ -42,8 +42,6 @@ Inputs:
   * ``TRANSCRYPT_PASSWORD`` sets the project password for transparently
     encrypting and decrypting secret values from ``*.secret`` files with the
     Transcrypt tool
-  * ``GPG_PASSPHRASE`` **used in legacy projects only** sets the project
-    password for handling secrets with `git-secret <http://git-secret.io/>`_
 
 Outputs:
 
@@ -80,8 +78,7 @@ Actions:
     **TODO** Do this in all cases, not only non-Docker?
 * Add script directories for requirements to system path
 * Source ``.env.local`` for bootstrap environment variables
-* Decrypt project secret files using Transcrypt and/or git-secret tools (the
-  separate script `setup-git-secret.sh`_ is used for git-secret files)
+* Decrypt project secret files using Transcrypt
 * Source environment variables from dotenv files ``.env.base``,
   ``.env.$DOTENV.secret``, and ``.env.local`` (again) when those files exist
 * If the PostgreSQL DB name ``PGDATABASE`` environment variable is not set,
