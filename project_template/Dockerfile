@@ -25,6 +25,7 @@ RUN apt-get update \
         pv \
         python2.7-dev \
         python${PY3_VER}-dev \
+        supervisor \
         vim-tiny \
     && rm -rf /var/lib/apt/lists/*
 RUN rm /usr/bin/python
