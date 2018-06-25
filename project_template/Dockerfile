@@ -12,19 +12,19 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         apache2-utils \
         apt-utils \
-        gnupg2 \
-        jq \
         bsdmainutils \
         gettext  \
+        gnupg2 \
         htop \
+        jq \
         less \
         locales \
         nano \
         nginx \
         postgresql-client \
+        pv \
         python2.7-dev \
         python${PY3_VER}-dev \
-        pv \
         vim-tiny \
     && rm -rf /var/lib/apt/lists/*
 RUN rm /usr/bin/python
