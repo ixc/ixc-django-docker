@@ -26,10 +26,6 @@ RUN apt-get update \
         python${PY3_VER}-dev \
         pv \
         vim-tiny \
-        build-essential \
-        unixodbc unixodbc-dev \
-        freetds-dev \
-        tdsodbc\
     && rm -rf /var/lib/apt/lists/*
 RUN rm /usr/bin/python
 RUN ln -s /usr/bin/python${PY3_VER} /usr/bin/python
