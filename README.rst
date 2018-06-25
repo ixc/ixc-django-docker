@@ -201,6 +201,7 @@ Or:
 System requirements when running without Docker
 -----------------------------------------------
 
+* [Dockerize](https://github.com/jwilder/dockerize/releases/latest)
 * md5sum
 * Nginx
 * NPM
@@ -208,13 +209,13 @@ System requirements when running without Docker
 * PostgreSQL
 * Python 2.7
 * Redis
+* Supervisord
+* Transcrypt
 * Yarn
-* Dockerize : install from https://github.com/jwilder/dockerize
 
 Optional:
 
 * Elasticsearch 2.x (5.x is not compatible with ``django-haystack``)
-* Transcrypt
 
 
 macOS
@@ -232,7 +233,7 @@ Install `Postgres.app <http://postgresapp.com/>`__.
 
 Install required system packages::
 
-    $ brew install md5sha1sum nginx npm pv python redis yarn
+    $ brew install md5sha1sum nginx npm pv python redis supervisor transcrypt yarn
 
 Start Redis::
 
@@ -242,7 +243,6 @@ Install optional system packages::
 
     $ brew install elasticsearch@2.4
     $ brew link elasticsearch@2.4 --force
-    $ brew install transcrypt
 
 Start Elasticsearch::
 
