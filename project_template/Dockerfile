@@ -79,10 +79,6 @@ COPY requirements.txt ${PROJECT_DIR}
 RUN pip3 install --no-cache-dir -r requirements.txt
 RUN md5sum requirements.txt > requirements.txt.md5
 
-
-COPY setup.py ${PROJECT_DIR}
-RUN pip install --no-cache-dir -e .
-
 ENV PATH=${PROJECT_DIR}bin:$PATH
 
 ENTRYPOINT ["tini", "--", "entrypoint.sh"]
