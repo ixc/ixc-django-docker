@@ -85,10 +85,7 @@ Actions:
 * Source environment variables from dotenv files ``.env.base``,
   ``.env.$DOTENV.secret``, and ``.env.local`` (again) when those files exist
 * If the PostgreSQL DB name ``PGDATABASE`` environment variable is not set,
-  derive it from one of the following in, order of preference:
-  * ``$PROJECT_NAME_<Git branch>`` if a Git repository is present
-  * ``$PROJECT_NAME_$DOTENV`` if ``DOTENV`` is set
-  * ``$PROJECT_NAME`` if neither of the two situations above holds.
+  use ``${PROJECT_NAME}_$DOTENV`` as the default
 * Pass through or set sensible default values for PostgreSQL and Redis
   connection settings
 * Exec any command arguments passed to this script, otherwise ``bash.sh``
@@ -121,7 +118,7 @@ Outputs:
   ``ixc_django_docker``
 * ``CPU_CORES`` set to number of processor cores
 * ``PROJECT_NAME`` set to the base name of ``$PROJECT_DIR``
-* ``PGDATABASE`` as provided in inputs, else derived from project name
+* ``PGDATABASE`` as provided in inputs, else derived from project name and dotenv
 * ``PGHOST`` as provided in inputs, else defaults to ``localhost``
 * ``PGPORT`` as provided in inputs, else defaults to ``5432``
 * ``PGUSER`` as provided in inputs, else defaults to local username

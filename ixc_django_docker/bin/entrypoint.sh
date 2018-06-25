@@ -157,21 +157,8 @@ export PYTHONHASHSEED=random
 export PYTHONPATH="$PROJECT_DIR:$PYTHONPATH"
 export PYTHONWARNINGS=ignore
 
-# Derive 'PGDATABASE' from 'PROJECT_NAME' and git branch or 'DOTENV', if not
-# already defined.
-if [[ -z "$PGDATABASE" ]]; then
-	if [[ -d .git ]]; then
-		export PGDATABASE="${PROJECT_NAME}_$(git rev-parse --abbrev-ref HEAD | sed 's/[^0-9A-Za-z]/_/g')"
-		echo "Derived database name '$PGDATABASE' from 'PROJECT_NAME' environment variable and git branch."
-	elif [[ -n "$DOTENV" ]]; then
-		export PGDATABASE="${PROJECT_NAME}_$DOTENV"
-		echo "Derived database name '$PGDATABASE' from 'PROJECT_NAME' and 'DOTENV' environment variables."
-	else
-		export PGDATABASE="$PROJECT_NAME"
-		echo "Derived database name '$PGDATABASE' from 'PROJECT_NAME' environment variable."
-	fi
-fi
-
+# Set PostgreSQL database and port.
+export PGDATABASE="${PGDATABASE:-${PROJECT_NAME}_${DOTENV}}"
 export PGPORT="${PGPORT:-5432}"
 
 # Set overridable default environment variables.
