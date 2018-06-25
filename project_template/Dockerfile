@@ -96,11 +96,6 @@ RUN md5sum requirements.txt > requirements.txt.md5
 COPY setup.py ${PROJECT_DIR}
 RUN pip install --no-cache-dir -e .
 
-ENV ELASTICSEARCH_ADDRESS=elasticsearch:9200
-ENV PGHOST=postgres
-ENV PGUSER=postgres
-ENV REDIS_ADDRESS=redis:6379
-
 ENV PATH=${PROJECT_DIR}bin:$PATH
 
 ENTRYPOINT ["tini", "--", "entrypoint.sh"]

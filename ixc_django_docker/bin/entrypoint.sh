@@ -172,13 +172,30 @@ if [[ -z "$PGDATABASE" ]]; then
 	fi
 fi
 
-# Default PostgreSQL credentials.
-export PGHOST="${PGHOST:-localhost}"
 export PGPORT="${PGPORT:-5432}"
-export PGUSER="${PGUSER:-$(whoami)}"
 
-# Get Redis host and port.
-export REDIS_ADDRESS="${REDIS_ADDRESS:-localhost:6379}"
+# Set overridable default environment variables.
+if [[ -f /.dockerenv ]]; then
+	# Set Elasticsearch host and port.
+	export ELASTICSEARCH_ADDRESS="${ELASTICSEARCH_ADDRESS:-elasticsearch:9200}"
+
+	# Set PostgreSQL host and user.
+	export PGHOST="${PGHOST:-postgres}"
+	export PGUSER="${PGUSER:-postgres}"
+
+	# Set Redis host and port.
+	export REDIS_ADDRESS="${REDIS_ADDRESS:-redis:6379}"
+else
+	# Set Elasticsearch host and port.
+	export ELASTICSEARCH_ADDRESS="${ELASTICSEARCH_ADDRESS:-localhost:9200}"
+
+	# Set PostgreSQL host and user.
+	export PGHOST="${PGHOST:-localhost}"
+	export PGUSER="${PGUSER:-$(whoami)}"
+
+	# Set Redis host and port.
+	export REDIS_ADDRESS="${REDIS_ADDRESS:-localhost:6379}"
+fi
 
 # Execute command.
 exec "${@:-bash.sh}"
