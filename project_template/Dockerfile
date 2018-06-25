@@ -76,7 +76,6 @@ ENV PYTHONHASHSEED=random
 ENV PYTHONWARNINGS=ignore
 
 COPY requirements.txt ${PROJECT_DIR}
-RUN pip2 install supervisor
 RUN bash -c 'pip3 install --no-cache-dir -r <(grep -v setuptools requirements.txt)'  # Unpin setuptools dependencies. See: https://github.com/pypa/pip/issues/4264
 RUN md5sum requirements.txt > requirements.txt.md5
 
