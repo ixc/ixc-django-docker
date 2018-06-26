@@ -55,14 +55,13 @@ RUN chmod +x /usr/local/bin/tini
 
 # PROJECT #####################################################################
 
-ENV PROJECT_DIR="/opt/project_template/"
-
+ENV PROJECT_DIR="/opt/project_template"
 WORKDIR "${PROJECT_DIR}"
 
 COPY package.json "${PROJECT_DIR}"
 RUN npm install && rm -rf /root/.npm
 RUN md5sum package.json > package.json.md5
-ENV PATH="${PROJECT_DIR}node_modules/.bin:$PATH"
+ENV PATH="${PROJECT_DIR}/node_modules/.bin:$PATH"
 
 COPY bower.json "${PROJECT_DIR}"
 RUN bower install --allow-root && rm -rf /root/.cache/bower
