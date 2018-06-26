@@ -79,8 +79,6 @@ COPY requirements.txt "${PROJECT_DIR}"
 RUN pip install --no-cache-dir -r requirements.txt
 RUN md5sum requirements.txt > requirements.txt.md5
 
-ENV PATH="${PROJECT_DIR}bin:$PATH"
-
 ENTRYPOINT ["tini", "--", "entrypoint.sh"]
 CMD ["bash.sh"]
 
