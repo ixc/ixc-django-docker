@@ -11,7 +11,7 @@ set -e
 if [[ -t 1 ]]; then
 	cat <<EOF
 
-You are running a pre-onfigured interactive Bash shell. Here is a list of
+You are running a pre-configured interactive Bash shell. Here is a list of
 frequently used scripts you might want to run:
 
     bower-install.sh <DIR>
