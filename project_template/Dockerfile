@@ -84,7 +84,7 @@ ENV PATH="${PROJECT_DIR}bin:$PATH"
 ENTRYPOINT ["tini", "--", "entrypoint.sh"]
 CMD ["bash.sh"]
 
-COPY . ${PROJECT_DIR}
+COPY . "${PROJECT_DIR}"
 
 RUN entrypoint.sh compile-sass.sh  # Must come before collectstatic
 RUN entrypoint.sh manage.py collectstatic --noinput --verbosity=0
