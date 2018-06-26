@@ -55,8 +55,7 @@ RUN chmod +x /usr/local/bin/tini
 
 # PROJECT #####################################################################
 
-ENV PROJECT_NAME=project_template
-ENV PROJECT_DIR="/opt/${PROJECT_NAME}/"
+ENV PROJECT_DIR="/opt/project_template/"
 
 WORKDIR "${PROJECT_DIR}"
 
