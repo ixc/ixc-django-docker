@@ -46,4 +46,12 @@ def skip_concurrent(f, *args, **kwargs):
 
 @task
 def call_command(*args, **kwargs):
-    return management.call_command(*args, **kwargs)
+	raise NotImplemented(
+		'The `call_command` task has been removed. Please create a new task '
+		'for each management command you need to execute, and apply one of '
+		'the concurrency decorators from `ixc_django_docker.celery.tasks`.')
+
+
+@task
+def clearsessions(*args, **kwargs):
+    return management.call_command('clearsessions', *args, **kwargs)

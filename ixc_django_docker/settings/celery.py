@@ -21,9 +21,8 @@ CELERY_TIMEZONE = TIME_ZONE
 
 CELERYBEAT_SCHEDULE = {
     'cleanup': {
-        'task': 'ixc_django_docker.celery.tasks.call_command',
+        'task': 'ixc_django_docker.celery.tasks.clearsessions',
         'schedule': crontab(hour=0, minute=0),
-        'args': ('cleanup', ),
     },
 }
 
