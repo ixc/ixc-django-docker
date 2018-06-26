@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python.sh
 
 """Acquire Redis lock and execute a command."""
 

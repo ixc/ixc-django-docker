@@ -8,6 +8,9 @@ EOF
 
 set -e
 
+# Set version for `python.sh` shim.
+export PYTHON_VERSION="${PYTHON_VERSION:-python}"
+
 # Print the full commit hash so it can be logged during startup.
 if [[ -d .git ]]; then
 	echo "Git Commit: $(git rev-parse HEAD)"
@@ -45,9 +48,8 @@ if [[ -f /.dockerenv ]]; then
 	export PIP_SRC="$PYTHONUSERBASE/src"
 
 	# For some reason pip allows us to install sdist packages, but not editable
-	# packages, when this directory doesn't exist. So make sure it does.
+	# packages, when these directories don't exist. So make sure they do.
 	mkdir -p "$PYTHONUSERBASE/lib/python2.7/site-packages"
-	# There's no harm in having both for compatibility
 	mkdir -p "$PYTHONUSERBASE/lib/python3.5/site-packages"
 
 	# On Docker for Mac, osxfs has performance issues when watching file system
@@ -100,7 +102,7 @@ else
 fi
 
 # Get absolute directory for the `ixc_django_docker` package.
-export IXC_DJANGO_DOCKER_DIR=$(python -c "import ixc_django_docker, os; print(os.path.dirname(ixc_django_docker.__file__));")
+export IXC_DJANGO_DOCKER_DIR=$("$PYTHON_VERSION" -c "import ixc_django_docker, os; print(os.path.dirname(ixc_django_docker.__file__));")
 
 # Add project, `node_modules`, and `ixc-django-docker` bin directories to PATH.
 export PATH="$PROJECT_DIR/bin:$PROJECT_DIR/node_modules/.bin:$IXC_DJANGO_DOCKER_DIR/bin:$PATH"
@@ -134,7 +136,7 @@ for dotenv in base "$DOTENV" "$DOTENV.secret" local; do
 done
 
 # Get number of CPU cores, so we know how many processes to run.
-export CPU_CORES=$(python -c "import multiprocessing; print(multiprocessing.cpu_count());")
+export CPU_CORES=$(python.sh -c "import multiprocessing; print(multiprocessing.cpu_count());")
 
 # Configure Pip.
 export PIP_DISABLE_PIP_VERSION_CHECK=on
