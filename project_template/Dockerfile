@@ -46,6 +46,12 @@ RUN ln -s "/opt/node-v${NODE_VERSION}-linux-x64/bin/npm" /usr/local/bin/
 ENV PYTHON_VERSION=3.5
 RUN ln -fs "python${PYTHON_VERSION}" /usr/bin/python
 
+ENV PIP_DISABLE_PIP_VERSION_CHECK=on
+ENV PIP_SRC=/opt
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONHASHSEED=random
+ENV PYTHONWARNINGS=ignore
+
 ENV PYTHON_PIP_VERSION=9.0.1
 RUN wget -nv -O - https://bootstrap.pypa.io/get-pip.py | python - "pip==${PYTHON_PIP_VERSION}"
 
@@ -66,12 +72,6 @@ ENV PATH="${PROJECT_DIR}/node_modules/.bin:$PATH"
 COPY bower.json "${PROJECT_DIR}"
 RUN bower install --allow-root && rm -rf /root/.cache/bower
 RUN md5sum bower.json > bower.json.md5
-
-ENV PIP_DISABLE_PIP_VERSION_CHECK=on
-ENV PIP_SRC=/opt
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONHASHSEED=random
-ENV PYTHONWARNINGS=ignore
 
 COPY requirements.txt "${PROJECT_DIR}"
 RUN pip install --no-cache-dir -r requirements.txt
