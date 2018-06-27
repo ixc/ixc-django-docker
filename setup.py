@@ -50,7 +50,7 @@ setuptools.setup(
             'decorator',
             'Django',
             'django-split-settings',
-            'gunicorn',
+            'gunicorn[gevent]',
             'jinja2',
             'python-redis-lock[django]',
     ],
