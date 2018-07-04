@@ -31,6 +31,9 @@ Here is a list of frequently used commands you might want to run:
 
 		Pass '--watch' to detect changes and recompile automatically.
 
+	ddtrace.sh <COMMAND>
+		Execute a command via 'ddtrace-run' (Datadog APM).
+
 	gunicorn.sh
 		Start Gunicorn. This is normally managed by Docker or Supervisord, and
 		is not normally used interactively.

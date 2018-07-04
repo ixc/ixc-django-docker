@@ -20,6 +20,7 @@ frequently used scripts you might want to run:
     celeryflower.sh
     clear-cache.sh
     compile-sass.sh [ARGS]
+    ddtrace.sh
     gunicorn.sh
     logentries.sh
     manage.py [COMMAND [ARGS]]

@@ -12,4 +12,4 @@ export FLOWER_PERSISTENT="${FLOWER_PERSISTENT:-True}"
 export FLOWER_PORT="${FLOWER_PORT:-${NGINX_PROXY_PORT:-8080}}"
 export FLOWER_TASKS_COLUMNS="${FLOWER_TASKS_COLUMNS:-name,uuid,state,args,kwargs,result,received,started,runtime,worker,retries,revoked,exception,expires,eta}"
 
-exec newrelic.sh celery --app="${CELERY_APP:-ixc_django_docker.celery}" flower "$@"
+exec "${APM:-newrelic}.sh" celery --app="${CELERY_APP:-ixc_django_docker.celery}" flower "$@"

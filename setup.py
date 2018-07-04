@@ -68,6 +68,9 @@ setuptools.setup(
             'django-compressor',
             'ixc-django-compressor',
         ],
+        'datadog': [
+            'ddtrace',
+        ],
         'debug-toolbar': [
             'django-debug-toolbar',
         ],
