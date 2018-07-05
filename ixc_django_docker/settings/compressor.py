@@ -3,7 +3,7 @@ COMPRESS_CSS_FILTERS = (
     'compressor.filters.cssmin.rCSSMinFilter',
 )
 
-COMPRESS_OFFLINE = True
+# COMPRESS_OFFLINE = True  # Only needed when there is no shared persistent volume
 COMPRESS_OFFLINE_CONTEXT = 'ixc_compressor.get_compress_offline_context'
 
 COMPRESS_PRECOMPILERS = (
