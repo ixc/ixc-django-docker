@@ -61,7 +61,7 @@ RUN chmod +x /usr/local/bin/tini
 
 # PROJECT #####################################################################
 
-ENV PROJECT_DIR="/opt/project_template"
+ENV PROJECT_DIR=/opt/project_template
 WORKDIR "${PROJECT_DIR}"
 
 COPY package.json "${PROJECT_DIR}"
