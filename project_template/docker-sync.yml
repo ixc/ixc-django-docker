@@ -1,0 +1,6 @@
+version: '2'
+syncs:
+  project_template-sync:
+    notify_terminal: true
+    src: .
+    sync_excludes: ['go.sh-venv']

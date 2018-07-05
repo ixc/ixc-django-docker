@@ -23,16 +23,12 @@ else
 	exit 1
 fi
 
-# Create virtualenv.
+# Create a virtualenv and install requirements, including `ixc-django-docker`.
 if [[ ! -d "$PROJECT_VENV_DIR" ]]; then
 	virtualenv --python=python3 "$PROJECT_VENV_DIR"
-fi
-
-# Install Python dependencies, which should include `ixc-django-docker`.
-if [[ ! -s requirements.txt.md5 ]] || ! md5sum --status -c requirements.txt.md5 > /dev/null 2>&1; then
 	"$PROJECT_VENV_DIR/bin/python" -m pip install --no-cache-dir --no-deps -r requirements.txt
 	md5sum requirements.txt > requirements.txt.md5
 fi
 
-# Execute entrypoint and command.
-exec "$PROJECT_VENV_DIR/bin/entrypoint.sh" ${@:-setup.sh bash.sh}
+# Execute entrypoint and command (default: open an interactive shell).
+exec "$PROJECT_VENV_DIR/bin/entrypoint.sh" ${@:-bash.sh}
