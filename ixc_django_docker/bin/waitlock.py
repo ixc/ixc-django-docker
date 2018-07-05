@@ -62,7 +62,7 @@ def execute(cmd):
         # Try reading some data from each
         stdoutPiece = (read_async(process.stdout) or b'').decode('utf-8')
         stderrPiece = (read_async(process.stderr) or b'').decode('utf-8')
-        
+
         if stdoutPiece:
             sys.stdout.write(stdoutPiece)
         if stderrPiece:
