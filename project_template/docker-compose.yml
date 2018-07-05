@@ -9,7 +9,7 @@ x-project: &project
 services:
   celery:
     << : *project
-    command: setup-wait.sh celery.sh
+    command: setup-wait.sh celery.sh --concurrency 1
 
   celerybeat:
     << : *project
