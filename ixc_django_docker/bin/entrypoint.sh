@@ -155,7 +155,7 @@ export PGPORT="${PGPORT:-5432}"
 # Set overridable default environment variables.
 if [[ -f /.dockerenv ]]; then
 	# Set Datadog trace agent host.
-	DATADOG_TRACE_AGENT_HOSTNAME="${DATADOG_TRACE_AGENT_HOSTNAME:-datadog}"
+	export DATADOG_TRACE_AGENT_HOSTNAME="${DATADOG_TRACE_AGENT_HOSTNAME:-datadog}"
 
 	# Set Elasticsearch host and port.
 	export ELASTICSEARCH_ADDRESS="${ELASTICSEARCH_ADDRESS:-elasticsearch:9200}"
@@ -168,7 +168,7 @@ if [[ -f /.dockerenv ]]; then
 	export REDIS_ADDRESS="${REDIS_ADDRESS:-redis:6379}"
 else
 	# Set Datadog trace agent host.
-	DATADOG_TRACE_AGENT_HOSTNAME="${DATADOG_TRACE_AGENT_HOSTNAME:-localhost}"
+	export DATADOG_TRACE_AGENT_HOSTNAME="${DATADOG_TRACE_AGENT_HOSTNAME:-localhost}"
 
 	# Set Elasticsearch host and port.
 	export ELASTICSEARCH_ADDRESS="${ELASTICSEARCH_ADDRESS:-localhost:9200}"
