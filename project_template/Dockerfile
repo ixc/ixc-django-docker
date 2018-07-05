@@ -10,6 +10,7 @@ RUN apt-get update \
         bsdmainutils \
         gettext  \
         htop \
+        iputils-ping \
         jq \
         less \
         locales \
