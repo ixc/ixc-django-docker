@@ -19,7 +19,7 @@ services:
     << : *project
     command: setup-wait.sh celeryflower.sh
     environment:
-      VIRTUAL_HOST: flower.project_template.lvh.me
+      VIRTUAL_HOST: 'flower.*'
       VIRTUAL_HOST_WEIGHT: 1
     ports:
       - 8080
@@ -54,7 +54,7 @@ services:
     << : *project
     command: setup-wait.sh runserver.sh
     environment:
-      VIRTUAL_HOST: '*project_template.lvh.me'
+      VIRTUAL_HOST: '*'
     ports:
       - 8000
 
