@@ -45,7 +45,7 @@ RUN ln -s "/opt/node-v${NODE_VERSION}-linux-x64/bin/node" /usr/local/bin/
 RUN ln -s "/opt/node-v${NODE_VERSION}-linux-x64/bin/npm" /usr/local/bin/
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK=on
-ENV PIP_SRC=/opt
+ENV PIP_SRC=/opt/project_template/src
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONHASHSEED=random
 ENV PYTHONWARNINGS=ignore
