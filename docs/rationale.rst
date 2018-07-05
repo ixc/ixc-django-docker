@@ -38,6 +38,3 @@ Docker on ephemeral infrastructure, that ``ixc-django-docker`` aims to solve:
 **TODO:** Use a CDN (e.g. Cloudfront) in front of ``whitenoise``.
 
 **TODO:** Move this section to the top of this document?
-
-
-
