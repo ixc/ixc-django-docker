@@ -29,15 +29,6 @@ services:
   #     ES_JAVA_OPTS: ${ES_JAVA_OPTS:-'-Xms500m -Xmx500m'}
   #   image: interaction/elasticsearch-icu:5-alpine
 
-  gunicorn:
-    << : *project
-    command: setup-wait.sh supervisor.sh
-    environment:
-      GUNICORN_OPTIONS: --reload
-      VIRTUAL_HOST: '*project_template.lvh.me'
-    ports:
-      - 8080
-
   haproxy:
     image: dockercloud/haproxy
     links:
@@ -59,6 +50,14 @@ services:
     ports:
       - 6379
 
+  runserver:
+    << : *project
+    command: setup-wait.sh runserver.sh
+    environment:
+      VIRTUAL_HOST: '*project_template.lvh.me'
+    ports:
+      - 8000
+
   shell:
     << : *project
     build: .
@@ -68,7 +67,7 @@ services:
       - celerybeat
       - celeryflower
       # - elasticsearch
-      - gunicorn
       - haproxy
       - postgres
       - redis
+      - runserver

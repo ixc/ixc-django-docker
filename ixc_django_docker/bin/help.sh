@@ -76,7 +76,7 @@ Here is a list of frequently used commands you might want to run:
 			PYDEVD_PORT=5678
 
 	runserver.sh [ARGS]
-		Start the Django development server.
+		Start gunicorn with simplified logging, auto-reloading, and 1 worker.
 
 	runtests.sh [ARGS]
 		Configure environment, create and restore test database, apply Django
