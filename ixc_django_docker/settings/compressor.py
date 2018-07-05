@@ -13,13 +13,6 @@ COMPRESS_PRECOMPILERS = (
             os.path.join(PROJECT_DIR, 'node_modules', '.bin', 'lessc'),
         ),
     ),
-    (
-        'text/x-scss',
-        '"%s" {infile} {outfile} --include-path "%s"' % (
-            os.path.join(PROJECT_DIR, 'node_modules', '.bin', 'node-sass'),
-            STATIC_ROOT,
-        ),
-    ),
 )
 
 INSTALLED_APPS += ('compressor', )

@@ -17,7 +17,7 @@ from django.utils.six import text_type
 
 # Get project directory from environment. This MUST already be defined.
 # Copied from __init__.py I'm not sure why it's needed here as well
-PROJECT_DIR = os.environ['PROJECT_DIR']
+PROJECT_DIR = os.environ['PROJECT_DIR'].rstrip('/')
 
 PROJECT_SLUG = re.sub(r'[^0-9A-Za-z]+', '-', slugify(
     text_type(os.path.basename(PROJECT_DIR)).lower()))

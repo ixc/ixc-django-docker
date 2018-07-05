@@ -6,13 +6,10 @@
 **/*.swp
 **/.DS_Store
 **/npm-debug.log
-**/pubring.gpg~
-**/random_seed
 **/requirements-local.txt
 /.coverage
 /.env.local
 /.idea/
-/.gnupg/gpg.conf
 /bower_components/
 /docker-compose.override.yml
 /node_modules/

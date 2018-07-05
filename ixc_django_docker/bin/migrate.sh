@@ -12,8 +12,8 @@ DIR="${1:-$PROJECT_DIR/var}"
 
 mkdir -p "$DIR"
 
-DJANGO_VERSION_LESS_THAN_1_7=$(python -c 'import django; print(django.VERSION < (1, 7))')
-DJANGO_VERSION_LESS_THAN_1_10=$(python -c 'import django; print(django.VERSION < (1, 10))')
+DJANGO_VERSION_LESS_THAN_1_7=$(python.sh -c 'import django; print(django.VERSION < (1, 7))')
+DJANGO_VERSION_LESS_THAN_1_10=$(python.sh -c 'import django; print(django.VERSION < (1, 10))')
 
 if [[ DJANGO_VERSION_LESS_THAN_1_7 == 'True' ]]; then
 	echo 'Always sync database, because Django version is less than 1.7.'
@@ -33,7 +33,7 @@ if ! redis-cache.py -v -x match ixc-django-docker:migrate-list < "$DIR/migrate.t
 
 	# Skip initial migration if all tables created by the initial migration
 	# already exist.
-	if [[ $(python -c 'import django; print(django.get_version());') < 1.7 ]]; then
+	if [[ $(python.sh -c 'import django; print(django.get_version());') < 1.7 ]]; then
 		manage.py migrate --noinput  # South has no `--fake-initial` option
 	else
 		manage.py migrate --fake-initial --noinput

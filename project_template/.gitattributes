@@ -1,3 +1,1 @@
-.env.* filter=crypt diff=crypt
-docker-cloud.*.yml filter=crypt diff=crypt
 *.secret* filter=crypt diff=crypt

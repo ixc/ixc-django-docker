@@ -1,48 +1,37 @@
 FROM buildpack-deps:xenial
 
-# Set your project name here, and a different directory if needed (unlikely)
-ENV PROJECT_NAME=project_template
-ENV PROJECT_DIR=/opt/${PROJECT_NAME}/
-
-# Set the Python 3 version here; it should match the one from buildpack-deps:xenial
-ENV PY3_VER=3.5
+# SYSTEM ######################################################################
 
 RUN apt-get update \
     && apt-get upgrade -y --no-install-recommends \
     && apt-get install -y --no-install-recommends \
         apache2-utils \
         apt-utils \
-        gnupg2 \
-        jq \
         bsdmainutils \
         gettext  \
         htop \
+        jq \
         less \
         locales \
         nano \
         nginx \
         postgresql-client \
-        python2.7-dev \
-        python${PY3_VER}-dev \
         pv \
+        python-dev \
+        python3-dev \
+        supervisor \
         vim-tiny \
-        build-essential \
-        unixodbc unixodbc-dev \
-        freetds-dev \
-        tdsodbc\
     && rm -rf /var/lib/apt/lists/*
-RUN rm /usr/bin/python
-RUN ln -s /usr/bin/python${PY3_VER} /usr/bin/python
 
 RUN locale-gen en_US.UTF-8
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
 
-ENV DOCKERIZE_VERSION=0.5.0
+ENV DOCKERIZE_VERSION=0.6.1
 RUN wget -nv -O - "https://github.com/jwilder/dockerize/releases/download/v${DOCKERIZE_VERSION}/dockerize-linux-amd64-v${DOCKERIZE_VERSION}.tar.gz" | tar -xz -C /usr/local/bin/ -f -
 
-ENV LOGENTRIES_VERSION="1.4.41"
+ENV LOGENTRIES_VERSION=1.4.43
 RUN echo 'deb http://rep.logentries.com/ xenial main' > /etc/apt/sources.list.d/logentries.list
 RUN apt-get update \
     && apt-get install -y --allow-unauthenticated --no-install-recommends \
@@ -54,65 +43,43 @@ RUN wget -nv -O - "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION
 RUN ln -s "/opt/node-v${NODE_VERSION}-linux-x64/bin/node" /usr/local/bin/
 RUN ln -s "/opt/node-v${NODE_VERSION}-linux-x64/bin/npm" /usr/local/bin/
 
-ENV PYTHON_PIP_VERSION=9.0.1
-RUN wget -nv -O - https://bootstrap.pypa.io/get-pip.py | python${PY3_VER} - "pip==${PYTHON_PIP_VERSION}"
-RUN wget -nv -O - https://bootstrap.pypa.io/get-pip.py | python2.7 - "pip==${PYTHON_PIP_VERSION}"
-
-ENV TINI_VERSION=0.16.1
-RUN wget -nv -O /usr/local/bin/tini "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-static"
-RUN chmod +x /usr/local/bin/tini
-
-WORKDIR /opt/git-secret/
-
-ENV GIT_SECRET_VERSION=0.2.1
-RUN git clone https://github.com/sobolevn/git-secret.git /opt/git-secret/ \
-    && git checkout "v$GIT_SECRET_VERSION" \
-    && make build \
-    && PREFIX=/usr/local make install
-
-WORKDIR ${PROJECT_DIR}
-
-COPY package.json ${PROJECT_DIR}
-RUN npm install && rm -rf /root/.npm
-RUN md5sum package.json > package.json.md5
-ENV PATH=${PROJECT_DIR}node_modules/.bin:$PATH
-
-COPY bower.json ${PROJECT_DIR}
-RUN bower install --allow-root && rm -rf /root/.cache/bower
-RUN md5sum bower.json > bower.json.md5
-
 ENV PIP_DISABLE_PIP_VERSION_CHECK=on
 ENV PIP_SRC=/opt
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONHASHSEED=random
 ENV PYTHONWARNINGS=ignore
 
-COPY requirements.txt ${PROJECT_DIR}
-RUN pip2 install supervisor
-RUN bash -c 'pip3 install --no-cache-dir -r <(grep -v setuptools requirements.txt)'  # Unpin setuptools dependencies. See: https://github.com/pypa/pip/issues/4264
+ENV PYTHON_VERSION=python3  # python or python3
+
+ENV PYTHON_PIP_VERSION=9.0.1
+RUN wget -nv -O - https://bootstrap.pypa.io/get-pip.py | "${PYTHON_VERSION}" - "pip==${PYTHON_PIP_VERSION}"
+
+ENV TINI_VERSION=0.16.1
+RUN wget -nv -O /usr/local/bin/tini "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-static"
+RUN chmod +x /usr/local/bin/tini
+
+# PROJECT #####################################################################
+
+ENV PROJECT_DIR="/opt/project_template"
+WORKDIR "${PROJECT_DIR}"
+
+COPY package.json "${PROJECT_DIR}"
+RUN npm install && rm -rf /root/.npm
+RUN md5sum package.json > package.json.md5
+ENV PATH="${PROJECT_DIR}/node_modules/.bin:$PATH"
+
+COPY bower.json "${PROJECT_DIR}"
+RUN bower install --allow-root && rm -rf /root/.cache/bower
+RUN md5sum bower.json > bower.json.md5
+
+COPY requirements.txt "${PROJECT_DIR}"
+RUN pip install --no-cache-dir -r requirements.txt
 RUN md5sum requirements.txt > requirements.txt.md5
-
-
-COPY setup.py ${PROJECT_DIR}
-RUN pip install --no-cache-dir -e .
-
-ENV DATADOG_TRACE_AGENT_HOSTNAME=datadog
-ENV ELASTICSEARCH_ADDRESS=elasticsearch:9200
-ENV PGHOST=postgres
-ENV PGUSER=postgres
-ENV REDIS_ADDRESS=redis:6379
-
-ENV PATH=${PROJECT_DIR}bin:$PATH
 
 ENTRYPOINT ["tini", "--", "entrypoint.sh"]
 CMD ["bash.sh"]
 
-COPY . ${PROJECT_DIR}
-
-# Fix password pass-through for git-secret and gpg2
-RUN mkdir -p .gnupg/
-RUN echo "allow-loopback-pinentry" > .gnupg/gpg-agent.conf
-RUN echo "pinentry-mode loopback" > .gnupg/gpg.conf
+COPY . "${PROJECT_DIR}"
 
 RUN entrypoint.sh compile-sass.sh  # Must come before collectstatic
 RUN entrypoint.sh manage.py collectstatic --noinput --verbosity=0

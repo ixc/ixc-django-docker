@@ -6,12 +6,9 @@
 **/*.swp
 **/.DS_Store
 **/npm-debug.log
-**/pubring.gpg~
-**/random_seed
 **/requirements-local.txt
 .coverage
 .env.local
-.gnupg/gpg.conf
 .idea/
 bower_components/
 docker-compose.override.yml
