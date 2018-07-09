@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Configure the environment so we can run `entrypoint.sh` and other scripts.
+# Just enough bootstrap so we can execute `entrypoint.sh`.
 
 cat <<EOF
 # `whoami`@`hostname`:$PWD$ go.sh $@
