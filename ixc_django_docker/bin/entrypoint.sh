@@ -98,7 +98,9 @@ else
 	export PATH="$PROJECT_VENV_DIR/bin:$PATH"
 fi
 
-# Get absolute directory for the `ixc_django_docker` package.
+# Get absolute directory for the `ixc_django_docker` package. We can't use
+# `python.sh` here because it is not installed into the virtualenv or system
+# `bin` directory.
 export IXC_DJANGO_DOCKER_DIR="$('${PYTHON_VERSION:-python}' -c 'import ixc_django_docker, os; print(os.path.dirname(ixc_django_docker.__file__));')"
 
 # Add project, `node_modules`, and `ixc-django-docker` bin directories to PATH.
