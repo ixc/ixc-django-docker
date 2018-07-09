@@ -99,7 +99,7 @@ else
 fi
 
 # Get absolute directory for the `ixc_django_docker` package.
-export IXC_DJANGO_DOCKER_DIR=$(python.sh -c "import ixc_django_docker, os; print(os.path.dirname(ixc_django_docker.__file__));")
+export IXC_DJANGO_DOCKER_DIR="$('${PYTHON_VERSION:-python}' -c 'import ixc_django_docker, os; print(os.path.dirname(ixc_django_docker.__file__));')"
 
 # Add project, `node_modules`, and `ixc-django-docker` bin directories to PATH.
 export PATH="$PROJECT_DIR/bin:$PROJECT_DIR/node_modules/.bin:$IXC_DJANGO_DOCKER_DIR/bin:$PATH"
