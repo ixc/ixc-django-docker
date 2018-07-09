@@ -12,9 +12,6 @@ set -e
 # See: http://stackoverflow.com/a/4774063
 export PROJECT_DIR=$(cd $(dirname "${BASH_SOURCE[0]}"); pwd -P)
 
-# Set location of virtualenv.
-export PROJECT_VENV_DIR="${VIRTUAL_ENV:-$PROJECT_DIR/var/go.sh-venv}"
-
 # Source local environment variables.
 if [[ -f "$PROJECT_DIR/.env.local" ]]; then
 	source "$PROJECT_DIR/.env.local"
@@ -22,6 +19,9 @@ else
 	>&2 echo 'ERROR: You must create a `.env.local` file. See: `.env.local.sample`.'
 	exit 1
 fi
+
+# Set location of virtualenv.
+export PROJECT_VENV_DIR="${PROJECT_VENV_DIR:-$PROJECT_DIR/var/go.sh-venv}"
 
 # Create a virtualenv and install requirements, including `ixc-django-docker`.
 if [[ ! -d "$PROJECT_VENV_DIR" ]]; then
