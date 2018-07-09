@@ -15,12 +15,12 @@ mkdir -p "$DIR"
 DJANGO_VERSION_LESS_THAN_1_7=$(python.sh -c 'import django; print(django.VERSION < (1, 7))')
 DJANGO_VERSION_LESS_THAN_1_10=$(python.sh -c 'import django; print(django.VERSION < (1, 10))')
 
-if [[ DJANGO_VERSION_LESS_THAN_1_7 == 'True' ]]; then
+if [[ "$DJANGO_VERSION_LESS_THAN_1_7" == 'True' ]]; then
 	echo 'Always sync database, because Django version is less than 1.7.'
 	manage.py syncdb --noinput
 fi
 
-if [[ DJANGO_VERSION_LESS_THAN_1_10 == 'True' ]]; then
+if [[ "$DJANGO_VERSION_LESS_THAN_1_10" == 'True' ]]; then
     manage.py migrate --list > "$DIR/migrate.txt"
 else
     manage.py showmigrations > "$DIR/migrate.txt"
@@ -39,7 +39,7 @@ if ! redis-cache.py -v -x match ixc-django-docker:migrate-list < "$DIR/migrate.t
 		manage.py migrate --fake-initial --noinput
 	fi
 
-    if [[ DJANGO_VERSION_LESS_THAN_1_10 == 'True' ]]; then
+    if [[ "$DJANGO_VERSION_LESS_THAN_1_10" == 'True' ]]; then
         manage.py migrate --list > "$DIR/migrate.txt"
     else
         manage.py showmigrations > "$DIR/migrate.txt"
