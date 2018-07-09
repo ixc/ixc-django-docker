@@ -55,7 +55,7 @@ services:
       << : *base-deploy
       replicas: ${CELERY_REPLICAS:-1}
     healthcheck:
-      test: celery inspect ping --app=ixc_django_docker.celery celery@$$HOSTNAME || exit 1
+      test: entrypoint.sh celery inspect ping --app=ixc_django_docker.celery -d celery@$$HOSTNAME || exit 1
 
   celerybeat:
     << : *project
