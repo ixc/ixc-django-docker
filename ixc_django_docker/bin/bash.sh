@@ -14,30 +14,30 @@ if [[ -t 1 ]]; then
 You are running a pre-configured interactive Bash shell. Here is a list of
 frequently used scripts you might want to run:
 
-    bower-install.sh <DIR>
-    celery.sh
-    celerybeat.sh
-    celeryflower.sh
-    clear-cache.sh
-    compile-sass.sh [ARGS]
-    ddtrace.sh
-    gunicorn.sh
-    logentries.sh
-    manage.py [COMMAND [ARGS]]
-    migrate.sh
-    newrelic.sh <COMMAND>
-    nginx.sh
-    npm-install.sh <DIR>
-    pip-install.sh <DIR>
-    pydevd.sh <COMMAND>
-    runserver.sh [ARGS]
-    runtests.sh [ARGS]
-    setup-django.sh [COMMAND]
-    setup-postgres.sh
-    setup-tests.sh [COMMAND]
-    supervisor.sh [OPTIONS] [ACTION [ARGS]]
-    transfer.sh <FILE>
-    waitlock.py [-b] <COMMAND>
+	bower-install.sh <DIR>
+	celery.sh
+	celerybeat.sh
+	celeryflower.sh
+	clear-cache.sh
+	compile-sass.sh [ARGS]
+	ddtrace.sh <COMMAND>
+	gunicorn.sh
+	logentries.sh
+	manage.py [COMMAND [ARGS]]
+	migrate.sh
+	newrelic.sh <COMMAND>
+	nginx.sh
+	npm-install.sh <DIR>
+	pip-install.sh <DIR>
+	pydevd.sh <COMMAND>
+	runserver.sh [ARGS]
+	runtests.sh [ARGS]
+	setup-django.sh [COMMAND]
+	setup-postgres.sh
+	setup-tests.sh [COMMAND]
+	supervisor.sh [OPTIONS] [ACTION [ARGS]]
+	transfer.sh <FILE>
+	waitlock.py [-b] <COMMAND>
 
 Most of these scripts are minimal wrappers that specify configuration and
 provide automation or integration with Docker and various 'ixc-django-docker'
@@ -45,11 +45,11 @@ components.
 
 For more info on each script, run:
 
-    help.sh
+	help.sh
 
 See more detailed documentation about commands at:
 
-    https://github.com/ixc/ixc-django-docker/docs/commands.rst
+	https://github.com/ixc/ixc-django-docker/docs/commands.rst
 
 EOF
 
