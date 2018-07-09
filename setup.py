@@ -48,7 +48,7 @@ setuptools.setup(
             'django-debug-toolbar',
         ],
         'extensions': [
-            'django-extensions',
+            'django-extensions>=1.4.5',  # For `clear_cache` management command
         ],
         'haystack': [
             'django-haystack',
