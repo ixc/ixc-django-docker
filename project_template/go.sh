@@ -26,7 +26,7 @@ export PROJECT_VENV_DIR="${PROJECT_VENV_DIR:-$PROJECT_DIR/var/go.sh-venv}"
 # Create a virtualenv and install requirements, including `ixc-django-docker`.
 if [[ ! -d "$PROJECT_VENV_DIR" ]]; then
 	virtualenv --python=python3 "$PROJECT_VENV_DIR"
-	PIP_SRC="$PROJECT_DIR/src" "$PROJECT_VENV_DIR/bin/python" -m pip install --no-cache-dir --no-deps -r requirements.txt
+	PIP_SRC="${PIP_SRC:-$PROJECT_DIR/src}" "$PROJECT_VENV_DIR/bin/python" -m pip install --no-cache-dir --no-deps -r requirements.txt
 	md5sum requirements.txt > requirements.txt.md5
 fi
 
