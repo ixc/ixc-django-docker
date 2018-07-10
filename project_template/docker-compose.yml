@@ -33,7 +33,7 @@ services:
     image: dockercloud/haproxy
     links:
       - celeryflower
-      - gunicorn
+      - runserver
     ports:
       - ${HAPROXY_PORT:-80}:80
       - 1936
