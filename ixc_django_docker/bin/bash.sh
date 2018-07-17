@@ -59,7 +59,7 @@ EOF
 	# Compare git commit and print reminder if setup has not completed successfully.
 	GIT_COMMIT="$(git rev-parse HEAD)"
 	if ! redis-cache.py -q match ixc-django-docker:setup-git-commit "$GIT_COMMIT" 2>&1; then
-		echo "Setup is not complete for '$GIT_COMMIT'. Run 'setup.sh' manually."
+		>&2 echo "Setup is not complete for '$GIT_COMMIT'. Run 'setup.sh' manually."
 	fi
 
 	export PS1="($PROJECT_NAME) \u@\h:\w\\n\$ "
