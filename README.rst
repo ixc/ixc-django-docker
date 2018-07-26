@@ -100,16 +100,15 @@ run a project, and a list of all the available settings modules.
 Encrypted secrets
 =================
 
-Secrets should only be stored in ``.env.*.secret`` and ``docker-cloud.*.yml``
-files which must be encrypted by ``transcrypt``.
+Secrets should only be stored in ``*.secret*`` files which will be encrypted by
+``transcrypt``.
 
 To enable, set the ``TRANSCRYPT_PASSWORD`` environment variable in
-``.env.local`` and ``docker-cloud.*.yml`` files. This password is generally
-available in IC's 1Password for existing projects.
+``.env.local`` and Docker stack files. This password is generally available in
+IC's 1Password for existing projects.
 
 See the `Encrypted secrets <docs/secrets.rst>`_ documentation for more details
-on how to use Transcrypt, or how to use Git-Secret for legacy projects where
-that was the secret management tool (Git-Secret it is no longer recommended).
+on how to use Transcrypt.
 
 
 How to run an ixc-django-docker project
@@ -202,21 +201,21 @@ Or:
 System requirements when running without Docker
 -----------------------------------------------
 
+* [Dockerize](https://github.com/jwilder/dockerize/releases/latest)
 * md5sum
 * Nginx
 * NPM
 * Pipe Viewer
 * PostgreSQL
-* Python 2.7
+* Python 2.7 or 3.5
 * Redis
+* Supervisor
+* Transcrypt
 * Yarn
-* Dockerize : install from https://github.com/jwilder/dockerize
 
 Optional:
 
 * Elasticsearch 2.x (5.x is not compatible with ``django-haystack``)
-* Git-Secret (not recommended)
-* Transcrypt
 
 
 macOS
@@ -234,7 +233,7 @@ Install `Postgres.app <http://postgresapp.com/>`__.
 
 Install required system packages::
 
-    $ brew install md5sha1sum nginx npm pv python redis yarn
+    $ brew install md5sha1sum nginx npm pv python redis supervisor transcrypt yarn
 
 Start Redis::
 
@@ -244,8 +243,6 @@ Install optional system packages::
 
     $ brew install elasticsearch@2.4
     $ brew link elasticsearch@2.4 --force
-    $ brew install git-secret
-    $ brew install transcrypt
 
 Start Elasticsearch::
 

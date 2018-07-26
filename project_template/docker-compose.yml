@@ -1,82 +1,73 @@
-version: "2.3"
+version: '3.6'
+
+x-project: &project
+  env_file: .env.local
+  image: interaction/project_template:local
+  volumes:
+    - .:/opt/project_template
+
 services:
-  base:
-    env_file: .env.local
-    environment:
-      TERM: # Get from environment
-    image: interaction/project_template:local
-    volumes:
-      - ./:/opt/project_template
-  bash:
-    command: setup-django.sh bash.sh
-    extends: base
-    links:
-      - postgres
-      - redis
-    ports:
-      - 8000:8000
   celery:
-    command: setup-django.sh celery.sh
-    extends: base
-    links:
-      # - elasticsearch
-      - postgres
-      - redis
+    << : *project
+    command: setup-wait.sh celery.sh --concurrency 1
+
   celerybeat:
-    command: setup-django.sh celerybeat.sh
-    extends: base
-    links:
-      - postgres
-      - redis
+    << : *project
+    command: setup-wait.sh celerybeat.sh
+
   celeryflower:
-    command: setup-django.sh supervisor.sh
+    << : *project
+    command: setup-wait.sh celeryflower.sh
     environment:
-      SUPERVISORD_PROGRAM: celeryflower
+      VIRTUAL_HOST: 'flower.*'
       VIRTUAL_HOST_WEIGHT: 1
-      VIRTUAL_HOST: flower.*
-    extends: base
-    links:
-      - postgres
-      - redis
     ports:
-      - 8000
-  django:
-    build: .
-    command: setup-django.sh supervisor.sh
-    environment:
-      VIRTUAL_HOST: '*'
-    extends: base
-    links:
-      # - celery
-      # - celerybeat
-      # - celeryflower
-      # - elasticsearch
-      - postgres
-      - redis
-    ports:
-      - 8000
+      - 8080
+
   # elasticsearch:
-  #   image: elasticsearch:2.4.6-alpine
-  #   ports:
-  #     - 9200
+  #   environment:
+  #     ES_JAVA_OPTS: ${ES_JAVA_OPTS:-'-Xms500m -Xmx500m'}
+  #   image: interaction/elasticsearch-icu:5-alpine
+
   haproxy:
-    image: 'dockercloud/haproxy:1.6.3'
+    image: dockercloud/haproxy
     links:
       - celeryflower
-      - django
+      - runserver
     ports:
-      # - 80:80
-      # - 443:443
-      - 1936:1936
-      - 8000:80
+      - ${HAPROXY_PORT:-80}:80
+      - 1936
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+
   postgres:
-    image: postgres:9.4-alpine
+    image: postgres:9.5-alpine
     ports:
       - 5432
+
   redis:
-    command: redis-server --appendonly yes
     image: redis:3-alpine
     ports:
       - 6379
+
+  runserver:
+    << : *project
+    command: setup-wait.sh runserver.sh
+    environment:
+      VIRTUAL_HOST: '*'
+    ports:
+      - 8000
+
+  shell:
+    << : *project
+    build: .
+    command: bash.sh
+    depends_on:
+      - celery
+      - celerybeat
+      - celeryflower
+      # - elasticsearch
+      - haproxy
+      - postgres
+      - redis
+      - runserver

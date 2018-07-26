@@ -7,9 +7,9 @@ Docker on ephemeral infrastructure, that ``ixc-django-docker`` aims to solve:
 * Compress CSS, JavaScript, Less, Sass, etc. offline, so each container in a
   multi-node configuration has immediate access to all compressed assets.
 
-  In-request compression does not work in a multi-node configuration, because
-  the container doing the compression may not be the one that receives the
-  request for compressed assets.
+  In-request compression does not work in a multi-node configuration, without
+  a shared persistent volume, because the container doing the compression may
+  not be the one that receives the request for compressed assets.
 
 * Use host names instead of ``localhost`` for services, e.g. ElasticSearch,
   PostgreSQL, Redis, etc.
@@ -38,6 +38,3 @@ Docker on ephemeral infrastructure, that ``ixc-django-docker`` aims to solve:
 **TODO:** Use a CDN (e.g. Cloudfront) in front of ``whitenoise``.
 
 **TODO:** Move this section to the top of this document?
-
-
-

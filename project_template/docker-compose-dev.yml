@@ -1,0 +1,16 @@
+version: '3.6'
+
+x-project: &project
+  volumes:
+    - project_template-sync:/opt/project_template:nocopy
+
+services:
+  celery: *project
+  celerybeat: *project
+  celeryflower: *project
+  runserver: *project
+  shell: *project
+
+volumes:
+  project_template-sync:
+    external: true

@@ -41,14 +41,13 @@ if [[ -f /.dockerenv ]]; then
 	# Add userbase bin directory to PATH.
 	export PATH="$PYTHONUSERBASE/bin:$PATH"
 
-	# Install editable packages into userbase directory.
-	export PIP_SRC="$PYTHONUSERBASE/src"
-
 	# For some reason pip allows us to install sdist packages, but not editable
-	# packages, when this directory doesn't exist. So make sure it does.
+	# packages, when these directories don't exist. So make sure they do.
+	# There's no easy way to detect the minor version of Python being used, so
+	# create directories for all supported versions. They don't hurt anything.
 	mkdir -p "$PYTHONUSERBASE/lib/python2.7/site-packages"
-	# There's no harm in having both for compatibility
 	mkdir -p "$PYTHONUSERBASE/lib/python3.5/site-packages"
+	mkdir -p "$PYTHONUSERBASE/lib/python3.6/site-packages"
 
 	# On Docker for Mac, osxfs has performance issues when watching file system
 	# events. Detect Docker for Mac and export an environment variable that we
@@ -87,7 +86,7 @@ else
 	done
 
 	# Fail loudly when required programs are missing.
-	for cmd in md5sum nginx npm psql python pv redis-server yarn dockerize; do  # TODO: elasticsearch git-secret transcrypt
+	for cmd in dockerize md5sum nginx npm psql python pv redis-server supervisord supervisorctl transcrypt yarn; do  # TODO: elasticsearch
 		hash $cmd 2>/dev/null || {
 			>&2 echo "ERROR: Missing program: $cmd"
 			>&2 echo 'See: https://github.com/ixc/ixc-django-docker/blob/master/README.rst#system-requirements-when-running-without-docker'
@@ -99,8 +98,10 @@ else
 	export PATH="$PROJECT_VENV_DIR/bin:$PATH"
 fi
 
-# Get absolute directory for the `ixc_django_docker` package.
-export IXC_DJANGO_DOCKER_DIR=$(python -c "import ixc_django_docker, os; print(os.path.dirname(ixc_django_docker.__file__));")
+# Get absolute directory for the `ixc_django_docker` package. We can't use
+# `python.sh` here because it is not installed into the virtualenv or system
+# `bin` directory.
+export IXC_DJANGO_DOCKER_DIR="$("${PYTHON_VERSION:-python}" -c 'import ixc_django_docker, os; print(os.path.dirname(ixc_django_docker.__file__));')"
 
 # Add project, `node_modules`, and `ixc-django-docker` bin directories to PATH.
 export PATH="$PROJECT_DIR/bin:$PROJECT_DIR/node_modules/.bin:$IXC_DJANGO_DOCKER_DIR/bin:$PATH"
@@ -113,18 +114,9 @@ if [[ -f "$PROJECT_DIR/.env.local" ]]; then
 	set +o allexport
 fi
 
-# Configure git secret.
-export GNUPGHOME="$PROJECT_DIR/.gnupg"
-export SECRETS_GPG_COMMAND=gpg2
-
-# Decrypt files with git secret.
-if [[ -d "$PROJECT_DIR/.gitsecret" ]]; then
-	setup-git-secret.sh || true  # Don't exit if we can't decrypt secrets
-fi
-
 # Decrypt files with transcrypt.
 if [[ -n "$TRANSCRYPT_PASSWORD" ]]; then
-	git status  # See: https://github.com/elasticdog/transcrypt/issues/37
+	git status &> /dev/null  # See: https://github.com/elasticdog/transcrypt/issues/37
 	# Use `--force` to overwrite "missing" secrets that are listed in
 	# `.dockerignore` to avoid accidentally copying decrypted secrets into an
 	# image.
@@ -143,10 +135,11 @@ for dotenv in base "$DOTENV" "$DOTENV.secret" local; do
 done
 
 # Get number of CPU cores, so we know how many processes to run.
-export CPU_CORES=$(python -c "import multiprocessing; print(multiprocessing.cpu_count());")
+export CPU_CORES=$(python.sh -c "import multiprocessing; print(multiprocessing.cpu_count());")
 
 # Configure Pip.
 export PIP_DISABLE_PIP_VERSION_CHECK=on
+export PIP_SRC="${PIP_SRC:-$PROJECT_DIR/src}"
 
 # Get project name from the project directory.
 export PROJECT_NAME=$(basename "$PROJECT_DIR")
@@ -157,28 +150,38 @@ export PYTHONHASHSEED=random
 export PYTHONPATH="$PROJECT_DIR:$PYTHONPATH"
 export PYTHONWARNINGS=ignore
 
-# Derive 'PGDATABASE' from 'PROJECT_NAME' and git branch or 'DOTENV', if not
-# already defined.
-if [[ -z "$PGDATABASE" ]]; then
-	if [[ -d .git ]]; then
-		export PGDATABASE="${PROJECT_NAME}_$(git rev-parse --abbrev-ref HEAD | sed 's/[^0-9A-Za-z]/_/g')"
-		echo "Derived database name '$PGDATABASE' from 'PROJECT_NAME' environment variable and git branch."
-	elif [[ -n "$DOTENV" ]]; then
-		export PGDATABASE="${PROJECT_NAME}_$DOTENV"
-		echo "Derived database name '$PGDATABASE' from 'PROJECT_NAME' and 'DOTENV' environment variables."
-	else
-		export PGDATABASE="$PROJECT_NAME"
-		echo "Derived database name '$PGDATABASE' from 'PROJECT_NAME' environment variable."
-	fi
-fi
-
-# Default PostgreSQL credentials.
-export PGHOST="${PGHOST:-localhost}"
+# Set PostgreSQL database and port.
+export PGDATABASE="${PGDATABASE:-${PROJECT_NAME}_${DOTENV}}"
 export PGPORT="${PGPORT:-5432}"
-export PGUSER="${PGUSER:-$(whoami)}"
 
-# Get Redis host and port.
-export REDIS_ADDRESS="${REDIS_ADDRESS:-localhost:6379}"
+# Set overridable default environment variables.
+if [[ -f /.dockerenv ]]; then
+	# Set Datadog trace agent host.
+	export DATADOG_TRACE_AGENT_HOSTNAME="${DATADOG_TRACE_AGENT_HOSTNAME:-datadog}"
+
+	# Set Elasticsearch host and port.
+	export ELASTICSEARCH_ADDRESS="${ELASTICSEARCH_ADDRESS:-elasticsearch:9200}"
+
+	# Set PostgreSQL host and user.
+	export PGHOST="${PGHOST:-postgres}"
+	export PGUSER="${PGUSER:-postgres}"
+
+	# Set Redis host and port.
+	export REDIS_ADDRESS="${REDIS_ADDRESS:-redis:6379}"
+else
+	# Set Datadog trace agent host.
+	export DATADOG_TRACE_AGENT_HOSTNAME="${DATADOG_TRACE_AGENT_HOSTNAME:-localhost}"
+
+	# Set Elasticsearch host and port.
+	export ELASTICSEARCH_ADDRESS="${ELASTICSEARCH_ADDRESS:-localhost:9200}"
+
+	# Set PostgreSQL host and user.
+	export PGHOST="${PGHOST:-localhost}"
+	export PGUSER="${PGUSER:-$(whoami)}"
+
+	# Set Redis host and port.
+	export REDIS_ADDRESS="${REDIS_ADDRESS:-localhost:6379}"
+fi
 
 # Execute command.
 exec "${@:-bash.sh}"

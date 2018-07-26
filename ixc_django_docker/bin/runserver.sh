@@ -1,17 +1,8 @@
 #!/bin/bash
 
-cat <<EOF
-# `whoami`@`hostname`:$PWD$ runserver.sh $@
-EOF
-
 set -e
 
-if [[ -n "${DOCKER_FOR_MAC+1}" ]]; then
-	cat <<-EOF
-	Disable auto-reload under Docker for Mac to avoid high CPU utilisation.
-	See: https://docs.docker.com/docker-for-mac/osxfs/#/performance-issues-solutions-and-roadmap
-	EOF
-	set -- --noreload "$@"
-fi
+export NGINX_PROXY_PORT="${NGINX_PROXY_PORT:-8000}"
+export GUNICORN_WORKERS=1
 
-exec manage.py runserver "$@" 0.0.0.0:${NGINX_PORT:-8000}
+exec gunicorn.sh --access-logformat '%(t)s "%(r)s" %(s)s %(b)s' --reload "${@:-ixc_django_docker.wsgi:application}"

@@ -45,5 +45,6 @@ def skip_concurrent(f, *args, **kwargs):
 
 
 @task
+@skip_concurrent
 def call_command(*args, **kwargs):
     return management.call_command(*args, **kwargs)
