@@ -13,7 +13,7 @@ if [[ -n "$NGINX_BASIC_AUTH" ]]; then
 	echo "$BASIC_AUTH_PASSWORD" | htpasswd -ci "$PROJECT_DIR/var/etc/nginx.htpasswd" "$BASIC_AUTH_USERNAME"
 fi
 
-export NGINX_WORKER_PROCESSES="${NGINX_WORKER_PROCESSES:-$CPU_CORES}"  # "auto" not supported before 1.2.5
+export NGINX_WORKER_PROCESSES="${NGINX_WORKER_PROCESSES:-auto}"
 
 # Render nginx config template.
 mkdir -p "$PROJECT_DIR/var/etc"
