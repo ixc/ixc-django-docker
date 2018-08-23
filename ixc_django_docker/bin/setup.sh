@@ -27,9 +27,6 @@ setup-postgres.sh
 # Apply migrations.
 migrate.sh "$PROJECT_DIR/var"
 
-# Clear caches.
-clear-cache.sh
-
 # Compile SASS.
 compile-sass.sh
 
