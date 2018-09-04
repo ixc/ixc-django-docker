@@ -23,7 +23,7 @@ DJANGO_VERSION_LESS_THAN_1_7=$(python.sh -c 'import django; print(django.VERSION
 
 setup-postgres.sh
 
-if [[ DJANGO_VERSION_LESS_THAN_1_7 == 'True' ]]; then
+if [[ "$DJANGO_VERSION_LESS_THAN_1_7" == 'True' ]]; then
 	echo 'Always sync database, because Django version is less than 1.7.'
 	manage.py syncdb --noinput
 fi
