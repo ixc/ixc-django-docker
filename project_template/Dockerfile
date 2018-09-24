@@ -1,5 +1,7 @@
 FROM buildpack-deps:xenial
 
+ENV PROJECT_DIR=/opt/project_template
+
 # SYSTEM ######################################################################
 
 RUN apt-get update \
@@ -8,6 +10,7 @@ RUN apt-get update \
         apache2-utils \
         apt-utils \
         bsdmainutils \
+        dnsutils \
         gettext  \
         htop \
         iputils-ping \
@@ -20,7 +23,9 @@ RUN apt-get update \
         pv \
         python-dev \
         python3-dev \
+        screen \
         supervisor \
+        tmux \
         vim-tiny \
     && rm -rf /var/lib/apt/lists/*
 
@@ -45,12 +50,12 @@ RUN ln -s "/opt/node-v${NODE_VERSION}-linux-x64/bin/node" /usr/local/bin/
 RUN ln -s "/opt/node-v${NODE_VERSION}-linux-x64/bin/npm" /usr/local/bin/
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK=on
-ENV PIP_SRC=/opt/project_template/src
+ENV PIP_SRC="${PROJECT_DIR}/src"
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONHASHSEED=random
 ENV PYTHONWARNINGS=ignore
 
-ENV PYTHON_VERSION=python3  # python or python3
+ENV PYTHON_VERSION=python3
 
 ENV PYTHON_PIP_VERSION=9.0.1
 RUN wget -nv -O - https://bootstrap.pypa.io/get-pip.py | "${PYTHON_VERSION}" - "pip==${PYTHON_PIP_VERSION}"
@@ -61,7 +66,6 @@ RUN chmod +x /usr/local/bin/tini
 
 # PROJECT #####################################################################
 
-ENV PROJECT_DIR=/opt/project_template
 WORKDIR "${PROJECT_DIR}"
 
 COPY package.json "${PROJECT_DIR}"
