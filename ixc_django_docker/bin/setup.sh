@@ -27,8 +27,13 @@ setup-postgres.sh
 # Apply migrations.
 migrate.sh "$PROJECT_DIR/var"
 
-# Compile SASS.
-compile-sass.sh
+# Run build script.
+if [[ "$(cat package.json | jq '.scripts.build')" != null ]]; then
+	cat <<-EOF
+	# `whoami`@`hostname`:$PWD$ npm run build
+	EOF
+	npm run build
+fi
 
 # Cache git commit.
 redis-cache.py -vv set ixc-django-docker:setup-git-commit "$(git rev-parse HEAD)"
