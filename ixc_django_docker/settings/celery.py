@@ -8,6 +8,7 @@ CELERY_ACCEPT_CONTENT = ['json', 'msgpack', 'yaml']  # 'pickle'
 CELERY_DEFAULT_QUEUE = PROJECT_SLUG
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
+CELERYBEAT_SCHEDULE_FILENAME = os.path.join(VAR_DIR, 'run/celerybeat-schedule')
 
 CELERYBEAT_SCHEDULE = {
     'clearsessions': {
