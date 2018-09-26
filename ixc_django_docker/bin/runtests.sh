@@ -14,7 +14,7 @@ set -e
 
 # Collect and compress static files. Skip when QUICK is set and when it has
 # already been done at least once before.
-[[ -z "$QUICK" || ! -d "$PROJECT_DIR/static_root" ]] && manage.py collectstatic --noinput --verbosity=0
+[[ -z "$QUICK" || ! -d "$PROJECT_DIR/static_root" ]] && [[ -z "$WITHOUT_COLLECTSTATIC" ]] && manage.py collectstatic --noinput --verbosity=0
 [[ -z "$QUICK" || ! -f "$PROJECT_DIR/static_root/CACHE/manifest.json" ]] && [[ -z "$WITHOUT_COMPRESSOR" ]] && manage.py compress --force --verbosity=0
 
 # Run tests and generate a coverage report.
