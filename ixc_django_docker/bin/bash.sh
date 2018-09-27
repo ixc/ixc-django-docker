@@ -15,10 +15,10 @@ scripts you might want to run:
 	celerybeat.sh
 	celeryflower.sh
 	clear-cache.sh
-	compile-sass.sh [ARGS]
+	# compile-sass.sh [ARGS]
 	ddtrace.sh <COMMAND>
 	gunicorn.sh
-	logentries.sh
+	# logentries.sh
 	manage.py [COMMAND [ARGS]]
 	migrate.sh
 	newrelic.sh <COMMAND>
@@ -33,7 +33,7 @@ scripts you might want to run:
 	setup-tests.sh [COMMAND]
 	supervisor.sh [OPTIONS] [ACTION [ARGS]]
 	transfer.sh <FILE>
-	waitlock.py [-b] <COMMAND>
+	# waitlock.py [-b] <COMMAND>
 
 Most of these scripts are minimal wrappers that specify configuration and
 provide automation or integration with Docker and various 'ixc-django-docker'
