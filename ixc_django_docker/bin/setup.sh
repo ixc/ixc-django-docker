@@ -3,10 +3,6 @@
 # Install Node modules, Bower components and Python requirements, create a
 # database, apply Django migrations, clear caches, and execute a command.
 
-cat <<EOF
-# `whoami`@`hostname`:$PWD$ setup.sh $@
-EOF
-
 set -e
 
 # Wait for Redis.
@@ -29,9 +25,6 @@ migrate.sh "$PROJECT_DIR/var"
 
 # Run build script.
 if [[ "$(cat package.json | jq '.scripts.build')" != null ]]; then
-	cat <<-EOF
-	# `whoami`@`hostname`:$PWD$ npm run build
-	EOF
 	npm run build
 fi
 

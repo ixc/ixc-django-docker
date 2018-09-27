@@ -1,9 +1,5 @@
 #!/bin/bash
 
-cat <<EOF
-# `whoami`@`hostname`:$PWD$ celery.sh $@
-EOF
-
 set -e
 
 # Allow Celery to run as root.

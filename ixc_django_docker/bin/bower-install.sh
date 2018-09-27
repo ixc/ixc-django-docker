@@ -2,10 +2,6 @@
 
 # Install Bower components in the given directory, if they have changed.
 
-cat <<EOF
-# `whoami`@`hostname`:$PWD$ bower-install.sh $@
-EOF
-
 set -e
 
 DIR="${1:-$PWD}"

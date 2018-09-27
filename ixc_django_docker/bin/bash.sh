@@ -2,10 +2,6 @@
 
 # Run a pre-configured interactive Bash shell, with some help text.
 
-cat <<EOF
-# `whoami`@`hostname`:$PWD$ bash.sh $@
-EOF
-
 set -e
 
 # Wait for Redis.

@@ -1,9 +1,5 @@
 #!/bin/bash
 
-cat <<EOF
-# `whoami`@`hostname`:$PWD$ newrelic.sh $@
-EOF
-
 set -e
 
 if [[ -z "$NEW_RELIC_LICENSE_KEY" ]]; then

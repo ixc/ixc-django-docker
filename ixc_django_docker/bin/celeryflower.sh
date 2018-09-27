@@ -1,9 +1,5 @@
 #!/bin/bash
 
-cat <<EOF
-# `whoami`@`hostname`:$PWD$ celeryflower.sh $@
-EOF
-
 set -e
 
 # Set new config defaults.

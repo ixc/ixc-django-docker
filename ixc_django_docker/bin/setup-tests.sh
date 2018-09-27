@@ -3,10 +3,6 @@
 # Configure environment, create and restore test database, apply Django
 # migrations, and execute a command.
 
-cat <<EOF
-# `whoami`@`hostname`:$PWD$ setup-tests.sh $@
-EOF
-
 set -e
 
 export OVERRIDE_SETTINGS="test.py"

@@ -2,10 +2,6 @@
 
 # Apply Django migrations, if they are out of date.
 
-cat <<EOF
-# `whoami`@`hostname`:$PWD$ migrate.sh $@
-EOF
-
 set -e
 
 DIR="${1:-$PROJECT_DIR/var}"

@@ -2,10 +2,6 @@
 
 # Compare git commit and wait if setup has not completed successfully.
 
-cat <<EOF
-# `whoami`@`hostname`:$PWD$ setup-wait.sh $@
-EOF
-
 set -e
 
 # Wait for Redis.

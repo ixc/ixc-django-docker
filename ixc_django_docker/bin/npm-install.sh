@@ -2,10 +2,6 @@
 
 # Install Node modules in the given directory, if they have changed.
 
-cat <<EOF
-# `whoami`@`hostname`:$PWD$ npm-install.sh $@
-EOF
-
 set -e
 
 DIR="${1:-$PWD}"

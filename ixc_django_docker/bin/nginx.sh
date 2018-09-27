@@ -1,9 +1,5 @@
 #!/bin/bash
 
-cat <<EOF
-# `whoami`@`hostname`:$PWD$ nginx.sh $@
-EOF
-
 set -e
 
 # Generate htpasswd file if credentials are set.

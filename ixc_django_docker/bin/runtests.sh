@@ -3,10 +3,6 @@
 # Run tests. Set 'QUICK=1' reuse the test database and collected static and
 # compressed files.
 
-cat <<EOF
-# `whoami`@`hostname`:$PWD$ runtests.sh $@
-EOF
-
 set -e
 
 # Configure environment, if not already done.
