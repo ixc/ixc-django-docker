@@ -12,13 +12,13 @@ while true; do
 		break
 	fi
 	if [[ "$COUNT" == 0 ]]; then
-		echo "Waiting for setup to complete for git commit: '$GIT_COMMIT'..."
+		echo "Waiting for setup to complete for git commit: $GIT_COMMIT..."
 	fi
 	(( COUNT += 1 ))
 	sleep 1
 done
 if (( COUNT > 0 )); then
-	echo "Waited $COUNT seconds for setup to complete."
+	echo "Waited $COUNT seconds for setup to complete for git commit: $GIT_COMMIT"
 fi
 
 # Execute command.
