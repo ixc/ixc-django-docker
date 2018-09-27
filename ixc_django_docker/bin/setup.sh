@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Install Node modules, Bower components and Python requirements, create a
-# database, apply Django migrations, clear caches, and execute a command.
+# database, apply Django migrations, run build script, and execute a command.
 
 set -e
 
