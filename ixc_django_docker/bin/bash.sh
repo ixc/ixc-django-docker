@@ -43,7 +43,7 @@ For more info on each script, run:
 
 	help.sh
 
-See more detailed documentation about commands at:
+For detailed documentation, see:
 
 	https://github.com/ixc/ixc-django-docker/docs/commands.rst
 
