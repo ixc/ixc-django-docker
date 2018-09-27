@@ -17,9 +17,9 @@ if [[ "$DJANGO_VERSION_LESS_THAN_1_7" == 'True' ]]; then
 fi
 
 if [[ "$DJANGO_VERSION_LESS_THAN_1_10" == 'True' ]]; then
-	manage.py migrate --list > "$DIR/migrate.txt"
+	manage.py migrate --list > "$DIR/migrate.txt" 2> /dev/null
 else
-	manage.py showmigrations > "$DIR/migrate.txt"
+	manage.py showmigrations > "$DIR/migrate.txt" 2> /dev/null
 fi
 
 if [[ ! -s "$DIR/migrate.txt.md5" ]] || ! md5sum --status -c "$DIR/migrate.txt.md5" > /dev/null 2>&1; then
@@ -34,9 +34,9 @@ if [[ ! -s "$DIR/migrate.txt.md5" ]] || ! md5sum --status -c "$DIR/migrate.txt.m
 	fi
 
 	if [[ "$DJANGO_VERSION_LESS_THAN_1_10" == 'True' ]]; then
-		manage.py migrate --list > "$DIR/migrate.txt"
+		manage.py migrate --list > "$DIR/migrate.txt" 2> /dev/null
 	else
-		manage.py showmigrations > "$DIR/migrate.txt"
+		manage.py showmigrations > "$DIR/migrate.txt" 2> /dev/null
 	fi
 
 	md5sum "$DIR/migrate.txt" > "$DIR/migrate.txt.md5"
