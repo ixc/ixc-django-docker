@@ -53,11 +53,7 @@ PROJECT_SETTINGS.append(
     optional(os.path.join(PROJECT_SETTINGS_DIR, 'local.py')))
 
 # Tell users where settings are coming from.
-if os.environ.get('DONT_PRINT_SETTINGS'):
-    print(
-        'NOT printing actual base and project settings. Unset '
-        '`DONT_PRINT_SETTINGS` to change.')
-else:
+if os.environ.get('SHOW_SETTINGS', '').lower() in ('1', 't', 'true', 'y', 'yes'):
     print('BASE_SETTINGS (%s):\n  %s' % (
         os.path.dirname(__file__),
         '\n  '.join(
@@ -69,6 +65,10 @@ else:
         '\n  '.join(
             _(os.path.join(PROJECT_DIR, s), PROJECT_DIR) for s in PROJECT_SETTINGS),
     ))
+else:
+    print(
+        'Not showing actual base and project settings. Set `SHOW_SETTINGS=1` '
+        'to change.')
 
 # Include base and project settings modules.
 include(*BASE_SETTINGS)
