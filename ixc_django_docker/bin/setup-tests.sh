@@ -5,10 +5,10 @@
 
 set -e
 
-export OVERRIDE_SETTINGS="test.py"
 export REUSE_DB=1
+export DOTENV=test
 export PGDATABASE="test_$PGDATABASE"
-export PS1="($PROJECT_NAME:test) \u@\h:\w\\$ "
+export PS1="($PROJECT_NAME:$DOTENV) \u@\h:\w\n\\$ "
 export SETUP_TESTS=1
 export SRC_PGDATABASE="$PROJECT_DIR/test_initial_data.sql"
 
