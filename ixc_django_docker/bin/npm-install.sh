@@ -30,6 +30,8 @@ if [[ ! -s package.json.md5 ]] || ! md5sum --status -c package.json.md5 > /dev/n
 	fi
 	if [[ -f yarn.lock ]]; then
 		yarn --non-interactive
+	elif [[ -f package-lock.json ]]; then
+		npm ci
 	else
 		npm install
 	fi
