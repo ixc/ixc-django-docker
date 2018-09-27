@@ -3,7 +3,7 @@
 set -e
 
 if [[ -z "$NEW_RELIC_LICENSE_KEY" ]]; then
-	>&2 echo "'NEW_RELIC_LICENSE_KEY' is unset. Run command directly."
+	>&2 echo "'NEW_RELIC_LICENSE_KEY' is unset. Running command directly."
 	exec "$@"
 fi
 
