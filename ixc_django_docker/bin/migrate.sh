@@ -27,7 +27,7 @@ if [[ ! -s "$DIR/migrate.txt.md5" ]] || ! md5sum --status -c "$DIR/migrate.txt.m
 
 	# Skip initial migration if all tables created by the initial migration
 	# already exist.
-	if [[ $(python.sh -c 'import django; print(django.get_version());') < 1.7 ]]; then
+	if [[ "$DJANGO_VERSION_LESS_THAN_1_7" == 'True' ]]; then
 		manage.py migrate --noinput  # South has no `--fake-initial` option
 	else
 		manage.py migrate --fake-initial --noinput
