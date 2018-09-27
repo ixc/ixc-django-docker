@@ -22,9 +22,7 @@ else
     manage.py showmigrations > "$DIR/migrate.txt"
 fi
 
-# Is local listing of migrations the same as one cached in Redis
-# (i.e. as has already been completed and cached by another server instance)?
-if ! redis-cache.py -v -x match ixc-django-docker:migrate-list < "$DIR/migrate.txt"; then
+if [[ ! -s "$DIR/migrate.txt.md5" ]] || ! md5sum --status -c "$DIR/migrate.txt.md5" > /dev/null 2>&1; then
 	echo 'Migrations are out of date.'
 
 	# Skip initial migration if all tables created by the initial migration
@@ -41,6 +39,5 @@ if ! redis-cache.py -v -x match ixc-django-docker:migrate-list < "$DIR/migrate.t
         manage.py showmigrations > "$DIR/migrate.txt"
     fi
 
-	# Cache listing of up-to-date migrations
-	redis-cache.py -vv -x set ixc-django-docker:migrate-list < "$DIR/migrate.txt"
+	md5sum "$DIR/migrate.txt" > "$DIR/migrate.txt.md5"
 fi

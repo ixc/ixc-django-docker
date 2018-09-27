@@ -4,9 +4,6 @@
 
 set -e
 
-# Wait for Redis.
-dockerize -timeout 1m -wait "tcp://${REDIS_ADDRESS:-setup:8000}"
-
 if [[ -t 1 ]]; then
 	cat <<EOF
 
@@ -54,8 +51,12 @@ EOF
 
 	# Compare git commit and print reminder if setup has not completed successfully.
 	GIT_COMMIT="$(git rev-parse HEAD)"
-	if ! redis-cache.py -q match ixc-django-docker:setup-git-commit "$GIT_COMMIT" 2>&1; then
-		>&2 echo "Setup is not complete for '$GIT_COMMIT'. Run 'setup.sh' manually."
+	if [[ "$GIT_COMMIT" != $(cat "$PROJECT_DIR/var/setup-git-commit.txt" 2>&1) ]]; then
+		>&2 cat <<EOF
+WARNING: Setup is not complete for git commit: '$GIT_COMMIT'
+         Run 'setup.sh' manually.
+
+EOF
 	fi
 
 	export PS1="($PROJECT_NAME) \u@\h:\w\n\\$ "
