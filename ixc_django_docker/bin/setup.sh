@@ -26,6 +26,7 @@ migrate.sh "$PROJECT_DIR/var"
 
 # Run build script.
 if [[ "$(cat package.json | jq '.scripts.build')" != null ]]; then
+	echo 'Executing: npm run build...'
 	npm run build
 fi
 
