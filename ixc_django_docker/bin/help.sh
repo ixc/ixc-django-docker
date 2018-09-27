@@ -88,7 +88,7 @@ Here is a list of frequently used commands you might want to run:
 
 			# QUICK=1 runtests.sh
 
-	setup-django.sh [COMMAND]
+	setup.sh [COMMAND]
 		Install Node modules, Bower components and Python requirements, create
 		a database, apply Django migrations, and execute a command.
 

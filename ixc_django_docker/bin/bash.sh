@@ -28,7 +28,7 @@ scripts you might want to run:
 	pydevd.sh <COMMAND>
 	runserver.sh [ARGS]
 	runtests.sh [ARGS]
-	setup-django.sh [COMMAND]
+	setup.sh [COMMAND]
 	setup-postgres.sh
 	setup-tests.sh [COMMAND]
 	supervisor.sh [OPTIONS] [ACTION [ARGS]]
