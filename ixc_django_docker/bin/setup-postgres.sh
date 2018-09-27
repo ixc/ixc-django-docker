@@ -23,7 +23,6 @@ fi
 # Database does not exist.
 if psql -l | grep -q "\b$PGDATABASE\b"; then
 	if [[ -z "$SETUP_POSTGRES_FORCE" ]]; then
-		echo "Database '$PGDATABASE' already exists."
 		exit 0
 	else
 		echo "Database '$PGDATABASE' already exists and SETUP_POSTGRES_FORCE is set. Drop existing database."
