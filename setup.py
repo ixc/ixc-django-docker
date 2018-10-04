@@ -31,8 +31,14 @@ setuptools.setup(
     extras_require={
         'celery': [
             'celery[django]',
-            'django-celery',
             'flower',
+        ],
+        'celery3': [
+            'django-celery',
+        ],
+        'celery4': [
+        	'django-celery-beat',
+			'django-celery-results',
         ],
         'celery-email': [
             'django-celery-email',

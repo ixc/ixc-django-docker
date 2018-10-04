@@ -5,10 +5,6 @@
 # Otherwise, 'SRC_PGDATABASE' should be the name of a database to dump and
 # restore from 'SRC_PG*' (which match 'PG*' by default).
 
-cat <<EOF
-# `whoami`@`hostname`:$PWD$ setup-postgres.sh $@
-EOF
-
 set -e
 
 # Wait for PostgreSQL to become available.
@@ -27,7 +23,6 @@ fi
 # Database does not exist.
 if psql -l | grep -q "\b$PGDATABASE\b"; then
 	if [[ -z "$SETUP_POSTGRES_FORCE" ]]; then
-		echo "Database '$PGDATABASE' already exists."
 		exit 0
 	else
 		echo "Database '$PGDATABASE' already exists and SETUP_POSTGRES_FORCE is set. Drop existing database."

@@ -2,10 +2,6 @@
 
 # Install Python requirements in the given directory, if they have changed.
 
-cat <<EOF
-# `whoami`@`hostname`:$PWD$ pip-install.sh $@
-EOF
-
 set -e
 
 DIR="${1:-$PWD}"

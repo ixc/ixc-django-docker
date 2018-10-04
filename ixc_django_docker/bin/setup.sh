@@ -1,16 +1,13 @@
 #!/bin/bash
 
 # Install Node modules, Bower components and Python requirements, create a
-# database, apply Django migrations, clear caches, and execute a command.
-
-cat <<EOF
-# `whoami`@`hostname`:$PWD$ setup.sh $@
-EOF
+# database, apply Django migrations, run build script, and execute a command.
 
 set -e
 
-# Wait for Redis.
-dockerize -timeout 1m -wait "tcp://$REDIS_ADDRESS"
+DIR="${1:-$PROJECT_DIR/var}"
+
+mkdir -p "$DIR"
 
 # Install Node modules.
 npm-install.sh "$PROJECT_DIR"
@@ -27,11 +24,14 @@ setup-postgres.sh
 # Apply migrations.
 migrate.sh "$PROJECT_DIR/var"
 
-# Compile SASS.
-compile-sass.sh
+# Run build script.
+if [[ "$(cat package.json | jq '.scripts.build')" != null ]]; then
+	echo 'Executing: npm run build...'
+	npm run build
+fi
 
-# Cache git commit.
-redis-cache.py -vv set ixc-django-docker:setup-git-commit "$(git rev-parse HEAD)"
+# Save git commit.
+echo "$(git rev-parse HEAD)" > "$DIR/setup-git-commit.txt"
 
 # Execute command.
 exec "$@"

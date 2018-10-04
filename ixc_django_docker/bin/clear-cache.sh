@@ -2,10 +2,6 @@
 
 # Clear all cache data.
 
-cat <<EOF
-# `whoami`@`hostname`:$PWD$ clear-cache.sh $@
-EOF
-
 # Django.
 manage.py clear_cache
 

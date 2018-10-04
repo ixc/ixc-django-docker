@@ -2,10 +2,6 @@
 
 # Apply Django migrations, if they are out of date.
 
-cat <<EOF
-# `whoami`@`hostname`:$PWD$ migrate.sh $@
-EOF
-
 set -e
 
 DIR="${1:-$PROJECT_DIR/var}"
@@ -21,30 +17,27 @@ if [[ "$DJANGO_VERSION_LESS_THAN_1_7" == 'True' ]]; then
 fi
 
 if [[ "$DJANGO_VERSION_LESS_THAN_1_10" == 'True' ]]; then
-    manage.py migrate --list > "$DIR/migrate.txt"
+	manage.py migrate --list > "$DIR/migrate.txt" 2> /dev/null
 else
-    manage.py showmigrations > "$DIR/migrate.txt"
+	manage.py showmigrations > "$DIR/migrate.txt" 2> /dev/null
 fi
 
-# Is local listing of migrations the same as one cached in Redis
-# (i.e. as has already been completed and cached by another server instance)?
-if ! redis-cache.py -v -x match ixc-django-docker:migrate-list < "$DIR/migrate.txt"; then
+if [[ ! -s "$DIR/migrate.txt.md5" ]] || ! md5sum --status -c "$DIR/migrate.txt.md5" > /dev/null 2>&1; then
 	echo 'Migrations are out of date.'
 
 	# Skip initial migration if all tables created by the initial migration
 	# already exist.
-	if [[ $(python.sh -c 'import django; print(django.get_version());') < 1.7 ]]; then
+	if [[ "$DJANGO_VERSION_LESS_THAN_1_7" == 'True' ]]; then
 		manage.py migrate --noinput  # South has no `--fake-initial` option
 	else
 		manage.py migrate --fake-initial --noinput
 	fi
 
-    if [[ "$DJANGO_VERSION_LESS_THAN_1_10" == 'True' ]]; then
-        manage.py migrate --list > "$DIR/migrate.txt"
-    else
-        manage.py showmigrations > "$DIR/migrate.txt"
-    fi
+	if [[ "$DJANGO_VERSION_LESS_THAN_1_10" == 'True' ]]; then
+		manage.py migrate --list > "$DIR/migrate.txt" 2> /dev/null
+	else
+		manage.py showmigrations > "$DIR/migrate.txt" 2> /dev/null
+	fi
 
-	# Cache listing of up-to-date migrations
-	redis-cache.py -vv -x set ixc-django-docker:migrate-list < "$DIR/migrate.txt"
+	md5sum "$DIR/migrate.txt" > "$DIR/migrate.txt.md5"
 fi

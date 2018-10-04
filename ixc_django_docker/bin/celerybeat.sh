@@ -1,9 +1,5 @@
 #!/bin/bash
 
-cat <<EOF
-# `whoami`@`hostname`:$PWD$ celerybeat.sh $@
-EOF
-
 set -e
 
 exec "${APM:-newrelic}.sh" celery --app="${CELERY_APP:-ixc_django_docker.celery}" beat --loglevel=INFO --pidfile= "$@"

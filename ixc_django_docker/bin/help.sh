@@ -25,11 +25,11 @@ Here is a list of frequently used commands you might want to run:
 	clear-cache.sh
 		Clear all Django caches and execute a command.
 
-	compile-sass.sh [ARGS]
-		Compile all SASS/SCSS files in the 'static' directory, saving output to
-		the 'static/COMPILED' directory.
+	# compile-sass.sh [ARGS]
+	# 	Compile all SASS/SCSS files in the 'static' directory, saving output to
+	# 	the 'static/COMPILED' directory.
 
-		Pass '--watch' to detect changes and recompile automatically.
+	# 	Pass '--watch' to detect changes and recompile automatically.
 
 	ddtrace.sh <COMMAND>
 		Execute a command via 'ddtrace-run' (Datadog APM).
@@ -38,9 +38,9 @@ Here is a list of frequently used commands you might want to run:
 		Start Gunicorn. This is normally managed by Docker or Supervisord, and
 		is not normally used interactively.
 
-	logentries.sh
-		Start LogEntries Agent. This is normally managed by Supervisord, and is
-		not normally used interactively.
+	# logentries.sh
+	# 	Start LogEntries Agent. This is normally managed by Supervisord, and is
+	# 	not normally used interactively.
 
 	manage.py [COMMAND [ARGS]]
 		Run a Django management command.
@@ -88,7 +88,7 @@ Here is a list of frequently used commands you might want to run:
 
 			# QUICK=1 runtests.sh
 
-	setup-django.sh [COMMAND]
+	setup.sh [COMMAND]
 		Install Node modules, Bower components and Python requirements, create
 		a database, apply Django migrations, and execute a command.
 
@@ -119,8 +119,8 @@ Here is a list of frequently used commands you might want to run:
 	transfer.sh
 		Encrypt and upload a file to https://transfer.sh
 
-	waitlock.py [-b] <COMMAND>
-		Serialize the execution of a command with a Redis lock.
+	# waitlock.py [-b] <COMMAND>
+	# 	Serialize the execution of a command with a Redis lock.
 
 See more detailed documentation about commands at:
 

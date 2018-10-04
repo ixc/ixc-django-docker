@@ -2,10 +2,6 @@
 
 # Configure the environment and execute a command.
 
-cat <<EOF
-# `whoami`@`hostname`:$PWD$ entrypoint.sh $@
-EOF
-
 set -e
 
 # Print the full commit hash so it can be logged during startup.

@@ -2,10 +2,6 @@
 
 # Start 'supervisord' or run 'supervisorctl', if arguments are given.
 
-cat <<EOF
-# `whoami`@`hostname`:$PWD$ supervisor.sh $@
-EOF
-
 set -e
 
 # Get a random-ish port in the 59000-59999 range. See: https://github.com/rfk/django-supervisor/blob/be2013c4826ae49730664b359ee285fa03b16c09/djsupervisor/config.py#L107-L111

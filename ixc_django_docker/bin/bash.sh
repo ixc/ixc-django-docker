@@ -1,31 +1,24 @@
 #!/bin/bash
 
-# Run a pre-configured interactive Bash shell, with some help text.
-
-cat <<EOF
-# `whoami`@`hostname`:$PWD$ bash.sh $@
-EOF
+# Run an interactive project shell, with some help text.
 
 set -e
-
-# Wait for Redis.
-dockerize -timeout 1m -wait "tcp://${REDIS_ADDRESS:-setup:8000}"
 
 if [[ -t 1 ]]; then
 	cat <<EOF
 
-You are running a pre-configured interactive Bash shell. Here is a list of
-frequently used scripts you might want to run:
+You are running an interactive project shell. Here is a list of frequently used
+scripts you might want to run:
 
 	bower-install.sh <DIR>
 	celery.sh
 	celerybeat.sh
 	celeryflower.sh
 	clear-cache.sh
-	compile-sass.sh [ARGS]
+	# compile-sass.sh [ARGS]
 	ddtrace.sh <COMMAND>
 	gunicorn.sh
-	logentries.sh
+	# logentries.sh
 	manage.py [COMMAND [ARGS]]
 	migrate.sh
 	newrelic.sh <COMMAND>
@@ -35,12 +28,12 @@ frequently used scripts you might want to run:
 	pydevd.sh <COMMAND>
 	runserver.sh [ARGS]
 	runtests.sh [ARGS]
-	setup-django.sh [COMMAND]
+	setup.sh [COMMAND]
 	setup-postgres.sh
 	setup-tests.sh [COMMAND]
 	supervisor.sh [OPTIONS] [ACTION [ARGS]]
 	transfer.sh <FILE>
-	waitlock.py [-b] <COMMAND>
+	# waitlock.py [-b] <COMMAND>
 
 Most of these scripts are minimal wrappers that specify configuration and
 provide automation or integration with Docker and various 'ixc-django-docker'
@@ -50,7 +43,7 @@ For more info on each script, run:
 
 	help.sh
 
-See more detailed documentation about commands at:
+For detailed documentation, see:
 
 	https://github.com/ixc/ixc-django-docker/docs/commands.rst
 
@@ -58,11 +51,15 @@ EOF
 
 	# Compare git commit and print reminder if setup has not completed successfully.
 	GIT_COMMIT="$(git rev-parse HEAD)"
-	if ! redis-cache.py -q match ixc-django-docker:setup-git-commit "$GIT_COMMIT" 2>&1; then
-		>&2 echo "Setup is not complete for '$GIT_COMMIT'. Run 'setup.sh' manually."
+	if [[ "$GIT_COMMIT" != $(cat "$PROJECT_DIR/var/setup-git-commit.txt" 2>&1) ]]; then
+		>&2 cat <<EOF
+WARNING: Setup is not complete for git commit: '$GIT_COMMIT'
+         Run 'setup.sh' manually.
+
+EOF
 	fi
 
-	export PS1="($PROJECT_NAME) \u@\h:\w\\n\$ "
+	export PS1="($PROJECT_NAME:$DOTENV) \u@\h:\w\n\\$ "
 
 	# Run bash by default without any user customisations from rc or profile files
 	# to reduce the chance of user customisations clashing with our paths etc.

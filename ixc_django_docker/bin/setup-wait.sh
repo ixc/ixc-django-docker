@@ -2,27 +2,23 @@
 
 # Compare git commit and wait if setup has not completed successfully.
 
-cat <<EOF
-# `whoami`@`hostname`:$PWD$ setup-wait.sh $@
-EOF
-
 set -e
-
-# Wait for Redis.
-dockerize -timeout 1m -wait "tcp://${REDIS_ADDRESS:-setup:8000}"
 
 # Wait for setup.
 COUNT=0
-GIT_COMMIT="$(git rev-parse HEAD)"
-until redis-cache.py -q match ixc-django-docker:setup-git-commit "$GIT_COMMIT" 2>&1; do
+while true; do
+	GIT_COMMIT="$(git rev-parse HEAD)"
+	if [[ "$GIT_COMMIT" == $(cat "$PROJECT_DIR/var/setup-git-commit.txt" 2>&1) ]]; then
+		break
+	fi
 	if [[ "$COUNT" == 0 ]]; then
-		echo "Waiting for setup to complete for '$GIT_COMMIT'..."
+		echo "Waiting for setup to complete for git commit: $GIT_COMMIT..."
 	fi
 	(( COUNT += 1 ))
 	sleep 1
 done
 if (( COUNT > 0 )); then
-	echo "Waited $COUNT seconds for setup to complete."
+	echo "Waited $COUNT seconds for setup to complete for git commit: $GIT_COMMIT"
 fi
 
 # Execute command.
