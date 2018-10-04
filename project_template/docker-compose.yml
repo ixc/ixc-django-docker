@@ -1,10 +1,19 @@
 version: '3.6'
 
 x-project: &project
+  depends_on:
+    - postgres
+    - redis
   env_file: .env.local
+  environment: &project-environment
+    # ELASTICSEARCH_URL: http://elasticsearch:9200
+    PGHOST: postgres
+    PGUSER: postgres
+    REDIS_ADDRESS: redis:6379
   image: interaction/project_template:local
   volumes:
     - .:/opt/project_template
+    - /var/run/docker.sock:/var/run/docker.sock
 
 services:
   celery:
@@ -19,15 +28,20 @@ services:
     << : *project
     command: setup-wait.sh celeryflower.sh
     environment:
-      VIRTUAL_HOST: 'flower.*'
+      << : *project-environment
+      VIRTUAL_HOST: flower.*
       VIRTUAL_HOST_WEIGHT: 1
     ports:
       - 8080
 
   # elasticsearch:
   #   environment:
-  #     ES_JAVA_OPTS: ${ES_JAVA_OPTS:-'-Xms500m -Xmx500m'}
+  #     ES_JAVA_OPTS: ${ES_JAVA_OPTS:--Xms500m -Xmx500m}
   #   image: interaction/elasticsearch-icu:5-alpine
+  #   ports:
+  #     - 9200
+  #   volumes:
+  #     - elasticsearch-data:/usr/share/elasticsearch/data
 
   haproxy:
     image: dockercloud/haproxy
@@ -41,33 +55,38 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   postgres:
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata  # Store data in subdirectory of volume mount point, per PostgreSQL recommendations
     image: postgres:9.5-alpine
     ports:
       - 5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
 
   redis:
     image: redis:3-alpine
     ports:
       - 6379
+    volumes:
+      - redis-data:/data
 
   runserver:
     << : *project
     command: setup-wait.sh runserver.sh
     environment:
+      << : *project-environment
       VIRTUAL_HOST: '*'
     ports:
       - 8000
 
   shell:
     << : *project
-    build: .
     command: bash.sh
-    depends_on:
-      - celery
-      - celerybeat
-      - celeryflower
-      # - elasticsearch
-      - haproxy
-      - postgres
-      - redis
-      - runserver
+    build: .
+    ports:
+      - 8000
+
+volumes:
+  elasticsearch-data:
+  postgres-data:
+  redis-data:
