@@ -6,6 +6,7 @@ AWS_HEADERS = {
     'Cache-Control': 'max-age=86400',
 }
 
+AWS_S3_CUSTOM_DOMAIN = os.environ.get('MEDIA_AWS_S3_CUSTOM_DOMAIN')
 AWS_SECRET_ACCESS_KEY = os.environ.get('MEDIA_AWS_SECRET_ACCESS_KEY')
 
 AWS_STORAGE_BUCKET_NAME = os.environ.get(
