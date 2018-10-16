@@ -88,6 +88,9 @@ Here is a list of frequently used commands you might want to run:
 
 			# QUICK=1 runtests.sh
 
+		Set 'RUNTESTS_EXTRA=...' to supply additional args to the 'test'
+		management command.
+
 	setup.sh [COMMAND]
 		Install Node modules, Bower components and Python requirements, create
 		a database, apply Django migrations, and execute a command.

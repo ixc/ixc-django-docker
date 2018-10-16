@@ -15,8 +15,8 @@ set -e
 
 # Run tests and generate a coverage report.
 if [[ -z "$WITHOUT_COVERAGE" ]]; then
-    time coverage run "$(which manage.py)" test --noinput --verbosity=2 "${@:-.}"
+    time coverage run "$(which manage.py)" test --noinput --verbosity=2 $RUNTESTS_EXTRA "${@:-.}"
     coverage report
 else
-    time manage.py test --noinput --verbosity=2 "${@:-.}"
+    time manage.py test --noinput --verbosity=2 $RUNTESTS_EXTRA "${@:-.}"
 fi
