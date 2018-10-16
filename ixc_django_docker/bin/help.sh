@@ -91,6 +91,9 @@ Here is a list of frequently used commands you might want to run:
 		Set 'RUNTESTS_EXTRA=...' to supply additional args to the 'test'
 		management command.
 
+		Set 'WITHOUT_COLLECTSTATIC=1' and 'WITHOUT_COMPRESSOR=1' to disable
+		'collectstatic' and 'compress' management commands, respectively.
+
 	setup.sh [COMMAND]
 		Install Node modules, Bower components and Python requirements, create
 		a database, apply Django migrations, and execute a command.
