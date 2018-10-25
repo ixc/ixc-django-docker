@@ -1,12 +1,5 @@
 # Actually send emails.
-if EMAIL_BACKEND == 'djcelery_email.backends.CeleryEmailBackend':
-    CELERY_EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-elif EMAIL_BACKEND == 'post_office.EmailBackend':
-    for backend in POST_OFFICE['BACKENDS']:
-        POST_OFFICE['BACKENDS'][backend] = \
-            'django.core.mail.backends.smtp.EmailBackend'
-else:
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+IXC_DJANGO_DOCKER_EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # Keep more log backups.
 LOGGING['handlers']['logfile']['backupCount'] = 100

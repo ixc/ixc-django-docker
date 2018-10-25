@@ -108,9 +108,15 @@ else:
         },
     }
 
-# Don't actually send emails, in case we are running locally with a copy of the
-# production database.
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Don't actually send emails, in case we are running in development or staging
+# with a copy of the production database.
+#
+# Set the Django backend to a simple wrapper/proxy backend, so we can more
+# easily wrap the `EMAIL_BACKEND` setting (e.g. with `django-celery-email` and
+# `django-post-office`), while still making it easy to re-enable actual email
+# sending in production settings.
+EMAIL_BACKEND = 'ixc_django_docker.mail.EmailBackend'
+IXC_DJANGO_DOCKER_EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Get email credentials from the environment.
 EMAIL_HOST = os.environ.get('EMAIL_HOST')
