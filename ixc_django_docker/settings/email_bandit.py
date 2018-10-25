@@ -1,5 +1,8 @@
+import os
+
 HIJACKED_EMAIL_BACKEND = EMAIL_BACKEND
 
+BANDIT_EMAIL = os.environ.get('BANDIT_EMAIL')
 EMAIL_BACKEND = 'ixc_django_docker.bandit.HijackedEmailBackend'
 
 # Make it clear that the email has been hijacked and the environment frmo which
