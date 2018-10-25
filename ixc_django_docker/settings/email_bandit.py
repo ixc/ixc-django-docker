@@ -5,9 +5,8 @@ HIJACKED_EMAIL_BACKEND = EMAIL_BACKEND
 BANDIT_EMAIL = os.environ.get('BANDIT_EMAIL')
 EMAIL_BACKEND = 'ixc_django_docker.bandit.HijackedEmailBackend'
 
-# Make it clear that the email has been hijacked and the environment frmo which
-# it has originated.
-EMAIL_SUBJECT_PREFIX = '[%s:%s] ' % (DOTENV.upper(), SITE_DOMAIN)
+# Make it clear that emails have been hijacked and from which site.
+EMAIL_SUBJECT_PREFIX = '[hijacked:%s] ' % SITE_DOMAIN
 
 INSTALLED_APPS += ('bandit', )
 
