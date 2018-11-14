@@ -53,6 +53,9 @@ setuptools.setup(
         'debug-toolbar': [
             'django-debug-toolbar',
         ],
+        'email-bandit': [
+            'django-email-bandit',
+        ],
         'extensions': [
             'django-extensions>=1.4.5',  # For `clear_cache` management command
         ],
