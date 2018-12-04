@@ -1,177 +1,65 @@
-project_template
-===
+# *Project Name*
 
-Local:
+*One or two lines describing the project: what is it, who is the client, URL of production site if there is one.*
 
-- http://project_template.lvh.me
-- http://flower.project_template.lvh.me
 
+## Technical Overview
 
-## Getting started
+*A more detailed technical summary, briefly listing key components used e.g. Django 1.8, GLAMkit/ICEkit with Collections*
 
-Get the code and change directory:
+*Consider adding a diagram if there are any non-trivial site integrations, unusual deployment arrangements, or anything that can be quickly expressed visually.*
 
-    $ git clone git@github.com:ixc/project_template.git
-    $ cd project_template
+Integrations:
 
-Create `.env.local` file from sample:
+*List any non-standard integrations here with a brief description, account name, who owns it, 1Password credentials, and a link to a more detailed Integrations document.*
 
-    $ cp .env.local.sample .env.local
+* *PayPal Payments for ticket sales. Account name someaccount@client.com is owned by IC, see "PayPal - Some Client" in 1Password. Further details in `docs/integrations.md#paypal`*
 
-Add `TRANSCRYPT_PASSWORD` to `.env.local` (get from 1Password).
+Deployments:
 
+*List deployed environments here with a brief description, URLs to the site itself and its hosting environment*
 
-## Run an interactive project shell with Docker
+* ***Staging** for client acceptance and integration testing at https://staging.somesite.com*
+  * *Site admin URL if non-obvious (e.g. `/kiosk/`)*
+  * *Hosting URL, e.g. Docker Cloud stack name and URL*
+  * *Any special instructions for accessing or maintaining site, e.g. access via VPN or via IC proxy server*
 
-### macOS
+*Mention here if the deployments are monitored by external services like NewRelic, DataDog, PingDom etc with corresponding URLs.*
 
-**WARNING:** Docker for Mac has significant performance issues due to its
-implementation of bind mounted volumes. Fortunately, we can work around them to
-get near native level performance with [docker-sync](http://docker-sync.io/).
 
-Install `docker-sync`:
+## Resources
 
-    $ brew install ruby && hash -r  # Do not install gems via system Ruby
-    $ gem install docker-sync
+Documentation:
 
-Start sync services:
+* *Link to code repository location (the canonical location of this README document)*
+* *Link to project technical documentation and diagrams, e.g. `docs/` directory in repo*
+* *Link to ticketing system, e.g. GitHub or Assembla (if different from the main code repository, or if spread between different places)*
+* *Link to project specs, client briefs etc e.g. a Google Team Drive directory*
 
-    $ docker-sync start  # Use `-f` to run in the foreground
+Contacts:
 
-**NOTE:** The first sync (and the first sync after `docker-sync clean`) can
-take several minutes. Please be patient when it says `Looking for changes`.
+* *Link to client's HubSpot URL, which will (ideally) be the single central repository of all the contact details below, otherwise*
+* *If a HubSpot URL isn't available or appropriate, list details for:*
+  * *IC staff member who acts as client contact or project manager*
+  * *Client contact* 
+  * *Any additional client- or project-specific communication channels, such as ZenDesk or Shared Slack Channels*
+  * *Any relevant third-party service provider contacts, such as DNS provider or external design agency etc*
 
-Manage sync services:
 
-    $ docker-sync clean  # Stop and clean up all sync points
-    $ docker-sync logs   # Use `-f` to follow
-    $ docker-sync stop
-    $ docker-sync sync   # One time manual sync
+## Getting Started
 
-### All platforms
+*Link directly to a Getting Started guide document for new or returning developers, or include instructions here if they are **brief***
 
-Build a Docker image:
+*For projects based on `ixc-django-docker` you can probably get away with something like the following...*
 
-    $ docker-compose build --pull
+*This project is based on [ixc-django-docker](https://github.com/ixc/ixc-django-docker/). To get started:*
 
-Run an interactive project shell:
+1. *Copy the `.env.local.sample` file to `.env.local` and fill in this file's `TRANSCRYPT_PASSWORD` value from 1Password*
 
-    $ docker-compose run --rm shell
+2. *Create and start a Docker or Docker-like development shell, see https://github.com/ixc/ixc-django-docker/tree/11-improve-documentation#how-to-run-an-ixc-django-docker-project*
 
-**NOTE:** This will automatically start `celery`, `celerybeat`, `celeryflower`,
-`elasticsearch`, `postgres` and `redis` as background services.
+3. *Perform any project-specific steps, such as `manage.py createsuperuser` to create a super-user*
 
-Manage background services:
+4. *Use the `ixc-django-docker` shell scripts to run the site, run tests, load data, etc, see (DOCS PENDING)*
 
-    $ docker-compose logs [service ...]     # Use `-f` to follow
-    $ docker-compose restart [service ...]
-    $ docker-compose rm [service ...]       # Use `-v` to remove volumes
-    $ docker-compose stop [service ...]
-    $ docker-compose up [service ...]       # Use `-d` to run in the background
-
-
-## Run an interactive project shell without Docker
-
-Even when not running the project with Docker, it's still recommended to run
-3rd party background services with Docker for isolation and version control:
-
-    $ docker-compose run --rm -p 9200:9200 elasticsearch
-    $ docker-compose run --rm -p 5432:5432 postgres
-    $ docker-compose run --rm -p 6379:6379 redis
-
-You can of course still run these natively, if you prefer.
-
-Run an interactive project shell:
-
-    $ ./go.sh
-
-If this doesn't work, see [system requirements when running without docker](https://github.com/ixc/ixc-django-docker/#system-requirements-when-running-without-docker).
-
-
-## About the interactive project shell
-
-The interactive project shell provides a consistent way to run project commands
-with and without Docker.
-
-Run setup:
-
-    (project_template) # setup.sh
-
-This is equivalent to the following, each of which can be run independently:
-
-    (project_template) # npm-install.sh
-    (project_template) # bower-install.sh
-    (project_template) # pip-install.sh
-    (project_template) # setup-postgres.sh
-    (project_template) # migrate.sh
-    (project_template) # clear-cache.sh
-    (project_template) # compile-sass.sh
-
-Run management commands:
-
-    (project_template) # manage.py createsuperuser
-    (project_template) # manage.py search_index --rebuild
-    (project_template) # manage.py shell_plus
-
-Run services:
-
-    (project_template) # celery.sh
-    (project_template) # celerybeat.sh
-    (project_template) # celeryflower.sh
-    (project_template) # gunicorn.sh
-    (project_template) # nginx.sh
-    (project_template) # runserver.sh
-    (project_template) # supervisor.sh
-
-Get help:
-
-    (project_template) # help.sh
-
-
-## Compiling SASS/SCSS in the 'static' directory
-
-Manually compile after making changes:
-
-    (project_template) # compile-sass.sh
-
-Detect changes and recompile automatically:
-
-    (project_template) # compile-sass.sh --watch
-
-
-## Updating Python requirements
-
-Add pinned top level project dependencies to `requirements.in` and compile to
-`requirements.txt`:
-
-    (project_template) # pip-compile -v
-
-
-## Testing
-
-Run tests:
-
-    (project_template) # runtests.sh
-
-Default args are `.`, but you can override:
-
-    (project_template) # runtests.sh --failfast .
-    (project_template) # runtests.sh <path/to/tests>
-    (project_template) # runtests.sh <dotted.path.to.tests>
-    (project_template) # runtests.sh <dotted.path.to.tests:TestCase>
-
-Update the test database dump after creating new migrations:
-
-    (project_template) # setup-tests.sh pg_dump -f test_initial_data.sql -Ovx
-
-Open a shell or run the dev server with test settings for manual testing:
-
-    (project_template) # setup-tests.sh               # Open a shell
-    (project_template) # setup-tests.sh runserver.sh  # Run the dev server
-
-Run the tests exactly the same way that Codefresh does:
-
-    $ docker-compose -f docker-compose.codefresh.yml build --pull        # Build image
-    $ docker-compose -f docker-compose.codefresh.yml run --rm runtests   # Run tests
-    $ docker-compose -f docker-compose.codefresh.yml stop                # Stop postgres and redis
-    $ docker-compose -f docker-compose.codefresh.yml rm -v               # Remove containers and volumes
+5. *See [using-docker.md](./using-docker.md) for more details on using Docker for development.
