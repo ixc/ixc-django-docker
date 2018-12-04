@@ -1,3 +1,5 @@
+This content has moved to https://stackoverflow.com/c/theic/questions/176 and https://github.com/ixc/ixc-django-docker/commit/d26db0a19b61b9ded8c6606feebbf3cd288db932
+
 # *Project Name*
 
 *One or two lines describing the project: what is it, who is the client, URL of production site if there is one.*
