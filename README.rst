@@ -201,16 +201,17 @@ Or:
 System requirements when running without Docker
 -----------------------------------------------
 
-* [Dockerize](https://github.com/jwilder/dockerize/releases/latest)
+* [Dockerize](https://github.com/jwilder/dockerize)
+* [jq](https://stedolan.github.io/jq/)
 * md5sum
 * Nginx
 * NPM
-* Pipe Viewer
-* PostgreSQL
-* Python 2.7 or 3.5
+* [Pipe Viewer](http://www.ivarch.com/programs/pv.shtml)
+* [PostgreSQL](https://postgresapp.com)
+* Python 2.7 or 3.x
 * Redis
 * Supervisor
-* Transcrypt
+* [Transcrypt](https://github.com/elasticdog/transcrypt)
 * Yarn
 
 Optional:
@@ -229,11 +230,12 @@ Install `Homebrew <http://brew.sh/>`__::
 
     $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
-Install `Postgres.app <http://postgresapp.com/>`__.
-
 Install required system packages::
 
-    $ brew install md5sha1sum nginx npm pv python redis supervisor transcrypt yarn
+    $ brew cask install postgres
+    $ brew install ixc/ixc/dockerize@0.5 jq md5sha1sum nginx node@8 pv redis supervisor transcrypt
+    $ brew install yarn --without-node  # Avoid installing the latest non-LTS Node
+    $ brew link --force dockerize@0.5
 
 Start Redis::
 
