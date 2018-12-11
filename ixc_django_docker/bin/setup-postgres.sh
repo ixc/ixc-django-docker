@@ -21,7 +21,7 @@ if (( COUNT > 0 )); then
 fi
 
 # Database does not exist.
-if psql -l | grep -q "\b$PGDATABASE\b"; then
+if psql -l | grep -q "\s$PGDATABASE\s"; then
 	if [[ -z "$SETUP_POSTGRES_FORCE" ]]; then
 		exit 0
 	else
