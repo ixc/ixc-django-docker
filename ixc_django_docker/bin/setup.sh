@@ -32,6 +32,7 @@ fi
 
 # Save git commit.
 echo "$(git rev-parse HEAD)" > "$DIR/setup-git-commit.txt"
+echo "Updated '$DIR/setup-git-commit.txt' ($(cat $DIR/setup-git-commit.txt))"
 
 # Execute command.
 exec "$@"
