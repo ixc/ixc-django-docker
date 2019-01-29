@@ -37,8 +37,8 @@ setuptools.setup(
             'django-celery',
         ],
         'celery4': [
-        	'django-celery-beat',
-			'django-celery-results',
+            'django-celery-beat',
+            'django-celery-results',
         ],
         'celery-email': [
             'django-celery-email',
