@@ -5,9 +5,12 @@
 
 set -e
 
-DIR="${1:-$PROJECT_DIR/var}"
+if [[ -z "$PROJECT_DIR" ]]; then
+	>&2 echo "ERROR: Missing environment variable: PROJECT_DIR"
+	exit 1
+fi
 
-mkdir -p "$DIR"
+mkdir -p "$DIR/var"
 
 # Install Node modules.
 npm-install.sh "$PROJECT_DIR"
@@ -31,8 +34,8 @@ if [[ "$(cat package.json | jq '.scripts.build')" != null ]]; then
 fi
 
 # Save git commit.
-echo "$(git rev-parse HEAD)" > "$DIR/setup-git-commit.txt"
-echo "Updated '$DIR/setup-git-commit.txt' ($(cat $DIR/setup-git-commit.txt))"
+echo "$(git rev-parse HEAD)" > "$PROJECT_DIR/var/setup-git-commit.txt"
+echo "Updated '$PROJECT_DIR/var/setup-git-commit.txt' ($(cat $PROJECT_DIR/var/setup-git-commit.txt))"
 
 # Execute command.
 exec "$@"
