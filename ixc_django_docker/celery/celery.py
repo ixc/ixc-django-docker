@@ -1,19 +1,27 @@
-# CELERY ######################################################################
-
-# See: http://docs.celeryproject.org/en/3.1/django/first-steps-with-django.html
-
 from __future__ import absolute_import
 
 import os
 
-from celery import Celery
+import celery
+
+# DATADOG #####################################################################
+
+# See: http://pypi.datadoghq.com/trace/docs/other_integrations.html#celery
+
+if os.environ.get('APM') == 'ddtrace':
+    import ddtrace
+    ddtrace.patch(celery=True)
+
+# CELERY ######################################################################
+
+# See: http://docs.celeryproject.org/en/3.1/django/first-steps-with-django.html
 
 # set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ixc_django_docker.settings')
 
 from django.conf import settings  # noqa
 
-app = Celery('ixc-django-docker')
+app = celery.Celery('ixc-django-docker')
 
 # Using a string here means the worker will not have to
 # pickle the object when using Windows.
