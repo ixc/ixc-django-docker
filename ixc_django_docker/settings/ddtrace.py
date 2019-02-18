@@ -4,4 +4,5 @@
 # http://pypi.datadoghq.com/trace/docs/advanced_usage.html#ddtracerun
 DATADOG_TRACE = {}
 
-INSTALLED_APPS += ('ddtrace.contrib.django', )
+# Install our Django 1.6 compatible app, instead of the official one.
+INSTALLED_APPS += ('ixc_django_docker.ddtrace', )
