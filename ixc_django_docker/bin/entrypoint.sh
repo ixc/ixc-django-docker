@@ -4,6 +4,9 @@
 
 set -e
 
+# Ensure host is accessible at `host.docker.internal`.
+ip -4 route list match 0/0 | awk '{print $3" host.docker.internal"}' >> /etc/hosts
+
 # Print the full commit hash so it can be logged during startup.
 if [[ -d .git ]]; then
 	echo "Git Commit: $(git rev-parse HEAD)"
