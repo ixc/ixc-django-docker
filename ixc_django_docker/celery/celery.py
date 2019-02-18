@@ -33,12 +33,12 @@ app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 def debug_task(self):
     print('Request: {0!r}'.format(self.request))
 
+
 # SENTRY ######################################################################
 
 # See: https://docs.sentry.io/clients/python/integrations/celery/
 
 if getattr(settings, 'RAVEN_CONFIG', {}).get('dsn'):
-
     from raven import Client
     from raven.contrib.celery import register_signal, register_logger_signal
 
