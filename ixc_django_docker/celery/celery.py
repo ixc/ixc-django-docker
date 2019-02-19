@@ -4,14 +4,6 @@ import os
 
 import celery
 
-# DATADOG #####################################################################
-
-# See: http://pypi.datadoghq.com/trace/docs/other_integrations.html#celery
-
-if os.environ.get('APM') == 'ddtrace':
-    import ddtrace
-    ddtrace.patch(celery=True)
-
 # CELERY ######################################################################
 
 # See: http://docs.celeryproject.org/en/3.1/django/first-steps-with-django.html

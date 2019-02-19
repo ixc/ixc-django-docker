@@ -1,31 +1,27 @@
 from __future__ import print_function
 
-import os
 import sys
 
-import django
-import django.conf
-
-AppConfig = object
-
-
-class apps(object):
-
-    @classmethod
-    def is_installed(cls, app):
-        return app in django.conf.settings.INSTALLED_APPS
-
-
-# ddtrace.contrib.django.apps imports #########################################
-
-# Use `AppConfig` and `apps`from above. Use absolute imports.
+# Everything below was copied from `ddtrace.contrib.django.apps`, with changes
+# noted in "IC" comments below, for Django 1.6 compatibility.
 
 import logging
 
 # 3rd party
-# from django.apps import AppConfig, apps  # From above
+# IC: Add Django 1.6 compatible fallback `AppConfig` and `apps`.
+try:
+    from django.apps import AppConfig, apps
+except ImportError:
+    AppConfig = object
+    class apps(object):
+        @classmethod
+        def is_installed(cls, app):
+            import django.conf
+            return app in django.conf.settings.INSTALLED_APPS
+
 
 # project
+# IC: Use absolute imports.
 from ddtrace.contrib.django.db import patch_db
 from ddtrace.contrib.django.conf import settings
 from ddtrace.contrib.django.cache import patch_cache
@@ -36,10 +32,6 @@ from ddtrace.ext import AppTypes
 
 log = logging.getLogger(__name__)
 
-
-# ddtrace.contrib.django.apps.TracerConfig ####################################
-
-# Copied verbatim.
 
 class TracerConfig(AppConfig):
     name = 'ddtrace.contrib.django'
@@ -73,8 +65,8 @@ class TracerConfig(AppConfig):
 
         if settings.AUTO_INSTRUMENT:
             # trace Django internals
-            insert_trace_middleware()
-            insert_exception_middleware()
+            insert_trace_middleware()  # IC: No-op. Too late to patch. This must be done explicitly.
+            insert_exception_middleware()  # IC: No-op. Too late to patch. This must be done explicitly.
 
             if settings.INSTRUMENT_TEMPLATE:
                 try:
@@ -97,12 +89,11 @@ class TracerConfig(AppConfig):
             # Instrument rest_framework app to trace custom exception handling.
             if apps.is_installed('rest_framework'):
                 try:
-                    from .restframework import patch_restframework
+                    # IC: Use absolute imports.
+                    from ddtrace.contrib.django.restframework import patch_restframework
                     patch_restframework(tracer)
                 except Exception:
                     log.exception('error patching rest_framework app')
 
-
-if os.environ.get('APM') == 'ddtrace' and django.VERSION[:2] < (1, 7):
-    print('# Configure ddtrace.contrib.django for Django 1.6', file=sys.stderr)
-    TracerConfig().ready()
+            # IC: Notify that ddtrace has been configured.
+            print('# Configured ddtrace.contrib.django for Django 1.6', file=sys.stderr)
