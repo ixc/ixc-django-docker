@@ -4,9 +4,6 @@
 
 set -e
 
-# Ensure host is accessible at `host.docker.internal`.
-ip -4 route list match 0/0 | awk '{print $3" host.docker.internal"}' >> /etc/hosts
-
 # Print the full commit hash so it can be logged during startup.
 if [[ -d .git ]]; then
 	echo "Git Commit: $(git rev-parse HEAD)"
@@ -47,6 +44,9 @@ if [[ -f /.dockerenv ]]; then
 	mkdir -p "$PYTHONUSERBASE/lib/python2.7/site-packages"
 	mkdir -p "$PYTHONUSERBASE/lib/python3.5/site-packages"
 	mkdir -p "$PYTHONUSERBASE/lib/python3.6/site-packages"
+
+	# Ensure host is accessible at `host.docker.internal`.
+	ip -4 route list match 0/0 | awk '{print $3" host.docker.internal"}' >> /etc/hosts
 
 	# On Docker for Mac, osxfs has performance issues when watching file system
 	# events. Detect Docker for Mac and export an environment variable that we
