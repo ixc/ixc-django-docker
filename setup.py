@@ -24,6 +24,7 @@ setuptools.setup(
             'decorator',
             'Django',
             'django-split-settings',
+            'futures; python_version == "2.7"',
             'gunicorn[gevent]',
             'jinja2',
             'python-redis-lock[django]',
