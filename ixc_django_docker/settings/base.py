@@ -12,7 +12,12 @@ if django.VERSION < (2,):
     from django.core.urlresolvers import reverse_lazy
 else:
     from django.urls import reverse_lazy
-from django.utils.text import slugify
+
+try:
+    from django.utils.text import slugify
+except ImportError:
+    from django.template.defaultfilters import slugify
+
 from django.utils.six import text_type
 
 # Get project directory from environment. This MUST already be defined.
