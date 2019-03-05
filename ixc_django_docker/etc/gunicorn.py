@@ -3,6 +3,8 @@ import multiprocessing
 
 accesslog = os.environ.get('GUNICORN_ACCESS_LOG', '-') or None
 bind = '0.0.0.0:%s' % os.environ.get('NGINX_PROXY_PORT', 8080)
+max_requests = os.environ.get('GUNICORN_MAX_REQUESTS', 10000)
+max_requests_jitter = os.environ.get('GUNICORN_MAX_REQUESTS_JITTER', 1000)
 threads = os.environ.get('GUNICORN_THREADS', 1)
 timeout = os.environ.get('GUNICORN_TIMEOUT', 50)  # HAproxy default
 worker_class = os.environ.get('GUNICORN_WORKER_CLASS', 'sync')
