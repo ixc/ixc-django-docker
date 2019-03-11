@@ -1,9 +1,10 @@
 import os
 import multiprocessing
+import six
 
 
 def truthy(val):
-    return unicode(val) in ('1', 'on', 't', 'true', 'y', 'yes')
+    return six.text_type(val) in ('1', 'on', 't', 'true', 'y', 'yes')
 
 
 accesslog = os.environ.get('GUNICORN_ACCESS_LOG', '-') or None
