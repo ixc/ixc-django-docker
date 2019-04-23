@@ -9,7 +9,11 @@ if [[ -n "$NGINX_BASIC_AUTH" ]]; then
 	echo "$BASIC_AUTH_PASSWORD" | htpasswd -ci "$PROJECT_DIR/var/etc/nginx.htpasswd" "$BASIC_AUTH_USERNAME"
 fi
 
-export NGINX_WORKER_PROCESSES="${NGINX_WORKER_PROCESSES:-auto}"
+# Default environment variables for config template.
+export NGINX_BASIC_AUTH="${NGINX_BASIC_AUTH:-}"
+export NGINX_PORT="${NGINX_PORT:-8000}"
+export NGINX_PROXY_PORT="${NGINX_PROXY_PORT:-8080}"
+export NGINX_WORKER_PROCESSES="${NGINX_WORKER_PROCESSES:-1}"
 
 # Render nginx config template.
 mkdir -p "$PROJECT_DIR/var/etc"

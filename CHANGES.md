@@ -1,7 +1,29 @@
 Breaking and notable changes
 ===
 
-## 10 July 2018
+
+27 March 2019
+---
+
+### Breaking
+
+- Rename `SUPERVISORD_*` environment variables to `SUPERVISOR_*` for consistency with Supervisor's own environment variables.
+- Remove `logentries` program from `supervisor.tmpl.conf`. Add it back via `SUPERVISOR_TMPL_CONF`, if needed.
+- Run a single gunicorn process by default. Explicitly set `GUNICORN_WORKERS=auto` for the previous behaviour (2x CPU cores +1 for sync, 1x CPU cores for async).
+- Run a single nginx worker process by default. Explicitly set `NGINX_WORKER_PROCESSES=auto` for the previous behaviour (1 per CPU core).
+- Remove `www` redirect via nginx when `NGINX_REDIRECT_SERVER_NAME` is defined. Do the redirect in your app or with https://github.com/ixc/nginx-proxy-redirect
+
+### Notable
+
+- Add `prefix-logs.sh` and use it in `supervisor.include.tmpl.conf`. Send program logs directly to stdout and stderr with a prefix, so we don't need `dockerize -stdout ... -stderr ...` anymore.
+- Send nginx access log to stdout instead of gunicorn, now that we can send all supervisor program logs directly to stdout and stderr with a prefix.
+- Define default environment variables once in shell scripts instead of config templates, where they are often needed multiple times.
+- Disable nginx CPU affinity. Allow workers to execute on any available process.
+- Move nginx config from lower to higher contexts (e.g. from `server` to `http`) where possible.
+
+
+10 July 2018
+---
 
 ### Breaking
 
@@ -50,18 +72,18 @@ Breaking and notable changes
 - Management commands executed in `Dockerfile` should be wrapped with `entrypoint.sh` to ensure the runtime environment is properly configured.
 
 
-## 16 January 2018
+16 January 2018
 ---
 
 - Config templates are now rendered to the `$PROJECT_DIR/var/etc` directory for
   easier discovery and to avoid writing to potentially read-only file systems.
 
   The default templates can be overridden by setting the `LOGENTRIES_TMPL_CONF`,
-  `NEWRELIC_TMPL_CONF`, `NGINX_TMPL_CONF`, `SUPERVISORD_TMPL_CONF`, or
-  `SUPERVISORD_INCLUDE_TMPL_CONF` environment variables in your dotenv file.
+  `NEWRELIC_TMPL_CONF`, `NGINX_TMPL_CONF`, `SUPERVISOR_TMPL_CONF`, or
+  `SUPERVISOR_INCLUDE_TMPL_CONF` environment variables in your dotenv file.
 
 - `supervisor.sh` no longer attempts to render `$PROJECT_DIR/etc/supervisor.tmpl.conf`
   as an alternative to the default include config (nginx proxy).
 
-  Instead, you should explicitly set `SUPERVISORD_INCLUDE_TMPL_CONF=$PROJECT_DIR/etc/supervisord.include.tmpl.conf`
+  Instead, you should explicitly set `SUPERVISOR_INCLUDE_TMPL_CONF=$PROJECT_DIR/etc/supervisord.include.tmpl.conf`
   in your dotenv file.

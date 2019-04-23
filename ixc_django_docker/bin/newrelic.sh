@@ -7,8 +7,11 @@ if [[ -z "$NEW_RELIC_LICENSE_KEY" ]]; then
 	exec "$@"
 fi
 
+# Default environment variables for config template.
 export NEW_RELIC_APP_NAME="${NEW_RELIC_APP_NAME:-$PROJECT_NAME (${NEW_RELIC_ENVIRONMENT:-${DOTENV:-$HOSTNAME}})}"
 export NEW_RELIC_CONFIG_FILE="$PROJECT_DIR/var/etc/newrelic.ini"
+export NEW_RELIC_LICENSE_KEY="${NEW_RELIC_LICENSE_KEY:-}"
+export NEW_RELIC_MONITOR_MODE="${NEW_RELIC_MONITOR_MODE:-true}"
 
 # Render new relic config template.
 mkdir -p "$PROJECT_DIR/var/etc"
