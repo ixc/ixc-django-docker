@@ -7,6 +7,14 @@
 
 set -e
 
+# Fail loudly when required environment variables are missing.
+for var in PGDATABASE; do
+	eval [[ -z \${$var+1} ]] && {
+		>&2 echo "ERROR: Missing environment variable: $var"
+		exit 1
+	}
+done
+
 # Wait for PostgreSQL to become available.
 COUNT=0
 until psql -l > /dev/null 2>&1; do
