@@ -29,7 +29,7 @@ done
 # Ensure host is accessible at `host.docker.internal`, for consistency across
 # Docker for Desktop and Docker Engine on Linux.
 if [[ -f /.dockerenv ]]; then
-	grep -v host.docker.internal /etc/hosts > /etc/hosts
+	echo "$(grep -v host.docker.internal /etc/hosts)" > /etc/hosts
 	ip -4 route list match 0/0 | awk '{print $3" host.docker.internal"}' >> /etc/hosts
 fi
 
