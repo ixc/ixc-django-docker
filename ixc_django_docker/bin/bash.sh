@@ -59,7 +59,7 @@ WARNING: Setup is not complete for git commit: '$GIT_COMMIT'
 EOF
 	fi
 
-	export PS1="($PROJECT_NAME:$DOTENV) \u@\h:\w\n\\$ "
+	export PS1="($COMPOSE_PROJECT_NAME) \u@\h:\w\n\\$ "
 
 	# Run bash by default without any user customisations from rc or profile files
 	# to reduce the chance of user customisations clashing with our paths etc.
