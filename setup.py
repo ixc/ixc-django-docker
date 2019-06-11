@@ -35,7 +35,6 @@ setuptools.setup(
         'ixc_django_docker/bin/pip-install.sh',
         'ixc_django_docker/bin/prefix-logs.sh',
         'ixc_django_docker/bin/pydevd.sh',
-        'ixc_django_docker/bin/python.sh',
         # 'ixc_django_docker/bin/redis-cache.py',
         'ixc_django_docker/bin/runserver.sh',
         'ixc_django_docker/bin/runtests.sh',

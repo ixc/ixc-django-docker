@@ -1,4 +1,4 @@
-#!/usr/bin/env python.sh
+#!/usr/bin/env python
 
 """ Set and fetch data cached in Redis """
 

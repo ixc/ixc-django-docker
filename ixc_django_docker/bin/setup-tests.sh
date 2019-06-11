@@ -12,7 +12,7 @@ export REUSE_DB=1
 export SETUP_TESTS=1
 export SRC_PGDATABASE="$PROJECT_DIR/test_initial_data.sql"
 
-DJANGO_VERSION_LESS_THAN_1_7=$(python.sh -c 'import django; print(django.VERSION < (1, 7))')
+DJANGO_VERSION_LESS_THAN_1_7=$(python -c 'import django; print(django.VERSION < (1, 7))')
 
 # Only drop existing database when QUICK is not set.
 [[ -z "$QUICK" ]] && export SETUP_POSTGRES_FORCE=1

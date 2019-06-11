@@ -8,8 +8,8 @@ DIR="${1:-$PROJECT_DIR/var}"
 
 mkdir -p "$DIR"
 
-DJANGO_VERSION_LESS_THAN_1_7=$(python.sh -c 'import django; print(django.VERSION < (1, 7))')
-DJANGO_VERSION_LESS_THAN_1_10=$(python.sh -c 'import django; print(django.VERSION < (1, 10))')
+DJANGO_VERSION_LESS_THAN_1_7=$(python -c 'import django; print(django.VERSION < (1, 7))')
+DJANGO_VERSION_LESS_THAN_1_10=$(python -c 'import django; print(django.VERSION < (1, 10))')
 
 if [[ "$DJANGO_VERSION_LESS_THAN_1_7" == 'True' ]]; then
 	echo 'Always sync database, because Django version is less than 1.7.'
