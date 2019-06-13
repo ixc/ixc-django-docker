@@ -266,6 +266,14 @@ if django.VERSION < (1, 10):
         # Extra.
         'django.contrib.admindocs.middleware.XViewMiddleware',
     )
+    if django.VERSION >= (1, 7):
+        MIDDLEWARE_CLASSES += (
+            'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+        )
+    if django.VERSION >= (1, 8):
+        MIDDLEWARE_CLASSES += (
+            'django.middleware.security.SecurityMiddleware',
+        )
 else:
     MIDDLEWARE = (
         # Default.
