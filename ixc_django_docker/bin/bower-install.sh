@@ -23,11 +23,14 @@ fi
 touch bower.json.md5
 
 if [[ ! -s bower.json.md5 ]] || ! md5sum --status -c bower.json.md5 > /dev/null 2>&1; then
-	echo "Bower components in '$DIR' directory are out of date."
+	echo
+	echo "Bower components in '$DIR' directory (bower.json) are out of date."
 	if [[ -d bower_components ]]; then
 		echo 'Removing old Bower components directory.'
 		rm -rf bower_components
 	fi
+	echo
 	bower install --allow-root
+	echo
 	md5sum bower.json > bower.json.md5
 fi

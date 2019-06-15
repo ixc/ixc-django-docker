@@ -29,13 +29,18 @@ migrate.sh "$PROJECT_DIR/var"
 
 # Run build script.
 if [[ "$(cat package.json | jq '.scripts.build')" != null ]]; then
+	echo
 	echo 'Executing: npm run build...'
+	echo
 	npm run build
 fi
 
 # Save git commit.
-echo "$(git rev-parse HEAD)" > "$PROJECT_DIR/var/setup-git-commit.txt"
-echo "Updated '$PROJECT_DIR/var/setup-git-commit.txt' ($(cat $PROJECT_DIR/var/setup-git-commit.txt))"
+FILENAME="$PROJECT_DIR/var/setup-git-commit-$(uname).txt"
+echo "$(git rev-parse HEAD)" > "$FILENAME"
+echo
+echo "Updated '$FILENAME' ($(cat $FILENAME))"
+echo
 
 # Execute command.
 exec "$@"

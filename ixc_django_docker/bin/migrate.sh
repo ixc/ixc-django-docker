@@ -12,7 +12,9 @@ DJANGO_VERSION_LESS_THAN_1_7=$(python -c 'import django; print(django.VERSION < 
 DJANGO_VERSION_LESS_THAN_1_10=$(python -c 'import django; print(django.VERSION < (1, 10))')
 
 if [[ "$DJANGO_VERSION_LESS_THAN_1_7" == 'True' ]]; then
+	echo
 	echo 'Always sync database, because Django version is less than 1.7.'
+	echo
 	manage.py syncdb --noinput
 fi
 
@@ -23,7 +25,9 @@ else
 fi
 
 if [[ ! -s "$DIR/migrate.txt.md5" ]] || ! md5sum --status -c "$DIR/migrate.txt.md5" > /dev/null 2>&1; then
+	echo
 	echo 'Migrations are out of date.'
+	echo
 
 	# Skip initial migration if all tables created by the initial migration
 	# already exist.

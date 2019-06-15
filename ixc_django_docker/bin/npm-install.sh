@@ -20,14 +20,17 @@ if [[ ! -s package.json ]]; then
 EOF
 fi
 
-touch package.json.md5
+SIGNATURE_FILE="package.json.$(uname).md5"
+touch "${SIGNATURE_FILE}"
 
-if [[ ! -s package.json.md5 ]] || ! md5sum --status -c package.json.md5 > /dev/null 2>&1; then
-	echo "Node modules in '$DIR' directory are out of date."
+if [[ ! -s "${SIGNATURE_FILE}" ]] || ! md5sum --status -c "${SIGNATURE_FILE}" > /dev/null 2>&1; then
+	echo
+	echo "Node modules in '$DIR' directory (package.json) are out of date."
 	if [[ -d node_modules ]]; then
 		echo 'Removing old Node modules directory.'
 		rm -rf node_modules
 	fi
+	echo
 	if [[ -f yarn.lock ]]; then
 		yarn --non-interactive
 	elif [[ -f package-lock.json ]]; then
@@ -35,5 +38,6 @@ if [[ ! -s package.json.md5 ]] || ! md5sum --status -c package.json.md5 > /dev/n
 	else
 		npm install
 	fi
-	md5sum package.json > package.json.md5
+	echo
+	md5sum package.json > "${SIGNATURE_FILE}"
 fi
