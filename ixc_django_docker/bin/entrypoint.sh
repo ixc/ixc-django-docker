@@ -41,6 +41,12 @@ if [[ -d .git ]]; then
 	echo "Git Commit: $(git rev-parse HEAD)"
 fi
 
+# Use `ixc-django-docker` settings by default.
+if [[ -z "${DJANGO_SETTINGS_MODULE+1}" ]]; then
+	echo "Exporting DJANGO_SETTINGS_MODULE='ixc_django_docker.settings'"
+	export DJANGO_SETTINGS_MODULE='ixc_django_docker.settings'
+fi
+
 # If executed interactively, update the prompt, print help text, and warn if
 # the user needs to run 'setup.sh'.
 if [[ -t 1 ]]; then
