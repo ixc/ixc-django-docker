@@ -5,7 +5,7 @@
 
 set -e
 
-mkdir -p "$DIR/var"
+mkdir -p "$PROJECT_DIR/var"
 
 # Install Node modules.
 npm-install.sh "$PROJECT_DIR"
