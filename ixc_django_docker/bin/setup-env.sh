@@ -110,21 +110,3 @@ EOF
 	# Add project dirname to prompt.
 	export PS1="($(basename "$PROJECT_DIR")) \u@\h:\w\n\\$ "
 fi
-
-# Secret config.
-if [[ -f "$PROJECT_DIR/.env.secret" ]]; then
-	if ! source "$PROJECT_DIR/.env.secret"; then
-		>&2 echo "Unable to source '$PROJECT_DIR/.env.secret'. You might need to run 'transcrypt -p TRANSCRYPT_PASSWORD' (get from 1Password)"
-		return 1
-	fi
-fi
-
-# Local untracked config.
-if [[ -f "$PROJECT_DIR/.env.local" ]]; then
-	source "$PROJECT_DIR/.env.local"
-fi
-
-# Execute wrapped command.
-if [[ -f /.dockerenv ]]; then
-	exec "${@:-bash}"
-fi
