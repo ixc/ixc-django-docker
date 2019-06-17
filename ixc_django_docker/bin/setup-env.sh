@@ -35,7 +35,7 @@ if [[ -f /.dockerenv ]]; then
 	ip -4 route list match 0/0 | awk '{print $3" host.docker.internal"}' >> /etc/hosts
 fi
 
-# Log the full git commit.
+# Export and log the full git commit.
 if [[ -d .git ]]; then
 	export GIT_COMMIT="$(git rev-parse HEAD)"
 	echo "Git Commit: $(git rev-parse HEAD)"
