@@ -5,11 +5,6 @@
 
 set -e
 
-if [[ -z "$PROJECT_DIR" ]]; then
-	>&2 echo "ERROR: Missing environment variable: PROJECT_DIR"
-	exit 1
-fi
-
 mkdir -p "$DIR/var"
 
 # Install Node modules.
