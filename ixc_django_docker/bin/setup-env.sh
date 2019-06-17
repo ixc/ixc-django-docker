@@ -44,7 +44,7 @@ fi
 # Export root directory, so we can determine relative paths.
 export IXC_DJANGO_DOCKER_DIR="$(python -c 'import ixc_django_docker, os; print(os.path.dirname(ixc_django_docker.__file__));')"
 
-# Add bin directory to PATH.
+# Add bin directory to the *end* of PATH, to avoid clobbering project scripts.
 if [[ ":$PATH:" != *":${IXC_DJANGO_DOCKER_DIR}/bin:"* ]]; then
     export PATH="${PATH}:${IXC_DJANGO_DOCKER_DIR}/bin"
 fi
