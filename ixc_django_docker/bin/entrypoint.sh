@@ -10,7 +10,7 @@ for var in IXC_DJANGO_DOCKER_DIR PROJECT_DIR; do
 	}
 done
 if [[ -n "${MISSING_VARS+1}" ]]; then
-	>&2 echo 'These are normally exported from `Dockerfile`, `Dockerfile.sh`, or the project entrypoint.'
+	>&2 echo 'Missing environment variables are normally exported from `Dockerfile`, `Dockerfile.sh`, or the project entrypoint.'
 	return 1
 fi
 
@@ -22,7 +22,7 @@ for program in dockerize git htpasswd jq md5sum nginx npm psql pv python supervi
 	}
 done
 if [[ -n "${MISSING_PROGRAMS+1}" ]]; then
-	>&2 echo 'These are normally installed by `Dockerfile`, but must be installed manually when running natively.'
+	>&2 echo 'Missing programs are normally installed by `Dockerfile`, but must be installed manually when running natively.'
 	return 1
 fi
 
