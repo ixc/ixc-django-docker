@@ -100,18 +100,13 @@ For detailed documentation, see:
     https://github.com/ixc/ixc-django-docker/docs/commands.rst
 
 EOF
-fi
 
-# Warn if setup is not complete.
-if [[ "$GIT_COMMIT" != $(cat "$PROJECT_DIR/var/setup-git-commit-$(uname).txt" 2>&1) ]]; then
-	>&2 cat <<EOF
-WARNING:
-
-    Setup is not complete for git commit: '$GIT_COMMIT'
-
-    Run 'setup.sh' to install Node modules, Bower components and Python
-    packages, create a database, apply Django migrations, and run the
-    npm 'build' script (if defined).
+	# Warn if setup is not complete.
+	if [[ "$GIT_COMMIT" != $(cat "$PROJECT_DIR/var/setup-git-commit-$(uname).txt" 2>&1) ]]; then
+		>&2 cat <<EOF
+WARNING: Setup is not complete for git commit: '$GIT_COMMIT'
+         Run 'setup.sh' manually.
 
 EOF
+	fi
 fi
