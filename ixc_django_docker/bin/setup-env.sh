@@ -41,6 +41,14 @@ if [[ -d .git ]]; then
 	echo "Git Commit: $(git rev-parse HEAD)"
 fi
 
+# Export root directory, so we can determine relative paths.
+export IXC_DJANGO_DOCKER_DIR="$(python -c 'import ixc_django_docker, os; print(os.path.dirname(ixc_django_docker.__file__));')"
+
+# Add bin directory to PATH.
+if [[ ":$PATH:" != *":${IXC_DJANGO_DOCKER_DIR}/bin:"* ]]; then
+	export PATH="${PATH}:${IXC_DJANGO_DOCKER_DIR}/bin"
+fi
+
 # Use `ixc-django-docker` settings by default.
 if [[ -z "${DJANGO_SETTINGS_MODULE+1}" ]]; then
 	echo "Exporting DJANGO_SETTINGS_MODULE='ixc_django_docker.settings'"
