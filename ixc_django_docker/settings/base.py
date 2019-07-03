@@ -258,14 +258,20 @@ if django.VERSION < (1, 10):
         'django.middleware.common.CommonMiddleware',
         'django.middleware.csrf.CsrfViewMiddleware',
         'django.contrib.auth.middleware.AuthenticationMiddleware',
-        'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
-        'django.middleware.security.SecurityMiddleware',
 
         # Extra.
         'django.contrib.admindocs.middleware.XViewMiddleware',
     )
+    if django.VERSION >= (1, 7):
+        MIDDLEWARE_CLASSES += (
+            'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+        )
+    if django.VERSION >= (1, 8):
+        MIDDLEWARE_CLASSES = (
+            'django.middleware.security.SecurityMiddleware',
+        ) + MIDDLEWARE_CLASSES
 else:
     MIDDLEWARE = (
         # Default.

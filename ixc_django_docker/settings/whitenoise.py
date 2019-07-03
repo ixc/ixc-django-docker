@@ -1,9 +1,26 @@
 INSTALLED_APPS += ('ixc_whitenoise', )
 
+# Insert middleware above all except SecurityMiddleware, per the documentation
 if django.VERSION < (1, 10):
-    MIDDLEWARE_CLASSES += ('ixc_whitenoise.middleware.WhiteNoiseMiddleware', )
+    try:
+        index = MIDDLEWARE_CLASSES.index(
+            'django.middleware.security.SecurityMiddleware'
+        ) + 1
+    except ValueError:
+        index = 0
+    MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES[:index] \
+        + ('ixc_whitenoise.middleware.WhiteNoiseMiddleware', ) \
+        + MIDDLEWARE_CLASSES[index:]
 else:
-    MIDDLEWARE += ('ixc_whitenoise.middleware.WhiteNoiseMiddleware', )
+    try:
+        index = MIDDLEWARE.index(
+            'django.middleware.security.SecurityMiddleware'
+        ) + 1
+    except ValueError:
+        index = 0
+    MIDDLEWARE = MIDDLEWARE[:index] \
+        + ('ixc_whitenoise.middleware.WhiteNoiseMiddleware', ) \
+        + MIDDLEWARE[index:]
 
 STATICFILES_STORAGE = 'ixc_whitenoise.storage.CompressedManifestStaticFilesStorage'
 WHITENOISE_AUTOREFRESH = True

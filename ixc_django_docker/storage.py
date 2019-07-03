@@ -9,7 +9,13 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage, default_storage
 from django.utils.functional import LazyObject
 from ixc_whitenoise.storage import UniqueMixin, UniqueStorage, unlazy_storage
-from storages.backends.s3boto3 import S3Boto3Storage
+
+# Maintain compatibility with pre-1.4 django-storages, which support Django
+# pre-1.7 versions, and use boto instead of boto3
+try:
+	from storages.backends.s3boto3 import S3Boto3Storage as S3BotoStorage
+except ImportError:
+	from storages.backends.s3boto import S3BotoStorage
 
 from ixc_django_docker import appsettings
 
@@ -120,11 +126,11 @@ class S3StaticLocationMixin(object):
 # STORAGE CLASSES #############################################################
 
 
-class S3PrivateStorage(S3MediaLocationMixin, S3PrivateMixin, S3Boto3Storage):
+class S3PrivateStorage(S3MediaLocationMixin, S3PrivateMixin, S3BotoStorage):
     pass
 
 
-class S3PublicStorage(S3MediaLocationMixin, S3PublicMixin, S3Boto3Storage):
+class S3PublicStorage(S3MediaLocationMixin, S3PublicMixin, S3BotoStorage):
     pass
 
 
@@ -133,7 +139,7 @@ class S3UniquePrivateStorage(
         S3GetContentHashMixin,
         S3MediaLocationMixin,
         S3PrivateMixin,
-        S3Boto3Storage):
+        S3BotoStorage):
     pass
 
 
@@ -142,7 +148,7 @@ class S3UniquePublicStorage(
         S3GetContentHashMixin,
         S3MediaLocationMixin,
         S3PublicMixin,
-        S3Boto3Storage):
+        S3BotoStorage):
     pass
 
 

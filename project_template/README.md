@@ -4,6 +4,56 @@ This content has moved to https://stackoverflow.com/c/theic/questions/176 and ht
 
 *One or two lines describing the project: what is it, who is the client, URL of production site if there is one.*
 
+## Project's FAQs 
+
+### Git Branching:
+- #### From which branch should I branch off the new branches?
+- > A:
+- #### Who should receive PR requests?
+- > A:
+- #### Which branch is following the `Staging` site?
+- > A:
+- #### Which branch is following the `Production` site?
+- > A:
+
+### Client:
+
+- #### Which are the communications channels with the client?
+- > A: 
+- #### Who are the client contacts and what are their roles?
+- > A: 
+- #### Which are the ticketing system urls?
+- > A: 
+- #### Should the client be contacted for questions/testing (or the client contact should be involved always)?
+- > A: 
+
+### Budget:
+- #### Where does the project's budget can be checked?
+- > A: 
+- #### If we have further questions about the budget, who could I ask?
+- > A: 
+
+### Sites:
+- #### Which is the `Production` site URL?
+- > A: 
+- #### Which is the `Staging` site URL?
+- > A: 
+- ### In which server does the `Production` site lives ?
+- > A: 
+- ### In which server does the `Staging` site lives ?
+- > A: 
+- ### Where is the DNS configuration defined?
+- > A: 
+
+### General:
+- #### Which developers have worked/usually work on this project?
+- > A: 
+- #### Where can I get a recent DB dump?
+- > A: 
+ > For most of the projects DB dumps are created periodically using Restic, see: [https://github.com/ixc/restic-pg-dump-docker#restore-macos](https://github.com/ixc/restic-pg-dump-docker#restore-macos) for more details. 
+- #### Which command is used to run the tests?
+- > A: 
+
 
 ## Technical Overview
 
