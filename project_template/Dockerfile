@@ -38,7 +38,8 @@ RUN wget -nv -O /usr/local/bin/docker-compose "https://github.com/docker/compose
 RUN chmod +x /usr/local/bin/docker-compose
 RUN wget -nv -O /etc/bash_completion.d/docker-compose "https://raw.githubusercontent.com/docker/compose/${DOCKER_COMPOSE_VERSION}/contrib/completion/bash/docker-compose"
 
-ENV DOCKERIZE_VERSION=0.6.1
+# Do NOT use dockerize 0.6.1 due to https://github.com/jwilder/dockerize/issues/125
+ENV DOCKERIZE_VERSION=0.6.0
 RUN wget -nv -O - "https://github.com/jwilder/dockerize/releases/download/v${DOCKERIZE_VERSION}/dockerize-linux-amd64-v${DOCKERIZE_VERSION}.tar.gz" | tar -xz -C /usr/local/bin/ -f -
 
 ENV NODE_VERSION=10.15.3
