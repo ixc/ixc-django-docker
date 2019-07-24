@@ -44,6 +44,15 @@ else:
     BANDIT_WHITELIST = []
 print("%s: BANDIT_WHITELIST = %r" % (REAL_MODULE_NAME, BANDIT_WHITELIST))
 
+
+# Ensure that BANDIT_EMAIL is set appropriately: it is always required and
+# must contain at least one value
+if not BANDIT_EMAIL:
+    raise ValueError(
+        "BANDIT_EMAIL environment variable must be set with at least one"
+        " email address. If you do not want to hijack email, remove"
+        " 'email_bandit.py' from the BASE_SETTINGS environment variable")
+
 # Make it clear that emails have been hijacked and from which site.
 # NOTE: This only applies to emails sent with admin-specific methods:
 # https://docs.djangoproject.com/en/2.2/ref/settings/#email-subject-prefix
