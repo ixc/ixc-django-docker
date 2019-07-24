@@ -1,5 +1,11 @@
 import os
 
+
+# When loaded by django-split-settings __name__ gives us the *includer* file's
+# name, not the name of this *included* file.
+REAL_MODULE_NAME = ".".join([__package__, "email_bandit"])
+
+
 # Hijack django-post-office backend if project is using that lib...
 if 'POST_OFFICE' in locals():
     HIJACKED_EMAIL_BACKEND = POST_OFFICE['BACKENDS']['default']
@@ -22,7 +28,7 @@ if os.environ.get('BANDIT_EMAIL'):
     ]
 else:
     BANDIT_EMAIL = None
-print("%s: BANDIT_EMAIL = %r" % (__name__, BANDIT_EMAIL))
+print("%s: BANDIT_EMAIL = %r" % (REAL_MODULE_NAME, BANDIT_EMAIL))
 
 # Whitelist outgoing emails to these specific addresses or domains to let
 # them through, instead of redirecting them to the BANDIT_EMAIL address.
@@ -34,9 +40,9 @@ if os.environ.get('BANDIT_WHITELIST'):
         for wl in os.environ['BANDIT_WHITELIST'].split(',')
         if wl.strip()
     ]
-    print("%s: BANDIT_WHITELIST = %r" % (__name__, BANDIT_WHITELIST))
 else:
-    print("%s: BANDIT_WHITELIST is not set" % __name__)
+    BANDIT_WHITELIST = []
+print("%s: BANDIT_WHITELIST = %r" % (REAL_MODULE_NAME, BANDIT_WHITELIST))
 
 # Make it clear that emails have been hijacked and from which site.
 # NOTE: This only applies to emails sent with admin-specific methods:
