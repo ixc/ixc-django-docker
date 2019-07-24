@@ -1,5 +1,7 @@
 import os
 
+from django.conf import settings
+
 
 # When loaded by django-split-settings __name__ gives us the *includer* file's
 # name, not the name of this *included* file.
@@ -44,6 +46,16 @@ else:
     BANDIT_WHITELIST = []
 print("%s: BANDIT_WHITELIST = %r" % (REAL_MODULE_NAME, BANDIT_WHITELIST))
 
+# Print the additional emails whitelisted by Bandit by default, to make it
+# clearer that this is what Bandit does. See logic in
+# `bandit.backends.base:HijackBackendMixin.send_messages()`
+admin_emails = [email for name, email in getattr(settings, 'ADMINS', [])]
+server_email = getattr(settings, 'SERVER_EMAIL', 'root@localhost')
+extra_whitelisted = admin_emails + [server_email]
+print(
+    "%s: Emails automatically whitelisted by Bandit, from `settings.ADMINS` and"
+    " `settings.SERVER_EMAIL` = %r" % (REAL_MODULE_NAME, extra_whitelisted)
+)
 
 # Ensure that BANDIT_EMAIL is set appropriately: it is always required and
 # must contain at least one value
