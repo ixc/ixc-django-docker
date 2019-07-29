@@ -17,6 +17,9 @@ Breaking and notable changes
 
 - Add `prefix-logs.sh` and use it in `supervisor.include.tmpl.conf`. Send program logs directly to stdout and stderr with a prefix, so we don't need `dockerize -stdout ... -stderr ...` anymore.
 - Send nginx access log to stdout instead of gunicorn, now that we can send all supervisor program logs directly to stdout and stderr with a prefix.
+- Add `SUPERVISOR_NUMPROCS` environment variable, for programs that don't internally run multiple worker processes.
+- Each process will have `SUPERVISOR_PROCESS_NUM` environment variable set, which can be used to increment the base `NGINX_PROXY_PORT` (default: 8080) port number.
+- Configure nginx to load balance all processes via the default server, AND allow direct access to each process via `s{{ SUPERVISOR_PROCESS_NUM }}.*` subdomains.
 - Define default environment variables once in shell scripts instead of config templates, where they are often needed multiple times.
 - Disable nginx CPU affinity. Allow workers to execute on any available process.
 - Move nginx config from lower to higher contexts (e.g. from `server` to `http`) where possible.
