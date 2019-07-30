@@ -7,12 +7,13 @@ REAL_MODULE_NAME = ".".join([__package__, "email_bandit"])
 
 
 # Hijack django-post-office backend if project is using that lib...
-if 'POST_OFFICE' in locals():
+try:
+    # Lookup of POST_OFFICE setting should fail if post-office isn't used
     HIJACKED_EMAIL_BACKEND = POST_OFFICE['BACKENDS']['default']
     POST_OFFICE['BACKENDS']['default'] = \
         'ixc_django_docker.bandit.HijackedEmailBackend'
 # ...otherwise hijack default Django backend
-else:
+except NameError:
     HIJACKED_EMAIL_BACKEND = EMAIL_BACKEND
     EMAIL_BACKEND = 'ixc_django_docker.bandit.HijackedEmailBackend'
 
@@ -47,9 +48,8 @@ print("%s: BANDIT_WHITELIST = %r" % (REAL_MODULE_NAME, BANDIT_WHITELIST))
 # Print the additional emails whitelisted by Bandit by default, to make it
 # clearer that this is what Bandit does. See logic in
 # `bandit.backends.base:HijackBackendMixin.send_messages()`
-admin_emails = [email for name, email in locals().get('ADMINS', [])]
-server_email = locals().get('SERVER_EMAIL', 'root@localhost')
-extra_whitelisted = admin_emails + [server_email]
+admin_emails = [email for name, email in ADMINS]
+extra_whitelisted = admin_emails + [SERVER_EMAIL]
 print(
     "%s: Emails automatically whitelisted by Bandit, from `settings.ADMINS` and"
     " `settings.SERVER_EMAIL` = %r" % (REAL_MODULE_NAME, extra_whitelisted)
