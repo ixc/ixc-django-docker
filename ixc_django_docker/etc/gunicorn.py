@@ -9,6 +9,7 @@ def truthy(val):
 
 accesslog = os.environ.get('GUNICORN_ACCESS_LOG') or None
 bind = '0.0.0.0:%s' % os.environ.get('NGINX_PROXY_PORT', 8080)
+limit_request_line = os.environ.get('GUNICORN_LIMIT_REQUEST_LINE', 4094)  # Default
 max_requests = os.environ.get('GUNICORN_MAX_REQUESTS', 10000)
 max_requests_jitter = os.environ.get('GUNICORN_MAX_REQUESTS_JITTER', 1000)
 preload = truthy(os.environ.get('GUNICORN_PRELOAD', 'true'))
