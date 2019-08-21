@@ -368,7 +368,7 @@ USE_ETAGS = True  # Default: False
 USE_L10N = True  # Default: False
 USE_TZ = True  # Default: False
 
-WSGI_APPLICATION = 'ixc_django_docker.wsgi.application'
+WSGI_APPLICATION = None
 
 # IXC-DJANGO-DOCKER ###########################################################
 
