@@ -87,7 +87,7 @@ else
 	done
 
 	# Fail loudly when required programs are missing.
-	for cmd in bower dockerize md5sum nginx npm psql python pv redis-server supervisord supervisorctl transcrypt yarn; do  # TODO: elasticsearch
+	for cmd in bower dockerize jq md5sum nginx npm psql python pv redis-server supervisord supervisorctl transcrypt yarn; do  # TODO: elasticsearch
 		hash $cmd 2>/dev/null || {
 			>&2 echo "ERROR: Missing program: $cmd"
             ok=
