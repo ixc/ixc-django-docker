@@ -23,6 +23,6 @@ else:
         + MIDDLEWARE[index:]
 
 STATICFILES_STORAGE = 'ixc_whitenoise.storage.CompressedManifestStaticFilesStorage'
-WHITENOISE_AUTOREFRESH = True
+WHITENOISE_AUTOREFRESH = DEBUG
 WHITENOISE_ROOT = os.path.join(PROJECT_DIR, 'whitenoise_root')
-WHITENOISE_USE_FINDERS = True
+WHITENOISE_USE_FINDERS = DEBUG
