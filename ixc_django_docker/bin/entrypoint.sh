@@ -85,7 +85,7 @@ else
 	done
 
 	# Fail loudly when required programs are missing.
-	for cmd in dockerize md5sum nginx npm psql python pv redis-server supervisord supervisorctl yarn; do  # TODO: elasticsearch
+	for cmd in dockerize md5sum nginx npm psql python pv redis-server supervisord supervisorctl; do  # TODO: elasticsearch
 		hash $cmd 2>/dev/null || {
 			>&2 echo "ERROR: Missing program: $cmd"
 			>&2 echo 'See: https://github.com/ixc/ixc-django-docker/blob/master/README.rst#system-requirements-when-running-without-docker'

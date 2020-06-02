@@ -212,7 +212,6 @@ System requirements when running without Docker
 * Redis
 * Supervisor
 * [Transcrypt](https://github.com/elasticdog/transcrypt)
-* Yarn
 
 Optional:
 
