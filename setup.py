@@ -25,7 +25,7 @@ setuptools.setup(
             'Django',
             'django-split-settings',
             'futures; python_version == "2.7"',
-            'gunicorn[gevent]',
+            'gunicorn[gevent]>=19.8.0',  # Extra was added in 19.8.0
             'jinja2',
             'python-redis-lock[django]',
     ],
