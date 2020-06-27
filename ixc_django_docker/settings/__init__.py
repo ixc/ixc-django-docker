@@ -1,5 +1,6 @@
 import os
 
+from django.core.exceptions import ImproperlyConfigured
 from split_settings.tools import include, optional
 
 
@@ -34,10 +35,23 @@ BASE_SETTINGS = os.environ.get(
     ])).split()
 
 # Project settings.
-PROJECT_SETTINGS = [os.path.join(
-    PROJECT_DIR, os.environ.get('PROJECT_SETTINGS') or 'project_settings.py',
-)]
-PROJECT_SETTINGS_DIR = os.path.dirname(PROJECT_SETTINGS[0])
+checked = []
+for filename in (
+    os.environ.get('PROJECT_SETTINGS'),
+    'djangosite/settings/base.py',
+    'project_settings.py',
+):
+    if filename:
+        checked.append("'%s'" % filename)
+        PROJECT_SETTINGS = os.path.join(PROJECT_DIR, filename)
+        if os.path.exists(PROJECT_SETTINGS):
+            break
+else:
+    raise ImproperlyConfigured(
+        'No project settings found. Checked: ' + ', '.join(checked)
+    )
+PROJECT_SETTINGS_DIR = os.path.dirname(PROJECT_SETTINGS)
+PROJECT_SETTINGS = [PROJECT_SETTINGS]  # Convert to list
 
 # Override settings.
 OVERRIDE_SETTINGS = os.environ.get('OVERRIDE_SETTINGS')
