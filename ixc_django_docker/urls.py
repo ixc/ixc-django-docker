@@ -1,6 +1,10 @@
+from importlib import import_module
+import os
+
 from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.core.exceptions import ImproperlyConfigured
 from django.views.generic import TemplateView
 
 admin.autodiscover()
@@ -19,10 +23,23 @@ if 'debug_toolbar' in settings.INSTALLED_APPS:
     ]
 
 # Auto-include `project` URLs if they are available
-try:
-    from project import urls as project_urls
-    urlpatterns += [
-        url(r'^', include(project_urls)),
-    ]
-except ImportError:
-    pass
+checked = []
+for module in (
+    os.environ.get('PROJECT_URLCONF'),
+    'djangosite.urls',
+    'project_urls',
+):
+    if module:
+        checked.append("'%s'" % module)
+        try:
+            project_urlconf = import_module(module)
+        except ImportError:
+            continue
+        break
+else:
+    raise ImproperlyConfigured(
+        'No project urlconf found. Checked: ' + ', '.join(checked)
+    )
+urlpatterns += [
+    url(r'^', include(project_urlconf)),
+]
