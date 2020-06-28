@@ -10,6 +10,7 @@ services:
       - redis
     environment:
       DOTENV: ${DOTENV:-develop}
+      # ELASTICSEARCH_ADDRESS: elasticsearch:9200
       FLOWER_PORT: 5555
       PGHOST: postgres
       PGUSER: postgres
