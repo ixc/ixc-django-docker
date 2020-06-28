@@ -15,9 +15,6 @@ services:
       PGUSER: postgres
       REDIS_ADDRESS: redis:6379
     image: interaction/project_template:local
-    ports:
-      - ${FLOWER_PORT:-5555}:5555
-      - ${GUNICORN_PORT:-8000}:8000
     volumes:
       - .:/opt/project_template
       - /var/run/docker.sock:/var/run/docker.sock
