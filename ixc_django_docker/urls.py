@@ -15,6 +15,20 @@ urlpatterns = [
     url(r'^500/$', TemplateView.as_view(template_name='500.html')),
 ]
 
+# Django Admin.
+if 'django.contrib.admin' in settings.INSTALLED_APPS:
+    urlpatterns += [
+        url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+        url(r'^admin/util/tools/', include('admin_tools.urls')),
+        url(r'^admin/', include(admin.site.urls)),
+    ]
+
+# Django Auth.
+if 'django.contrib.auth' in settings.INSTALLED_APPS:
+    urlpatterns += [
+        url(r'^accounts/', include('django.contrib.auth.urls')),
+    ]
+
 # Django Debug Toolbar.
 if 'debug_toolbar' in settings.INSTALLED_APPS:
     import debug_toolbar
