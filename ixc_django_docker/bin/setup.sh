@@ -12,6 +12,11 @@ fi
 
 mkdir -p "$DIR/var"
 
+if [[ -n "${SETUP_FORCE+1}" ]]; then
+	>&2 echo 'SETUP_FORCE is set. Delete "*.md5" files.'
+	find . -name "*.md5" -delete
+fi
+
 # Install Node modules.
 npm-install.sh "$PROJECT_DIR"
 
