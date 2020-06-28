@@ -28,8 +28,8 @@ setup-postgres.sh
 migrate.sh "$PROJECT_DIR/var"
 
 # Run build script.
-echo 'Executing: npm run build...'
-npm run build --if-present
+echo "Executing: npm run ${SETUP_NPM_RUN:-build}..."
+npm run "${SETUP_NPM_RUN:-build}" --if-present
 
 # Save git commit.
 echo "$(git rev-parse HEAD)" > "$PROJECT_DIR/var/setup-git-commit.txt"
