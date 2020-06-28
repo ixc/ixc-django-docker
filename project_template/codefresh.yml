@@ -11,13 +11,42 @@ steps:
 
   run_tests:
     type: composition
-    composition: docker-compose.yml
+    composition:
+      version: '2'
+
+      services:
+        django:
+          depends_on:
+            # - elasticsearch
+            - postgres
+            - redis
+          environment:
+            DOTENV: test
+            # ELASTICSEARCH_ADDRESS: elasticsearch:9200
+            PGHOST: postgres
+            PGUSER: postgres
+            REDIS_ADDRESS: redis:6379
+          image: '${{build_image}}'
+
+        # elasticsearch:
+        #   image: interaction/elasticsearch-icu:7-alpine
+
+        postgres:
+          environment:
+            POSTGRES_HOST_AUTH_METHOD: trust
+          image: postgres:12.2-alpine
+
+        redis:
+          image: redis:6-alpine
+
+      volumes:
+        # elasticsearch-data:
+        postgres-data:
+        redis-data:
+
     composition_candidates:
       django:
         command: runtests.sh --failfast .
-        environment:
-          DOTENV: test
-        image: '${{build_image}}'
     when:
       condition:
         all:
