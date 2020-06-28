@@ -5,7 +5,7 @@
 
 set -e
 
-export DOTENV=test
+export DOTENV='test'
 export PGDATABASE="test_$PGDATABASE"
 export OVERRIDE_SETTINGS='test.py'
 export PS1="($PROJECT_NAME:$DOTENV) \u@\h:\w\n\\$ "
