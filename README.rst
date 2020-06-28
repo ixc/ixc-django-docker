@@ -202,7 +202,6 @@ System requirements when running without Docker
 -----------------------------------------------
 
 * [Dockerize](https://github.com/jwilder/dockerize)
-* [jq](https://stedolan.github.io/jq/)
 * md5sum
 * Nginx
 * NPM
@@ -232,7 +231,7 @@ Install `Homebrew <http://brew.sh/>`__::
 Install required system packages::
 
     $ brew cask install postgres
-    $ brew install ixc/ixc/dockerize@0.5 jq md5sha1sum nginx node@8 pv redis supervisor transcrypt
+    $ brew install ixc/ixc/dockerize@0.6.0 md5sha1sum nginx node@8 pv redis supervisor transcrypt
     $ brew install yarn --without-node  # Avoid installing the latest non-LTS Node
     $ brew link --force dockerize@0.5
 
