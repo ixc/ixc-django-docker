@@ -2,4 +2,4 @@
 
 set -e
 
-sass "$PROJECT_DIR/static:$PROJECT_DIR/static/COMPILED" "$@"
+sass "$PROJECT_DIR/static:$PROJECT_DIR/static_root/COMPILED" "$@"
