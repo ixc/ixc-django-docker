@@ -1,1 +1,1 @@
-*.secret* filter=crypt diff=crypt
+*.secret filter=crypt diff=crypt

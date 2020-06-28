@@ -1,0 +1,20 @@
+tap 'ixc/ixc'
+
+# System requirements, to match the `interaction/buildpack-deps:focal` Docker image.
+
+brew 'direnv'
+brew 'dockerize@0.6.0'
+brew 'md5sha1sum'
+brew 'nginx'
+brew 'node@12'
+# brew 'postgresql@12'  # Use Postgres.app, instead
+brew 'pv'
+brew 'pyenv'
+brew 'redis'
+brew 'supervisor'
+# brew 'transcrypt'
+# brew 'yarn'
+
+cask 'postgres-all-versions'
+
+# Project requirements.

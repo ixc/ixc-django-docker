@@ -1,92 +1,48 @@
-version: '3.6'
-
-x-project: &project
-  depends_on:
-    - postgres
-    - redis
-  env_file: .env.local
-  environment: &project-environment
-    # ELASTICSEARCH_URL: http://elasticsearch:9200
-    PGHOST: postgres
-    PGUSER: postgres
-    REDIS_ADDRESS: redis:6379
-  image: interaction/project_template:local
-  volumes:
-    - .:/opt/project_template
-    - /var/run/docker.sock:/var/run/docker.sock
+version: '2.4'
 
 services:
-  celery:
-    << : *project
-    command: setup-wait.sh celery.sh --concurrency 1
-
-  celerybeat:
-    << : *project
-    command: setup-wait.sh celerybeat.sh
-
-  celeryflower:
-    << : *project
-    command: setup-wait.sh celeryflower.sh
+  django:
+    build: .
+    command: bash.sh
+    depends_on:
+      # - elasticsearch
+      - postgres
+      - redis
     environment:
-      << : *project-environment
-      VIRTUAL_HOST: flower.*
-      VIRTUAL_HOST_WEIGHT: 1
+      DOTENV: ${DOTENV:-develop}
+      FLOWER_PORT: 5555
+      PGHOST: postgres
+      PGUSER: postgres
+      REDIS_ADDRESS: redis:6379
+    image: interaction/project_template:local
     ports:
-      - 8080
+      - ${FLOWER_PORT:-5555}:5555
+      - ${GUNICORN_PORT:-8000}:8000
+    volumes:
+      - .:/opt/project_template
+      - /var/run/docker.sock:/var/run/docker.sock
 
   # elasticsearch:
   #   environment:
   #     ES_JAVA_OPTS: ${ES_JAVA_OPTS:--Xms500m -Xmx500m}
-  #   image: interaction/elasticsearch-icu:5-alpine
-  #   ports:
-  #     - 9200
+  #   image: interaction/elasticsearch-icu:7-alpine
   #   volumes:
   #     - elasticsearch-data:/usr/share/elasticsearch/data
-
-  haproxy:
-    image: dockercloud/haproxy
-    links:
-      - celeryflower
-      - runserver
-    ports:
-      - ${HAPROXY_PORT:-80}:80
-      - 1936
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
 
   postgres:
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata  # Store data in subdirectory of volume mount point, per PostgreSQL recommendations
-    image: postgres:9.5-alpine
-    ports:
-      - 5432
+      POSTGRES_HOST_AUTH_METHOD: trust
+    image: postgres:12.2-alpine
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
   redis:
-    image: redis:3-alpine
-    ports:
-      - 6379
+    image: redis:6-alpine
     volumes:
       - redis-data:/data
 
-  runserver:
-    << : *project
-    command: setup-wait.sh runserver.sh
-    environment:
-      << : *project-environment
-      VIRTUAL_HOST: '*'
-    ports:
-      - 8000
-
-  shell:
-    << : *project
-    command: bash.sh
-    build: .
-    ports:
-      - 8000
-
 volumes:
-  elasticsearch-data:
+  # elasticsearch-data:
   postgres-data:
   redis-data:

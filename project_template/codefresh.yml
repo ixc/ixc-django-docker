@@ -1,42 +1,39 @@
 version: '1.0'
 
 steps:
+  main_clone:
+    type: git-clone
+    repo: ixc/project_template
+
   build_image:
     type: build
-    title: Building Docker Image
     image_name: interaction/project_template
 
   run_tests:
     type: composition
-    title: Running Tests
-    composition: ./docker-compose.codefresh.yml
+    composition: docker-compose.yml
     composition_candidates:
-      runtests:
+      django:
+        command: runtests.sh --failfast .
+        environment:
+          DOTENV: test
         image: '${{build_image}}'
     when:
       condition:
         all:
-          skip_tests_in_branch: includes(lower('${{CF_BRANCH_TAG_NORMALIZED}}'), 'cf-skip-tests') == false
           skip_tests_variable: lower('${{CF_SKIP_TESTS}}') != 'true'
 
-  push_image_branch_tag:
-    title: Pushing Docker Image to Registry (branch tag)
+  push_images:
     candidate: '${{build_image}}'
-    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
     type: push
-
-  push_image_commit_tag:
-    title: Pushing Docker Image to Registry (commit tag)
-    candidate: '${{build_image}}'
-    tag: '${{CF_REVISION}}'
-    type: push
-
-  push_image_latest_tag:
-    title: Pushing Docker Image to Registry (latest tag)
-    candidate: '${{build_image}}'
-    tag: latest
-    type: push
-    when:
-      branch:
-        only:
-          - master
+    scale:
+      push_branch_tag:
+        tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
+      push_commit_tag:
+        tag: '${{CF_REVISION}}'
+      push_latest_tag:
+        tag: latest
+        when:
+          branch:
+            only:
+              - master

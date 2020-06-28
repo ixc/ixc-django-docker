@@ -1,2 +1,2 @@
-# -e ..[celery,celery4,celery-email,compressor,datadog,debug-toolbar,email-bandit,extensions,logentries,master-password,newrelic,nose,post-office,postgres,pydevd,sentry,storages,whitenoise]  # celery3,haystack,
--e git+https://github.com/ixc/ixc-django-docker.git@master#egg=ixc-django-docker[celery,celery4,celery-email,compressor,datadog,debug-toolbar,email-bandit,extensions,logentries,master-password,newrelic,nose,post-office,postgres,pydevd,sentry,storages,whitenoise]  # celery3,haystack,
+# -e ..[celery,celery4,celery-email,compressor,datadog,debug-toolbar,email-bandit,extensions,logentries,master-password,newrelic,nose,post-office,postgres,pydevd,sentry,storages,whitenoise]
+-e git+https://github.com/ixc/ixc-django-docker.git@master#egg=ixc-django-docker[celery,celery4,celery-email,compressor,datadog,debug-toolbar,email-bandit,extensions,logentries,master-password,newrelic,nose,post-office,postgres,pydevd,sentry,storages,whitenoise]

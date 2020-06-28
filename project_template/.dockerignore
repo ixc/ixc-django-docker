@@ -1,8 +1,9 @@
+# Git ignores. Duplicated in `.dockerignore` and `.gitignore`.
 **/*.md5
 **/*.orig
 **/*.pyc
 **/*.pyo
-**/*.secret*
+**/*.secret
 **/*.swp
 **/.DS_Store
 **/npm-debug.log
@@ -10,10 +11,16 @@
 .coverage
 .env.local
 .idea/
+.vscode/
 bower_components/
+djangosite/settings/local.py
 docker-compose.override.yml
 node_modules/
 project_settings_local.py
-static/COMPILED/
+src/
 static_root/
 var/
+venv/
+
+# Docker ignores.
+*.secret
