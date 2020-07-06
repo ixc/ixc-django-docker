@@ -93,6 +93,7 @@ setuptools.setup(
         'storages': [
             'boto3',
             'django-storages',
+            'requests',
         ],
         'whitenoise': [
             'ixc-whitenoise',
