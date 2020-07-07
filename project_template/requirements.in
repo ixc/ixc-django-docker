@@ -1,2 +1,24 @@
 # -e ..[celery,celery4,celery-email,compressor,datadog,debug-toolbar,email-bandit,extensions,logentries,master-password,newrelic,nose,post-office,postgres,pydevd,sentry,storages,whitenoise]
 -e git+https://github.com/ixc/ixc-django-docker.git@master#egg=ixc-django-docker[celery,celery4,celery-email,compressor,datadog,debug-toolbar,email-bandit,extensions,logentries,master-password,newrelic,nose,post-office,postgres,pydevd,sentry,storages,whitenoise]
+
+
+##############################################################################
+# Django<1.11 compatibility recommendations
+
+# -e git+https://github.com/ixc/ixc-whitenoise.git@9812e7b3caa62a438c9332653c2b297856d6f104#egg=ixc-whitenoise  # Compatibilty with older Django
+# celery<4.3  # Version 4.3 requires Django>=1.11
+# django-appconf<1.0.4  # Version 1.0.4 should work with Django 1.8 but doesn't
+# django-celery-beat<1.6  # Version 1.6 requires Django>=1.11.17
+# django-celery-email<3  # Version 3.0.0 requires Django>1
+# django-celery-results<1.1  # Version 1.1 requires celery>=4.3
+# django-compressor<2.2  # Version 2.3 requires Django>1.11, but 2.2 doesn't work
+# django-debug-toolbar<1.10  # Version 1.10 requires Django>=1.11
+# django-extensions<2.1.1  # Version 2.1.1 requires Django>=1.11
+# django-ipware<3  # Version 3 requires Python>=3.5
+# django-post-office<3.3  # Version 3.3.0 requires Django>=1.11
+# django-redis<4.9  # Version 4.9.0 requires Django>=1.11
+# django-storages<1.6.6  # Version 1.6.6 requires Django>=1.11
+# django-timezone-field<3.1  # Version 3.1 requires Django>=1.11
+# jsonfield<2.1  # Version 2.1 requires Django>=1.11
+
+##############################################################################
