@@ -20,6 +20,9 @@ except ImportError:
 
 from django.utils.six import text_type
 
+# Store DOTENV from environment as a setting
+DOTENV = os.environ.get('DOTENV', 'dotenv-not-set')
+
 # Get project directory from environment. This MUST already be defined.
 # Copied from __init__.py I'm not sure why it's needed here as well
 PROJECT_DIR = os.environ['PROJECT_DIR'].rstrip('/')
