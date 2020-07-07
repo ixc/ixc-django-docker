@@ -22,3 +22,12 @@
 # jsonfield<2.1  # Version 2.1 requires Django>=1.11
 
 ##############################################################################
+
+
+##############################################################################
+# Use Thumbor for thumbnails (latest versions of IC forks of Thumbor libs)
+
+# -e git+https://github.com/ixc/django-thumbor.git@481cf39536b384369b2bc31da2af2bee34a4c617#egg=django-thumbor
+# -e git+https://github.com/ixc/libthumbor.git@d5f44bbd6cd7c19f61f47d941213d1de52209521#egg=libthumbor
+
+##############################################################################
