@@ -6,6 +6,9 @@ set -e
 
 # Do macOS setup if brew is installed.
 if hash brew 2>/dev/null; then
+	# Catalina. See: https://apple.stackexchange.com/a/372600
+	export CPATH="$(xcrun --show-sdk-path)/usr/include"
+
 
 	# Add keg-only dockerize@0.6.0 to PATH.
 	DOCKERIZE_PREFIX="$(brew --prefix dockerize@0.6.0 2>/dev/null || true)"
