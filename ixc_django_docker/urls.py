@@ -17,10 +17,10 @@ urlpatterns = [
 
 # Django Admin.
 if 'django.contrib.admin' in settings.INSTALLED_APPS:
+    _prefix = settings.ADMIN_URL.strip("/")
     urlpatterns += [
-        url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-        url(r'^admin/util/tools/', include('admin_tools.urls')),
-        url(r'^admin/', include(admin.site.urls)),
+        url(r'^%s/doc/' % _prefix, include('django.contrib.admindocs.urls')),
+        url(r'^%s/' % _prefix, include(admin.site.urls)),
     ]
 
 # Django Auth.

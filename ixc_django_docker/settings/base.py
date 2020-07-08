@@ -20,6 +20,9 @@ except ImportError:
 
 from django.utils.six import text_type
 
+# Store DOTENV from environment as a setting
+DOTENV = os.environ.get('DOTENV', 'dotenv-not-set')
+
 # Get project directory from environment. This MUST already be defined.
 # Copied from __init__.py I'm not sure why it's needed here as well
 PROJECT_DIR = os.environ['PROJECT_DIR'].rstrip('/')
@@ -135,6 +138,9 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(VAR_DIR, 'media_root')
 MEDIA_URL = '/media/'
+
+# Prefix for admin URL paths, see `ixc_django_docker.urls`
+ADMIN_URL = '/admin/'
 
 #
 # HTTPS
