@@ -50,7 +50,7 @@ export PROJECT_VENV_DIR="${PROJECT_VENV_DIR:-$PROJECT_DIR/var/go.sh-venv}"
 
 # Check that required version of Python is installed.
 PYTHON_VERSION="$(cat .python-version)"
-if ! python --version 2>&1 | grep -q "$PYTHON_VERSION"; then
+if ! python --version 2>&1 | grep -q "^Python $PYTHON_VERSION"; then
 	# Check that virtualenv does not already exist, as it will need to be recreated.
 	if [[ -d "$PROJECT_VENV_DIR" ]]; then
 		>&2 echo "ERROR: Missing required version of Python, but virtualenv already exists and needs to be recreated. Please delete manually: $PROJECT_VENV_DIR"
