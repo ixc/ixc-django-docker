@@ -6,6 +6,8 @@ set -e
 
 # Do macOS setup if brew is installed.
 if hash brew 2>/dev/null; then
+	# Catalina. See: https://apple.stackexchange.com/a/372600
+	export CPATH="$(xcrun --show-sdk-path)/usr/include"
 
 	# Add keg-only dockerize@0.6.0 to PATH.
 	DOCKERIZE_PREFIX="$(brew --prefix dockerize@0.6.0 2>/dev/null || true)"
@@ -35,6 +37,10 @@ for cmd in direnv dockerize md5sum nginx npm psql pv pyenv redis-server supervis
 	}
 done
 
+if [[ -n "${MISSING+1}" ]]; then
+	exit 1
+fi
+
 # Get absolute project directory from the location of this script.
 # See: http://stackoverflow.com/a/4774063
 export PROJECT_DIR=$(cd $(dirname "${BASH_SOURCE[0]}"); pwd -P)
@@ -44,7 +50,7 @@ export PROJECT_VENV_DIR="${PROJECT_VENV_DIR:-$PROJECT_DIR/var/go.sh-venv}"
 
 # Check that required version of Python is installed.
 PYTHON_VERSION="$(cat .python-version)"
-if ! python --version 2>&1 | grep -q "$PYTHON_VERSION"; then
+if ! python --version 2>&1 | grep -q "^Python $PYTHON_VERSION"; then
 	# Check that virtualenv does not already exist, as it will need to be recreated.
 	if [[ -d "$PROJECT_VENV_DIR" ]]; then
 		>&2 echo "ERROR: Missing required version of Python, but virtualenv already exists and needs to be recreated. Please delete manually: $PROJECT_VENV_DIR"
