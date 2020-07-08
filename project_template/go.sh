@@ -37,6 +37,10 @@ for cmd in direnv dockerize md5sum nginx npm psql pv pyenv redis-server supervis
 	}
 done
 
+if [[ -z "${MISSING+1}" ]]; then
+	exit 1
+fi
+
 # Get absolute project directory from the location of this script.
 # See: http://stackoverflow.com/a/4774063
 export PROJECT_DIR=$(cd $(dirname "${BASH_SOURCE[0]}"); pwd -P)
