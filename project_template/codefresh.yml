@@ -4,6 +4,7 @@ steps:
   main_clone:
     type: git-clone
     repo: ixc/project_template
+    revision: '${{CF_REVISION}}'
 
   build_image:
     type: build
