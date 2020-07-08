@@ -37,7 +37,7 @@ for cmd in direnv dockerize md5sum nginx npm psql pv pyenv redis-server supervis
 	}
 done
 
-if [[ -z "${MISSING+1}" ]]; then
+if [[ -n "${MISSING+1}" ]]; then
 	exit 1
 fi
 
