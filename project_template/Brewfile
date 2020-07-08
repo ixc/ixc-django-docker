@@ -1,6 +1,6 @@
 tap 'ixc/ixc'
 
-# System requirements, to match the `interaction/buildpack-deps:focal` Docker image.
+# System requirements, to match the Docker image.
 
 brew 'direnv'
 brew 'dockerize@0.6.0'
