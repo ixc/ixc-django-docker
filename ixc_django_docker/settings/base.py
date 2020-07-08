@@ -139,6 +139,9 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(VAR_DIR, 'media_root')
 MEDIA_URL = '/media/'
 
+# Prefix for admin URL paths, see `ixc_django_docker.urls`
+ADMIN_URL = '/admin/'
+
 #
 # HTTPS
 #
