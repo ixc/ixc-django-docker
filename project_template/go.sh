@@ -37,6 +37,15 @@ for cmd in direnv dockerize md5sum nginx npm psql pv pyenv redis-server supervis
 	}
 done
 
+# Check that required Python version is installed.
+CUR_PYTHON_VERSION="$(python --version 2>&1 || true)"
+REQ_PYTHON_VERSION="$(cat .python-version)"
+if [[ "$CUR_PYTHON_VERSION" != "Python $REQ_PYTHON_VERSION" ]]; then
+	MISSING=1
+	>&2 echo "ERROR: Missing Python version: $REQ_PYTHON_VERSION"
+fi
+
+# Abort if any dependencies are missing.
 if [[ -n "${MISSING+1}" ]]; then
 	exit 1
 fi
@@ -48,19 +57,6 @@ export PROJECT_DIR=$(cd $(dirname "${BASH_SOURCE[0]}"); pwd -P)
 # Set location of virtualenv.
 export PROJECT_VENV_DIR="${PROJECT_VENV_DIR:-$PROJECT_DIR/var/go.sh-venv}"
 
-# Check that required version of Python is installed.
-PYTHON_VERSION="$(cat .python-version)"
-if ! python --version 2>&1 | grep -q "^Python $PYTHON_VERSION"; then
-	# Check that virtualenv does not already exist, as it will need to be recreated.
-	if [[ -d "$PROJECT_VENV_DIR" ]]; then
-		>&2 echo "ERROR: Missing required version of Python, but virtualenv already exists and needs to be recreated. Please delete manually: $PROJECT_VENV_DIR"
-		exit 1
-	fi
-	# Install required version of Python.
-	pyenv install $(cat .python-version)
-	pyenv rehash  # Create pyenv shims
-fi
-
 # Create virtualenv and install requirements.
 if [[ ! -d "$PROJECT_VENV_DIR" ]]; then
 	# NOTE: Use 'python -m' to ensure we are working with the required Python version.
@@ -70,6 +66,13 @@ if [[ ! -d "$PROJECT_VENV_DIR" ]]; then
 	python -m virtualenv "$PROJECT_VENV_DIR"
 	PIP_SRC="$PROJECT_DIR/src" "$PROJECT_VENV_DIR/bin/python" -m pip install --no-cache-dir --no-deps -r requirements.txt
 	md5sum requirements.txt > requirements.txt.md5
+else
+	# Check that virtualenv is using required Python version.
+	VENV_PYTHON_VERSION="$($PROJECT_VENV_DIR/bin/python --version 2>&1 || true)"
+	if [[ "$VENV_PYTHON_VERSION" != "Python $REQ_PYTHON_VERSION" ]]; then
+		>&2 echo "ERROR: Virtualenv is not using required Python version $REQ_PYTHON_VERSION. Please delete: $PROJECT_VENV_DIR"
+		exit 1
+	fi
 fi
 
 # Execute entrypoint and command (default: open an interactive shell).
