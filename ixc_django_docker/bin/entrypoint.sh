@@ -9,7 +9,7 @@ if [[ -d .git ]]; then
 	echo "Git Commit: $(git rev-parse HEAD)"
 fi
 
-if [[ -f /.dockerenv ]]; then
+if [[ -f /.dockerenv || -n "${DOCKER+1}" ]]; then
 	# When run via Docker, the only system site packages are the ones that we
 	# have installed, so we do not need a virtualenv for isolation. Using an
 	# isolated virtualenv would mean we have to reinstall everything during
@@ -44,9 +44,6 @@ if [[ -f /.dockerenv ]]; then
 	mkdir -p "$PYTHONUSERBASE/lib/python2.7/site-packages"
 	mkdir -p "$PYTHONUSERBASE/lib/python3.5/site-packages"
 	mkdir -p "$PYTHONUSERBASE/lib/python3.6/site-packages"
-
-	# Ensure host is accessible at `host.docker.internal`.
-	ip -4 route list match 0/0 | awk '{print $3" host.docker.internal"}' >> /etc/hosts
 
 	# On Docker for Mac, osxfs has performance issues when watching file system
 	# events. Detect Docker for Mac and export an environment variable that we
