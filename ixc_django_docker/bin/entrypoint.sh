@@ -151,7 +151,7 @@ export PGDATABASE="${PGDATABASE:-${PROJECT_NAME}_${DOTENV}}"
 export PGPORT="${PGPORT:-5432}"
 
 # Set overridable default environment variables.
-if [[ -f /.dockerenv ]]; then
+if [[ -f /.dockerenv || -n "${DOCKER+1}" ]]; then
 	# Set Datadog trace agent host.
 	export DATADOG_TRACE_AGENT_HOSTNAME="${DATADOG_TRACE_AGENT_HOSTNAME:-datadog}"
 
