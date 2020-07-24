@@ -3,7 +3,9 @@ COMPRESS_CSS_FILTERS = (
     'compressor.filters.cssmin.rCSSMinFilter',
 )
 
-# COMPRESS_OFFLINE = True  # Only needed when there is no shared persistent volume
+# Offline compression only is needed when there is no persistent shared volume for all
+# gunicorn processes (e.g. Docker Swarm) OR when using WhiteNoise without autorefresh.
+COMPRESS_OFFLINE = False
 COMPRESS_OFFLINE_CONTEXT = 'ixc_compressor.get_compress_offline_context'
 
 COMPRESS_PRECOMPILERS = (
