@@ -44,3 +44,8 @@ COMPRESS_PRECOMPILERS = ()
 # STORAGE #####################################################################
 
 ENABLE_S3_STORAGE = False
+
+# WHITENOISE ##################################################################
+
+WHITENOISE_AUTOREFRESH = True
+WHITENOISE_USE_FINDERS = True
