@@ -45,10 +45,18 @@ if [[ "$CUR_PYTHON_VERSION" != "Python $REQ_PYTHON_VERSION" ]]; then
 	>&2 echo "ERROR: Missing Python version: $REQ_PYTHON_VERSION"
 fi
 
+if [[ ! -f .env ]]; then
+	MISSING=1
+	>&2 echo "ERROR: Missing '.env' file. Copy '.env.example' and update."
+fi
+
 # Abort if any dependencies are missing.
 if [[ -n "${MISSING+1}" ]]; then
 	exit 1
 fi
+
+# Configure environment.
+source .env
 
 # Get absolute project directory from the location of this script.
 # See: http://stackoverflow.com/a/4774063

@@ -8,6 +8,7 @@ services:
       # - elasticsearch
       - postgres
       - redis
+    env_file: .env
     environment:
       DOTENV: ${DOTENV:-develop}
       # ELASTICSEARCH_ADDRESS: elasticsearch:9200
