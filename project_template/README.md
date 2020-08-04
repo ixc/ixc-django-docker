@@ -4,7 +4,7 @@ This content has moved to https://stackoverflow.com/c/theic/questions/176 and ht
 
 *One or two lines describing the project: what is it, who is the client, URL of production site if there is one.*
 
-## Project's FAQs 
+## Project's FAQs
 
 ### Git Branching:
 - #### From which branch should I branch off the new branches?
@@ -19,40 +19,40 @@ This content has moved to https://stackoverflow.com/c/theic/questions/176 and ht
 ### Client:
 
 - #### Which are the communications channels with the client?
-- > A: 
+- > A:
 - #### Who are the client contacts and what are their roles?
-- > A: 
+- > A:
 - #### Which are the ticketing system urls?
-- > A: 
+- > A:
 - #### Should the client be contacted for questions/testing (or the client contact should be involved always)?
-- > A: 
+- > A:
 
 ### Budget:
 - #### Where does the project's budget can be checked?
-- > A: 
+- > A:
 - #### If we have further questions about the budget, who could I ask?
-- > A: 
+- > A:
 
 ### Sites:
 - #### Which is the `Production` site URL?
-- > A: 
+- > A:
 - #### Which is the `Staging` site URL?
-- > A: 
+- > A:
 - ### In which server does the `Production` site lives ?
-- > A: 
+- > A:
 - ### In which server does the `Staging` site lives ?
-- > A: 
+- > A:
 - ### Where is the DNS configuration defined?
-- > A: 
+- > A:
 
 ### General:
 - #### Which developers have worked/usually work on this project?
-- > A: 
+- > A:
 - #### Where can I get a recent DB dump?
-- > A: 
- > For most of the projects DB dumps are created periodically using Restic, see: [https://github.com/ixc/restic-pg-dump-docker#restore-macos](https://github.com/ixc/restic-pg-dump-docker#restore-macos) for more details. 
+- > A:
+ > For most of the projects DB dumps are created periodically using Restic, see: [https://github.com/ixc/restic-pg-dump-docker#restore-macos](https://github.com/ixc/restic-pg-dump-docker#restore-macos) for more details.
 - #### Which command is used to run the tests?
-- > A: 
+- > A:
 
 
 ## Technical Overview
@@ -93,7 +93,7 @@ Contacts:
 * *Link to client's HubSpot URL, which will (ideally) be the single central repository of all the contact details below, otherwise*
 * *If a HubSpot URL isn't available or appropriate, list details for:*
   * *IC staff member who acts as client contact or project manager*
-  * *Client contact* 
+  * *Client contact*
   * *Any additional client- or project-specific communication channels, such as ZenDesk or Shared Slack Channels*
   * *Any relevant third-party service provider contacts, such as DNS provider or external design agency etc*
 
@@ -104,14 +104,20 @@ Contacts:
 
 *For projects based on `ixc-django-docker` you can probably get away with something like the following...*
 
-*This project is based on [ixc-django-docker](https://github.com/ixc/ixc-django-docker/). To get started:*
+This project is based on [ixc-django-docker]. To get started with [Visual Studio Code] & [Docker]:
 
-1. *Copy the `.env.local.sample` file to `.env.local` and fill in this file's `TRANSCRYPT_PASSWORD` value from 1Password*
+1. Save a copy of `.env.example` as `.env` and update `TRANSCRYPT_PASSWORD` (get from 1Password).
 
-2. *Create and start a Docker or Docker-like development shell, see https://github.com/ixc/ixc-django-docker/tree/11-improve-documentation#how-to-run-an-ixc-django-docker-project*
+2. Click the automatic `Reopen in Container` alert (bottom right), or click `><` (bottom left) > `Reopen in Container`.
 
-3. *Perform any project-specific steps, such as `manage.py createsuperuser` to create a super-user*
+3. Click the `Starting with Dev Container` alert (bottom right) to watch the logs, or just wait.
 
-4. *Use the `ixc-django-docker` shell scripts to run the site, run tests, load data, etc, see (DOCS PENDING)*
+4. Hit `CTRL-SHIFT-(backtick)` to open a new terminal. A project shell (`entrypoint.sh`) will open when the container is ready.
 
-5. *See [using-docker.md](./using-docker.md) for more details on using Docker for development.
+5. Run commands as needed from the project shell, `runserver.sh`, `runtests.sh`, `manage.py shell_plus`, `run-p celery runserver` (multiple specific npm scripts), `npm run dev` (all npm scripts typically needed for dev), `docker-compose exec redis ...`, etc.
+
+6. See [Run with Visual Studio Code & Docker](https://github.com/ixc/ixc-django-docker/blob/master/docs/run-with-vscode-and-docker.md) for more details.
+
+[Docker]: https://docs.docker.com/get-docker/
+[ixc-django-docker]: https://github.com/ixc/ixc-django-docker/
+[Visual Studio Code]: https://code.visualstudio.com/
