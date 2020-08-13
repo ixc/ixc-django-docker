@@ -81,7 +81,7 @@ if [[ -f "$PROJECT_DIR/.env.local" ]]; then
 fi
 
 # Decrypt files with transcrypt.
-if [[ -n "$TRANSCRYPT_PASSWORD" ]]; then
+if [[ -d .git && -n "$TRANSCRYPT_PASSWORD" ]]; then
 	git status &> /dev/null  # See: https://github.com/elasticdog/transcrypt/issues/37
 	# Use `--force` to overwrite "missing" secrets that are listed in
 	# `.dockerignore` to avoid accidentally copying decrypted secrets into an
