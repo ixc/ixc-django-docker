@@ -50,13 +50,15 @@ For detailed documentation, see:
 EOF
 
 	# Compare git commit and print reminder if setup has not completed successfully.
-	GIT_COMMIT="$(git rev-parse HEAD)"
-	if [[ "$GIT_COMMIT" != $(cat "$PROJECT_DIR/var/setup-git-commit.txt" 2>&1) ]]; then
-		>&2 cat <<EOF
+	if [[ -d .git ]]; then
+		GIT_COMMIT="$(git rev-parse HEAD)"
+		if [[ "$GIT_COMMIT" != $(cat "$PROJECT_DIR/var/setup-git-commit.txt" 2>&1) ]]; then
+			>&2 cat <<EOF
 WARNING: Setup is not complete for git commit: '$GIT_COMMIT'
          Run 'setup.sh' manually.
 
 EOF
+		fi
 	fi
 
 	export PS1="($PROJECT_NAME:$DOTENV) \u@\h:\w\n\\$ "
