@@ -41,19 +41,24 @@ else
 	# Fail loudly when required environment variables are missing.
 	for var in PROJECT_DIR PROJECT_VENV_DIR; do
 		eval [[ -z \${$var+1} ]] && {
+			MISSING=1
 			>&2 echo "ERROR: Missing environment variable: $var"
-			exit 1
 		}
 	done
 
 	# Fail loudly when required programs are missing.
-	for cmd in dockerize md5sum nginx npm psql python pv redis-server supervisord supervisorctl; do  # TODO: elasticsearch
+	for cmd in dockerize md5sum nginx npm psql "${PYTHON_VERSION:-python}" pv supervisord supervisorctl; do
 		hash $cmd 2>/dev/null || {
+			MISSING=1
 			>&2 echo "ERROR: Missing program: $cmd"
-			>&2 echo 'See: https://github.com/ixc/ixc-django-docker/blob/master/README.rst#system-requirements-when-running-without-docker'
-			exit 1
 		}
 	done
+
+	# Abort if any dependencies are missing.
+	if [[ -n "${MISSING+1}" ]]; then
+		>&2 echo 'See: https://github.com/ixc/ixc-django-docker/blob/master/README.rst#system-requirements-when-running-without-docker'
+		exit 1
+	fi
 
 	# Add virtualenv bin directory to PATH.
 	export PATH="$PROJECT_VENV_DIR/bin:$PATH"
