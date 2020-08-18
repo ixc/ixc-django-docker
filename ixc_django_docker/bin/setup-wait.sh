@@ -4,10 +4,11 @@
 
 set -e
 
+GIT_COMMIT="$(git-commit.sh)"
+
 # Wait for setup.
 COUNT=0
 while true; do
-	GIT_COMMIT="$(git rev-parse HEAD)"
 	if [[ "$GIT_COMMIT" == $(cat "$PROJECT_DIR/var/setup-git-commit.txt" 2>&1) ]]; then
 		break
 	fi

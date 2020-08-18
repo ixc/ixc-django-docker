@@ -5,9 +5,7 @@
 set -e
 
 # Print the full commit hash so it can be logged during startup.
-if [[ -d .git ]]; then
-	echo "Git Commit: $(git rev-parse HEAD)"
-fi
+echo "Git Commit: $(git-commit.sh)"
 
 if [[ -f /.dockerenv || -n "${DOCKER+1}" ]]; then
 	# On Docker for Mac, osxfs has performance issues when watching file system
