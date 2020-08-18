@@ -30,7 +30,7 @@ if hash brew 2>/dev/null; then
 fi
 
 # Check that dependencies are installed.
-for cmd in direnv dockerize md5sum nginx npm psql pv pyenv redis-server supervisord supervisorctl; do
+for cmd in direnv dockerize md5sum nginx npm psql pv supervisord supervisorctl; do
 	hash $cmd 2>/dev/null || {
 		MISSING=1
 		>&2 echo "ERROR: Missing dependency: $cmd"
