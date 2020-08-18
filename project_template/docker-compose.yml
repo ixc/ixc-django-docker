@@ -2,8 +2,9 @@ version: '2.4'
 
 services:
   django:
-    build: .
-    command: bash.sh
+    build:
+      args:
+        IMAGE_TAG: ${IMAGE_TAG:-master}
     depends_on:
       # - elasticsearch
       - postgres
@@ -11,20 +12,30 @@ services:
     env_file: .env
     environment:
       DOTENV: ${DOTENV:-develop}
-      # ELASTICSEARCH_ADDRESS: elasticsearch:9200
       FLOWER_PORT: 5555
       PGHOST: postgres
       PGUSER: postgres
-      REDIS_ADDRESS: redis:6379
-    image: interaction/project_template:local
+    image: interaction/project_template:${IMAGE_TAG:-master}-devcontainer
+    ports:
+      - 5555
+      - 8000
     volumes:
-      - .:/opt/project_template
+      # Bind mount the project directory with `cached` consistency for performance.
+      - .:/opt/project_template:cached
+      # Bind the Docker socket, so we can manage the whole stack (e.g. view logs, exec
+      # into or restart redis, etc.)
       - /var/run/docker.sock:/var/run/docker.sock
+      # Persist vscode extensions to avoid reinstalling them on rebuild.
+      - vscode-extensions:/root/.vscode-server/extensions
+      - vscode-insiders-extensions:/root/.vscode-server-insiders/extensions
 
   # elasticsearch:
   #   environment:
-  #     ES_JAVA_OPTS: ${ES_JAVA_OPTS:--Xms500m -Xmx500m}
+  #     discovery.type: single-node
+  #     ES_JAVA_OPTS: ${ES_JAVA_OPTS:--Xms256m -Xmx256m}
   #   image: interaction/elasticsearch-icu:7-alpine
+  #   ports:
+  #     - 9200
   #   volumes:
   #     - elasticsearch-data:/usr/share/elasticsearch/data
 
@@ -37,11 +48,16 @@ services:
       - postgres-data:/var/lib/postgresql/data
 
   redis:
+    command: --maxmemory 256mb --maxmemory-policy volatile-lru
     image: redis:6-alpine
     volumes:
       - redis-data:/data
 
 volumes:
-  # elasticsearch-data:
+  # Visual Studio Code extensions.
+  vscode-extensions:
+  vscode-insiders-extensions:
+  # No anonymous volumes.
+  elasticsearch-data:
   postgres-data:
   redis-data:

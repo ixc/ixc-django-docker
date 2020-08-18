@@ -1,0 +1,20 @@
+{
+	"dockerComposeFile": [
+		"docker-compose.yml"
+	],
+	"service": "django",
+	"workspaceFolder": "/opt/project_template",
+	"extensions": [
+		"editorconfig.editorconfig",
+		"ms-python.python",
+		"ms-python.vscode-pylance"
+	],
+	"forwardPorts": [
+		5555,
+		8000
+	],
+	"settings": {
+		"python.pythonPath": "/usr/bin/python3.8"
+	},
+	"postCreateCommand": "find . -name '*.md5' -delete"
+}

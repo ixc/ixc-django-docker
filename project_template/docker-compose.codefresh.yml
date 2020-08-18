@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  # elasticsearch:
+  #   image: interaction/elasticsearch-icu:7-alpine
+
+  postgres:
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+    image: postgres:12.2-alpine
+
+  redis:
+    image: redis:6-alpine
+
+  runtests:
+    command: --failfast .
+    depends_on:
+      # - elasticsearch
+      - postgres
+      - redis
+    entrypoint: tini -- entrypoint.sh runtests.sh
+    environment:
+      DOTENV: test
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      PGHOST: postgres
+      PGUSER: postgres
+    image: interaction/project_template:local

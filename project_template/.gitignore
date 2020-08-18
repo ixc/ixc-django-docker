@@ -9,9 +9,9 @@
 **/npm-debug.log
 **/requirements-local.txt
 .coverage
+.env
 .env.local
 .idea/
-.vscode/
 bower_components/
 djangosite/settings/local.py
 docker-compose.override.yml

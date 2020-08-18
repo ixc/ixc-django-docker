@@ -1,26 +1,3 @@
-# Git ignores. Duplicated in `.dockerignore` and `.gitignore`.
-**/*.md5
-**/*.orig
-**/*.pyc
-**/*.pyo
-**/*.secret
-**/*.swp
-**/.DS_Store
-**/npm-debug.log
-**/requirements-local.txt
-.coverage
-.env.local
-.idea/
-.vscode/
-bower_components/
-djangosite/settings/local.py
-docker-compose.override.yml
-node_modules/
-project_settings_local.py
-src/
-static_root/
-var/
-venv
-
-# Docker ignores.
-*.secret
+# Ignore everything by default, then allow just what we really need.
+*
+!requirements.txt

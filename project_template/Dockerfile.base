@@ -1,0 +1,40 @@
+# syntax = docker/dockerfile:experimental
+FROM interaction/buildpack-deps:focal
+
+ENV NODE_VERSION=12.18.1
+RUN wget -nv -O - "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" | tar -Jx -C /opt/ -f -
+RUN ln -s "/opt/node-v${NODE_VERSION}-linux-x64/bin/node" /usr/local/bin/
+RUN ln -s "/opt/node-v${NODE_VERSION}-linux-x64/bin/npm" /usr/local/bin/
+
+ENV PIP_DISABLE_PIP_VERSION_CHECK=on
+ENV PIP_SRC=/opt/src
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONHASHSEED=random
+ENV PYTHONWARNINGS=ignore
+
+ENV PYTHON_VERSION=python3.8
+
+ENV PYTHON_PIP_VERSION=20.1.1
+RUN wget -nv -O - https://bootstrap.pypa.io/get-pip.py | "${PYTHON_VERSION}" - "pip==${PYTHON_PIP_VERSION}"
+
+ENV PROJECT_DIR=/opt/project_template
+WORKDIR "${PROJECT_DIR}"
+
+COPY package.json package-lock.json ./
+RUN --mount=type=cache,mode=0777,target=/root/.npm npm ci --unsafe-perm
+RUN md5sum package.json > package.json.md5
+
+COPY bower.json .
+RUN --mount=type=cache,mode=0777,target=/root/.cache/bower ./node_modules/.bin/bower install --allow-root
+RUN md5sum bower.json > bower.json.md5
+
+COPY requirements.txt .
+RUN --mount=type=cache,mode=0777,target=/root/.cache/pip pip install -r requirements.txt
+RUN md5sum requirements.txt > requirements.txt.md5
+
+ENTRYPOINT ["tini", "--", "entrypoint.sh"]
+CMD ["bash.sh"]
+
+COPY . .
+
+RUN entrypoint.sh run-s build collectstatic

@@ -1,0 +1,16 @@
+# Ignore everything by default, then allow just what we really need.
+*
+!.env.base
+!.env.test
+!.git/
+!.gitattributes
+!.gitignore
+!bower.json
+!djangosite/
+!package-lock.json
+!package.json
+!requirements.txt
+!static/
+!templates/
+!test_initial_data.sql
+!whitenoise_root/
