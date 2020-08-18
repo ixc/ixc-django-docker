@@ -94,3 +94,40 @@ In that case, set `IMAGE_TAG` in `.env` and click `>< Dev Container` > `Rebuild 
 Visual Studio Code uses the same `docker-compose.yml` file that you can also use when you run `docker-compose` commands in a terminal outside of Visual Studio Code.
 
 For example, you can start your containers manually from any terminal and then attach from Visual Studio Code, or start them with Visual Studio Code and then exec into them from any terminal.
+
+## Troubleshooting
+
+Sometimes things go wrong. Here are some tips on troubleshooting with Visual Studio Code:
+
+### build cache
+
+The build cache for the `pip-install.sh` command will be busted if `requirements.txt` has changed. If it has any unpinned dependencies, you might want to rebuild to reinstall the latest version.
+
+In that case, you will need to manually build with no cache outside Visual Studio Code:
+
+    docker-compose build --no-cache
+
+### `entrypoint.sh`
+
+If your project shell fails to open, `entrypoint.sh` may be exiting with an error. Visual Studio Code can close the failed shell before you have a chance to see the error.
+
+In that case, you can exec into the container manually to see what is happening:
+
+    docker-compose exec django bash
+
+Problems we've had that caused `entrypoint.sh` to fail in the past:
+
+- Failing to set `TRANSCRYPT_PASSWORD` in `.env`
+- Using a version of `transcrypt` that does not work with `--force` when a `.env.*.secret` file is missing
+
+### Disable automatic execution of `entrypoint.sh`
+
+We execute `entrypoint.sh` automatically via `.bashrc` for convenience, and to configure the environment for our run/debug launch config.
+
+But if you want to disable it, edit `Dockerfile` and comment out the following:
+
+    RUN echo 'source entrypoint.sh' >> /root/.bashrc
+
+Then click `>< Dev Container` > `Rebuild Container`.
+
+The run/debug launch config will not work, and you will need to execute `entrypoint.sh` manually every time you open a shell.
