@@ -4,9 +4,6 @@
 
 set -e
 
-# Print the full commit hash so it can be logged during startup.
-echo "Git Commit: $(git-commit.sh)"
-
 if [[ -f /.dockerenv || -n "${DOCKER+1}" ]]; then
 	# On Docker for Mac, osxfs has performance issues when watching file system
 	# events. Detect Docker for Mac and export an environment variable that we
@@ -69,6 +66,9 @@ export IXC_DJANGO_DOCKER_DIR="$("${PYTHON_VERSION:-python}" -c 'import ixc_djang
 
 # Add project, `node_modules`, and `ixc-django-docker` bin directories to PATH.
 export PATH="$PROJECT_DIR/bin:$PROJECT_DIR/node_modules/.bin:$IXC_DJANGO_DOCKER_DIR/bin:$PATH"
+
+# Print the full commit hash so it can be logged during startup.
+echo "Git Commit: $(git-commit.sh)"
 
 # Source local dotenv file, which is not encrypted or version controlled, and
 # may contain the password needed to decrypt secret files.
