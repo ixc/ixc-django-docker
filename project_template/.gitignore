@@ -20,4 +20,3 @@ project_settings_local.py
 src/
 static_root/
 var/
-venv
