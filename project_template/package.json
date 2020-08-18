@@ -7,7 +7,7 @@
   },
   "private": true,
   "scripts": {
-    "build-dev": "run-s -l compile-sass",
+    "build-dev": "run-s -l compile-sass-dev",
     "build": "run-s -l compile-sass",
     "celery": "celery.sh --concurrency=${CELERY_CONCURRENCY:-1} -Ofair",
     "celerybeat": "celerybeat.sh",
