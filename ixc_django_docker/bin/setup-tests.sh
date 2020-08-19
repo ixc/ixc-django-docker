@@ -11,6 +11,7 @@ export OVERRIDE_SETTINGS='test.py'
 export PS1="($PROJECT_NAME:${OVERRIDE_SETTINGS:-$DOTENV}) \u@\h:\w\n\\$ "
 export REUSE_DB=1
 export SETUP_TESTS=1
+export SHOW_SETTINGS="${SHOW_SETTINGS:-1}"
 export SRC_PGDATABASE="$PROJECT_DIR/test_initial_data.sql"
 
 DJANGO_VERSION_LESS_THAN_1_7=$(python.sh -c 'import django; print(django.VERSION < (1, 7))')
