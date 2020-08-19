@@ -83,5 +83,5 @@ else
 	fi
 fi
 
-# Execute entrypoint and command (default: open an interactive shell).
-exec "$PROJECT_VENV_DIR/bin/entrypoint.sh" ${@:-bash.sh}
+# Execute command (default: open an interactive shell).
+exec ${@:-bash.sh}
