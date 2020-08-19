@@ -63,7 +63,10 @@ EOF
 
 	# Run bash by default without any user customisations from rc or profile files
 	# to reduce the chance of user customisations clashing with our paths etc.
-	exec bash --norc --noprofile
+	# Only if not sourced.
+	if [[ "$0" = "$BASH_SOURCE" ]]; then
+		exec bash --norc --noprofile
+	fi
 else
 	cat <<EOF
 
