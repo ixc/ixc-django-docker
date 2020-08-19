@@ -67,7 +67,7 @@ EOF
 else
 	cat <<EOF
 
-Sleeping forever, so you can exec into this container to troubleshoot.
+Sleeping forever, so you can exec into this container.
 
 For example, you might need to rollback database migrations before rolling back
 a deployment.
