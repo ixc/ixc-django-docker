@@ -63,11 +63,10 @@ EOF
 
 	# Run bash by default without any user customisations from rc or profile files
 	# to reduce the chance of user customisations clashing with our paths etc.
-	# Only if not sourced.
-	if [[ "$0" = "$BASH_SOURCE" ]]; then
+	if [[ "$0" = "$BASH_SOURCE" ]]; then  # Only if not sourced.
 		exec bash --norc --noprofile
 	fi
-else
+elif [[ "$0" = "$BASH_SOURCE" ]]; then  # Only if not sourced.
 	cat <<EOF
 
 Sleeping forever, so you can exec into this container.
