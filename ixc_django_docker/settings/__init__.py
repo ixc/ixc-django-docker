@@ -34,6 +34,9 @@ BASE_SETTINGS = os.environ.get(
         'whitenoise.py',
     ])).split()
 
+# Extra settings.
+BASE_SETTINGS.extend(os.environ.get('EXTRA_SETTINGS', '').split())
+
 # Project settings.
 checked = []
 for filename in (
