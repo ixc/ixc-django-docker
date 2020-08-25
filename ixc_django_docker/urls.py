@@ -39,7 +39,7 @@ if 'debug_toolbar' in settings.INSTALLED_APPS:
 # Auto-include `project` URLs if they are available
 checked = []
 for module in (
-    os.environ.get('PROJECT_URLCONF'),
+    os.environ.get('PROJECT_URLS'),
     'djangosite.urls',
     'project_urls',
 ):
