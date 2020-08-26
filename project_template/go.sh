@@ -4,6 +4,28 @@
 
 set -e
 
+# './go.sh --reset' will reset the local dev environment, after confirmation.
+if [[ "$1" == "--reset" ]]; then
+	RESET_COMMANDS='find . -name "*.md5" -delete; rm -rf bower_components node_modules src static_root var'
+	>&2 cat <<EOF
+Are you SURE you want to reset your dev environment? This cannot be undone.
+
+These commands will be executed:
+
+    $RESET_COMMANDS
+
+EOF
+	select yn in 'Yes' 'No'; do
+		case $yn in
+				Yes )
+					/bin/bash -c "$RESET_COMMANDS"
+					exit 0;;
+				No )
+					exit 1;;
+		esac
+	done
+fi
+
 # Do macOS setup if brew is installed.
 if hash brew 2>/dev/null; then
 	# Catalina. See: https://apple.stackexchange.com/a/372600
