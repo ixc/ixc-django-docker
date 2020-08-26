@@ -78,15 +78,28 @@ if [[ -n "${MISSING+1}" ]]; then
 	exit 1
 fi
 
+# Configure the environment to match the Docker image. See 'ENV' lines in 'Dockerfile'.
+# export NODE_VERSION=12.18.1  # Only used to install Node.js in 'Dockerfile'
+export PROJECT_DIR="$(cd $(dirname "${BASH_SOURCE[0]}"); pwd -P)"  # See: http://stackoverflow.com/a/4774063
+export PYTHON_VERSION=python3.8
+export PIP_DISABLE_PIP_VERSION_CHECK=on
+export PIP_SRC="${PROJECT_DIR}/src"  # Inside project directory
+export PYTHONDONTWRITEBYTECODE=1
+export PYTHONHASHSEED=random
+export PYTHONPATH="${PROJECT_DIR}:${PYTHONPATH}"
+export PYTHONWARNINGS=ignore
+export PYTHON_PIP_VERSION=20.1.1
+export PATH="${PROJECT_DIR}/node_modules/.bin:${PATH}"
+export IXC_DJANGO_DOCKER_DIR="${PIP_SRC}/ixc-django-docker/ixc_django_docker"
+export PATH="${IXC_DJANGO_DOCKER_DIR}/bin:${PATH}"
+export GIT_COMMIT="$(git rev-parse HEAD)"
+
 # Configure environment.
 source .env
 
-# Get absolute project directory from the location of this script.
-# See: http://stackoverflow.com/a/4774063
-export PROJECT_DIR=$(cd $(dirname "${BASH_SOURCE[0]}"); pwd -P)
-
-# Set location of virtualenv.
+# Set location of virtualenv and add bin directory to PATH.
 export PROJECT_VENV_DIR="${PROJECT_VENV_DIR:-$PROJECT_DIR/var/go.sh-venv}"
+export PATH="${PROJECT_VENV_DIR}/bin:${PATH}"
 
 # Create virtualenv and install requirements.
 if [[ ! -d "$PROJECT_VENV_DIR" ]]; then
@@ -95,7 +108,8 @@ if [[ ! -d "$PROJECT_VENV_DIR" ]]; then
 		python -m pip install virtualenv
 	fi
 	python -m virtualenv "$PROJECT_VENV_DIR"
-	PIP_SRC="$PROJECT_DIR/src" "$PROJECT_VENV_DIR/bin/python" -m pip install --no-cache-dir --no-deps -r requirements.txt
+	"${PROJECT_VENV_DIR}/bin/python" -m pip install "pip==${PYTHON_PIP_VERSION}"
+	"${PROJECT_VENV_DIR}/bin/python" -m pip install --no-cache-dir --no-deps -r requirements.txt
 	md5sum requirements.txt > requirements.txt.md5
 else
 	# Check that virtualenv is using required Python version.
@@ -106,5 +120,5 @@ else
 	fi
 fi
 
-# Execute entrypoint and command (default: open an interactive shell).
-exec "$PROJECT_VENV_DIR/bin/entrypoint.sh" ${@:-bash.sh}
+# Execute command (default: open an interactive shell).
+exec ${@:-bash.sh}
