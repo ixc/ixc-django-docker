@@ -67,12 +67,13 @@ if [[ "$CUR_PYTHON_VERSION" != "Python $REQ_PYTHON_VERSION" ]]; then
 	>&2 echo "ERROR: Missing Python version: $REQ_PYTHON_VERSION"
 fi
 
+# Check that a '.env' file exists.
 if [[ ! -f .env ]]; then
 	MISSING=1
 	>&2 echo "ERROR: Missing '.env' file. Copy '.env.example' and update."
 fi
 
-# Abort if any dependencies are missing.
+# Exit if anything is missing.
 if [[ -n "${MISSING+1}" ]]; then
 	exit 1
 fi
