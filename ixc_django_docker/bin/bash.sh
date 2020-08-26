@@ -66,17 +66,4 @@ EOF
 	if [[ "$0" = "$BASH_SOURCE" ]]; then  # Only if not sourced.
 		exec bash --norc --noprofile
 	fi
-elif [[ "$0" = "$BASH_SOURCE" ]]; then  # Only if not sourced.
-	cat <<EOF
-
-Sleeping forever, so you can exec into this container.
-
-For example, you might need to rollback database migrations before rolling back
-a deployment.
-
-Or you might want to install and temporarily run a program that needs access to
-the stack, and exposes a service on a dynamic port.
-
-EOF
-	sleep infinity
 fi
