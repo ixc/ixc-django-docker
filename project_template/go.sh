@@ -91,7 +91,7 @@ export PROJECT_VENV_DIR="${PROJECT_VENV_DIR:-$PROJECT_DIR/var/go.sh-venv}"
 # Create virtualenv and install requirements.
 if [[ ! -d "$PROJECT_VENV_DIR" ]]; then
 	# NOTE: Use 'python -m' to ensure we are working with the required Python version.
-	if ! python -m virtualenv >/dev/null 2>&1; then
+	if ! python -m virtualenv --version &>/dev/null 2>&1; then
 		python -m pip install virtualenv
 	fi
 	python -m virtualenv "$PROJECT_VENV_DIR"
