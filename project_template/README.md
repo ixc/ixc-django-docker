@@ -106,17 +106,19 @@ Contacts:
 
 This project is based on [ixc-django-docker]. To get started with [Visual Studio Code] & [Docker]:
 
-1. Save a copy of `.env.example` as `.env` and update `TRANSCRYPT_PASSWORD` (get from 1Password).
+1. Clone the repository and open your local working copy with Visual Studio Code.
 
-2. Click the automatic `Reopen in Container` alert (bottom right), or click `><` (bottom left) > `Reopen in Container`.
+2. Save a copy of `.env.example` as `.env` and update as required.
 
-3. Click the `Starting with Dev Container` alert (bottom right) to watch the logs, or just wait.
+3. Click the automatic `Reopen in Container` alert (bottom right), or click `><` (bottom left) > `Reopen in Container`.
 
-4. Hit `CTRL-SHIFT-(backtick)` to open a new terminal. A project shell (`entrypoint.sh`) will open when the container is ready.
+4. Click the `Starting with Dev Container` alert (bottom right) to watch the logs, or just wait.
 
-5. Run commands as needed from the project shell, `runserver.sh`, `runtests.sh`, `manage.py shell_plus`, `run-p celery runserver` (multiple specific npm scripts), `npm run dev` (all npm scripts typically needed for dev), `docker-compose exec redis ...`, etc.
+5. Hit `CTRL-SHIFT-(backtick)` to open a new terminal. A project shell will open when the container is ready.
 
-6. See [Run with Visual Studio Code & Docker](https://github.com/ixc/ixc-django-docker/blob/master/docs/run-with-vscode-and-docker.md) for more details.
+6. Run commands as needed from the project shell, `runserver.sh`, `runtests.sh`, `manage.py shell_plus`, `run-p celery runserver` (multiple specific npm scripts), `npm run dev` (all npm scripts typically needed for dev), `docker-compose exec redis ...`, etc.
+
+7. See [Run with Visual Studio Code & Docker](https://github.com/ixc/ixc-django-docker/blob/master/docs/run-with-vscode-and-docker.md) for more details.
 
 [Docker]: https://docs.docker.com/get-docker/
 [ixc-django-docker]: https://github.com/ixc/ixc-django-docker/
