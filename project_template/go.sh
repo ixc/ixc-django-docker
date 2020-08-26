@@ -99,7 +99,7 @@ if [[ ! -d "$PROJECT_VENV_DIR" ]]; then
 	md5sum requirements.txt > requirements.txt.md5
 else
 	# Check that virtualenv is using required Python version.
-	VENV_PYTHON_VERSION="$($PROJECT_VENV_DIR/bin/python --version 2>&1 || true)"
+	VENV_PYTHON_VERSION="$("${PROJECT_VENV_DIR}/bin/python" --version 2>&1 || true)"
 	if [[ "$VENV_PYTHON_VERSION" != "Python $REQ_PYTHON_VERSION" ]]; then
 		>&2 echo "ERROR: Virtualenv is not using required Python version $REQ_PYTHON_VERSION. Please delete: $PROJECT_VENV_DIR"
 		exit 1
