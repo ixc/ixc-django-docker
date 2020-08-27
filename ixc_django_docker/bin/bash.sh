@@ -4,6 +4,7 @@
 
 set -e
 
+# Running in a terminal.
 if [[ -t 1 ]]; then
 	cat <<EOF
 
@@ -61,9 +62,15 @@ EOF
 
 	export PS1="($PROJECT_NAME:${OVERRIDE_SETTINGS:-$DOTENV}) \u@\h:\w\n\\$ "
 
-	# Run bash by default without any user customisations from rc or profile files
-	# to reduce the chance of user customisations clashing with our paths etc.
-	if [[ "$0" = "$BASH_SOURCE" ]]; then  # Only if not sourced.
+	# Not sourced.
+	if [[ "$0" = "$BASH_SOURCE" ]]; then
+		# Run bash without any user customisations from rc or profile files to reduce the
+		# chance of user customisations clashing with our paths etc.
 		exec bash --norc --noprofile
 	fi
+
+# Not running in a terminal and not sourced.
+elif [[ "$0" = "$BASH_SOURCE" ]]; then
+	>&2 echo 'Sleeping forever, so you can exec into this container.'
+	sleep infinity
 fi
