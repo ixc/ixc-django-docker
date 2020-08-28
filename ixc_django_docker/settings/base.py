@@ -35,7 +35,7 @@ SITE_DOMAIN = os.environ.get('SITE_DOMAIN', '%s.lvh.me' % PROJECT_SLUG)
 
 VAR_DIR = os.environ.get('VAR_DIR', os.path.join(PROJECT_DIR, 'var'))
 
-# Create missing runtime directories.
+# Create missing var directory.
 try:
     os.makedirs(VAR_DIR)
 except OSError:
@@ -157,10 +157,12 @@ CONN_MAX_AGE = 60  # Default: 0
 # ERROR REPORTING
 #
 
-# Create logfile directory if necessary
+# Create missing logfile directory.
 LOGFILE_DIR = os.path.join(VAR_DIR, 'log')
-if not os.path.exists(LOGFILE_DIR):
-    os.mkdir(LOGFILE_DIR)
+try:
+    os.makedirs(LOGFILE_DIR)
+except OSError:
+    pass
 
 LOGLEVEL = os.environ.get('LOGLEVEL', 'info').upper()
 
