@@ -6,3 +6,4 @@ SESSION_COOKIE_SECURE = False  # Don't require HTTPS for session cookie
 # WHITENOISE ##################################################################
 
 WHITENOISE_AUTOREFRESH = True
+WHITENOISE_USE_FINDERS = True

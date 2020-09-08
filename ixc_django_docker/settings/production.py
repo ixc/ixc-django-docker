@@ -23,8 +23,3 @@ TEMPLATES[0]['OPTIONS']['loaders'] = [
         TEMPLATES[0]['OPTIONS']['loaders'],
     ),
 ]
-
-# WHITENOISE ##################################################################
-
-# Only find files in the `STATIC_ROOT` directory.
-WHITENOISE_USE_FINDERS = False
