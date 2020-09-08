@@ -32,6 +32,9 @@ DEBUG = True
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 PASSWORD_HASHERS = ('django.contrib.auth.hashers.MD5PasswordHasher', )
 
+# Do not use a manifest storage backend for tests, so we can skip `collectstatic`.
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+
 # Enable the cached template loader.
 TEMPLATES[0]['OPTIONS']['loaders'] = [
     (
