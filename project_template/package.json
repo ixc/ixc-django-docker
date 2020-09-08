@@ -7,15 +7,15 @@
   },
   "private": true,
   "scripts": {
-    "build-dev": "run-s -l compile-sass-dev",
-    "build": "run-s -l compile-sass",
+    "all-services": "run-p -l celery celerybeat celeryflower runserver",
+    "build": "run-s -l compile-sass collectstatic compress",
     "celery": "celery.sh --concurrency=${CELERY_CONCURRENCY:-1} -Ofair",
     "celerybeat": "celerybeat.sh",
     "celeryflower": "celeryflower.sh",
     "collectstatic": "manage.py collectstatic --noinput --verbosity=0",
-    "compile-sass-dev": "compile-sass.sh --watch",
     "compile-sass": "compile-sass.sh",
-    "dev": "run-p -l compile-sass-dev celery celerybeat celeryflower runserver",
-    "runserver": "runserver.sh"
+    "compress": "manage.py compress --force --verbosity=0",
+    "runserver": "runserver.sh",
+    "setup": "run-s -l compile-sass compress"
   }
 }

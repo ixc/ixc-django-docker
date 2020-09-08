@@ -37,4 +37,4 @@ CMD ["bash.sh"]
 
 COPY . .
 
-RUN entrypoint.sh run-s build collectstatic
+RUN entrypoint.sh npm run build

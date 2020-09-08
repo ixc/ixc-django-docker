@@ -27,6 +27,14 @@ if [[ "$DJANGO_VERSION_LESS_THAN_1_7" == 'True' ]]; then
 fi
 [[ -z "$QUICK" ]] && manage.py migrate --noinput
 
+# Run 'setup' script.
+if [[ -z "${QUICK+1}" ]]; then
+    echo "Executing: npm run ${SETUP_TESTS_NPM_RUN:-setup}..."
+    npm run "${SETUP_TESTS_NPM_RUN:-setup}" --if-present
+else
+    echo "QUICK=${QUICK}; Skipping: npm run ${SETUP_TESTS_NPM_RUN:-setup}..."
+fi
+
 # Execute command, only if not sourced.
 if [[ "$0" = "$BASH_SOURCE" ]]; then
 	exec "${@:-bash}"
