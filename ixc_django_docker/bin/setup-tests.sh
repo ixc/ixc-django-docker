@@ -31,8 +31,6 @@ fi
 if [[ -z "${QUICK+1}" ]]; then
     echo "Executing: npm run ${SETUP_TESTS_NPM_RUN:-setup}..."
     npm run "${SETUP_TESTS_NPM_RUN:-setup}" --if-present
-else
-    echo "QUICK=${QUICK}; Skipping: npm run ${SETUP_TESTS_NPM_RUN:-setup}..."
 fi
 
 # Execute command, only if not sourced.
