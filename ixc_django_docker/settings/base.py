@@ -252,9 +252,9 @@ INSTALLED_APPS = (
 
 LANGUAGE_CODE = 'en-au'  # Default: en-us
 
-LOGIN_REDIRECT_URL = '/'  # Default: '/accounts/profile/'
-LOGIN_URL = reverse_lazy('login')  # Default: '/accounts/signin/'
-LOGOUT_URL = reverse_lazy('logout')  # Default: '/accounts/signout/'
+LOGIN_REDIRECT_URL = '/'  # Default: /accounts/profile/
+LOGIN_URL = reverse_lazy('login')  # Default: /accounts/signin/
+LOGOUT_URL = reverse_lazy('logout')  # Default: /accounts/signout/
 
 if django.VERSION < (1, 10):
     MIDDLEWARE_CLASSES = (
