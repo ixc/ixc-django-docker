@@ -1,6 +1,14 @@
 Breaking and notable changes
 ===
 
+8 September 2020
+---
+
+### Breaking
+
+- `setup.sh` now runs the `setup` npm script instead of `build`, to better reflect its purpose. To upgrade, rename your `build` script to `setup` in `package.json` or export `SETUP_NPM_RUN=build` in your env file(s).
+- The hard coded `collectstatic` and `compress` commands have been removed from `runtests.sh`. Instead, the `setup` npm script is run by `setup-tests.sh`. If you need to execute different commands for setup and tests, export `SETUP_TESTS_NPM_RUN=foo` in your env file(s).
+
 
 27 March 2019
 ---
