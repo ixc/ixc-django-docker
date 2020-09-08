@@ -24,3 +24,7 @@ else:
 
 STATICFILES_STORAGE = 'ixc_whitenoise.storage.CompressedManifestStaticFilesStorage'
 WHITENOISE_ROOT = os.path.join(PROJECT_DIR, 'whitenoise_root')
+
+# Allow `compress` and other commands to find files with base settings, which are used
+# during image build and set `DEBUG=False`.
+WHITENOISE_USE_FINDERS = True  # Default: DEBUG
