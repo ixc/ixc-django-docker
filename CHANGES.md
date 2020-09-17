@@ -14,7 +14,11 @@ Breaking and notable changes
 
   We can also execute any shell script or bash command.
 
-  When upgrading an old project, export `SETUP_COMMAND='npm run build --if-present` and `SETUP_TESTS_COMMAND='npm run build --if-present'` to restore the old behaviour.
+  When upgrading:
+
+  - Add `export SETUP_COMMAND='npm run -l build --if-present'` and `export SETUP_TESTS_COMMAND='npm run -l build --if-present'` to your `.env` file to restore the old behaviour.
+
+  - Or add `export SETUP_COMMAND='...'` to your `.env` file, as required.
 
 - The `COMPRESS_OFFLINE` setting is now `True`. Offline compression is required when using WhiteNoise without autorefresh, which is not used in production because it is only intended for development and has had a serious security issue in the past.
 
