@@ -29,6 +29,14 @@ Breaking and notable changes
   - Add `run-s -l collectstatic compress` to `Dockerfile`.
   - Confirm that your `{% compress %}` blocks do not have any dynamic content (changes with context), or set `IXC_COMPRESSOR_REQUEST`, `IXC_COMPRESSOR_GLOBAL_CONTEXT` and `IXC_COMPRESSOR_OPTIONAL_CONTEXT` accordingly.
 
+### Notable
+
+- Supervisor no longer wraps its programs with `entrypoint.sh`. This was a convenience during troubleshooting so we could edit a dotenv file and restart the program, without having to restart supervisor or the container itself.
+
+  Now that `entrypoint.sh` is optional, it is no longer appropriate to always wrap programs with it.
+
+  If you are still using `entrypoint.sh`, in a pinch you can live edit the supervisor template to reinstate the wrapper.
+
 8 September 2020
 ---
 
