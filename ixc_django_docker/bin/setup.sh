@@ -10,7 +10,7 @@ if [[ -z "$PROJECT_DIR" ]]; then
 	exit 1
 fi
 
-mkdir -p "$DIR/var"
+mkdir -p "$PROJECT_DIR/var"
 
 if [[ -n "${SETUP_FORCE+1}" ]]; then
 	>&2 echo 'SETUP_FORCE is set. Delete "*.md5" files.'
