@@ -2,8 +2,6 @@
 
 # Run an interactive project shell, with some help text.
 
-set -e
-
 # Running in a terminal.
 if [[ -t 1 ]]; then
 	cat <<EOF
