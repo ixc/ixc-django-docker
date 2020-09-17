@@ -16,6 +16,15 @@ Breaking and notable changes
 
   When upgrading an old project, export `SETUP_COMMAND='npm run build --if-present` and `SETUP_TESTS_COMMAND='npm run build --if-present'` to restore the old behaviour.
 
+- The `COMPRESS_OFFLINE` setting is now `True`. Offline compression is required when using WhiteNoise without autorefresh, which is not used in production because it is only intended for development and has had a serious security issue in the past.
+
+  When upgrading:
+
+  - Add `"compress": "manage.py compress --verbosity=0"` to the `package.json` file.
+  - Add `export SETUP_COMMAND='run-s -l compress ...'` to your `.env` file.
+  - Add `run-s -l collectstatic compress` to `Dockerfile`.
+  - Confirm that your `{% compress %}` blocks do not have any dynamic content (changes with context), or set `IXC_COMPRESSOR_REQUEST`, `IXC_COMPRESSOR_GLOBAL_CONTEXT` and `IXC_COMPRESSOR_OPTIONAL_CONTEXT` accordingly.
+
 8 September 2020
 ---
 
