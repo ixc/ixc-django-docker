@@ -30,7 +30,7 @@ fi
 # Execute setup tests command.
 if [[ -z "${QUICK+1}" && -n "${SETUP_TESTS_COMMAND+1}" ]]; then
 	echo "Executing setup command: ${SETUP_TESTS_COMMAND}"
-	bash -c ${SETUP_TESTS_COMMAND}
+	bash -c "${SETUP_TESTS_COMMAND}"
 fi
 
 # Execute command, only if not sourced.

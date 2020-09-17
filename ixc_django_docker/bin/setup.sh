@@ -35,7 +35,7 @@ migrate.sh "$PROJECT_DIR/var"
 # Execute setup command.
 if [[ -n "${SETUP_COMMAND+1}" ]]; then
 	echo "Executing setup command: ${SETUP_COMMAND}"
-	bash -c ${SETUP_COMMAND}
+	bash -c "${SETUP_COMMAND}"
 fi
 
 # Save git commit.
