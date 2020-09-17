@@ -32,9 +32,11 @@ setup-postgres.sh
 # Apply migrations.
 migrate.sh "$PROJECT_DIR/var"
 
-# Run 'setup' script.
-echo "Executing: npm run ${SETUP_NPM_RUN:-setup}..."
-npm run "${SETUP_NPM_RUN:-setup}" --if-present
+# Execute setup command.
+if [[ -n "${SETUP_COMMAND+1}" ]]; then
+	echo "Executing setup command: ${SETUP_COMMAND}"
+	bash -c ${SETUP_COMMAND}
+fi
 
 # Save git commit.
 echo "$(git-commit.sh)" > "$PROJECT_DIR/var/setup-git-commit.txt"

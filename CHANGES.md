@@ -1,6 +1,21 @@
 Breaking and notable changes
 ===
 
+17 September 2020
+---
+
+### Breaking
+
+- `setup.sh` and `setup-tests.sh` no longer automatically run any npm script, even if `SETUP_NPM_RUN` or `SETUP_TESTS_NPM_RUN` is defined.
+
+  Instead, export `SETUP_COMMAND` and `SETUP_TESTS_COMMAND`, which can be any shell command instead of the name of an npm script.
+
+  This allows us to execute any combination of npm scripts in sequence (via `run-s`) or parallel (via `run-p`), without cluttering up `package.json` with near identical wrapper scripts.
+
+  We can also execute any shell script or bash command.
+
+  When upgrading an old project, export `SETUP_COMMAND='npm run build --if-present` and `SETUP_TESTS_COMMAND='npm run build --if-present'` to restore the old behaviour.
+
 8 September 2020
 ---
 
