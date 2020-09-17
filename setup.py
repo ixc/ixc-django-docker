@@ -14,6 +14,11 @@ setuptools.setup(
     long_description=long_description,
     license='MIT',
     packages=setuptools.find_packages(),
+    entry_points = {
+        'console_scripts': [
+            'supervisor_stdout = ixc_django_docker.supervisor_stdout:main',
+        ]
+    },
     scripts=[
         'ixc_django_docker/bin/entrypoint.sh',
     ],
