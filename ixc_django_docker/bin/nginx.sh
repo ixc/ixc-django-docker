@@ -2,19 +2,21 @@
 
 set -e
 
-# Create context specific config directory.
+# Create context specific config and run directories.
 if [[ -z "${CONTEXT+1}" ]]; then
-	DIR="$PROJECT_DIR/var/etc"
+	ETC_DIR="$PROJECT_DIR/var/etc"
+	export RUN_DIR="$PROJECT_DIR/var/run"
 else
-	DIR="$PROJECT_DIR/var/etc/$CONTEXT"
+	ETC_DIR="$PROJECT_DIR/var/etc/$CONTEXT"
+	export RUN_DIR="$PROJECT_DIR/var/run/$CONTEXT"
 fi
-mkdir -p "$DIR"
+mkdir -p "$ETC_DIR" "$RUN_DIR"
 
 # Generate htpasswd file if credentials are set.
 if [[ -n "$NGINX_BASIC_AUTH" ]]; then
 	# Split on `:`.
 	IFS=: read BASIC_AUTH_USERNAME BASIC_AUTH_PASSWORD <<< "$NGINX_BASIC_AUTH"
-	echo "$BASIC_AUTH_PASSWORD" | htpasswd -ci "$DIR/nginx.htpasswd" "$BASIC_AUTH_USERNAME"
+	echo "$BASIC_AUTH_PASSWORD" | htpasswd -ci "$ETC_DIR/nginx.htpasswd" "$BASIC_AUTH_USERNAME"
 fi
 
 # Default environment variables for config template.
@@ -26,8 +28,8 @@ export NGINX_WORKER_PROCESSES="${NGINX_WORKER_PROCESSES:-1}"
 export SUPERVISOR_PROGRAM_NUMPROCS="${SUPERVISOR_PROGRAM_NUMPROCS:-1}"
 
 # Render nginx config template.
-dockerize -template "${NGINX_TMPL_CONF:-$IXC_DJANGO_DOCKER_DIR/etc/nginx.tmpl.conf}:$DIR/nginx.conf"
+dockerize -template "${NGINX_TMPL_CONF:-$IXC_DJANGO_DOCKER_DIR/etc/nginx.tmpl.conf}:$ETC_DIR/nginx.conf"
 
 # Set `error_log` via command line to avoid a permissions error when run as an
 # unprivileged user. See: https://stackoverflow.com/a/24423319
-exec nginx -c "$DIR/nginx.conf" -g "error_log /dev/stderr;" "$@"
+exec nginx -c "$ETC_DIR/nginx.conf" -g "error_log /dev/stderr;" "$@"
