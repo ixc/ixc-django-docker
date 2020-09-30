@@ -95,7 +95,7 @@ if [[ ! -d "$PROJECT_VENV_DIR" ]]; then
 		python -m pip install virtualenv
 	fi
 	python -m virtualenv "$PROJECT_VENV_DIR"
-	"${PROJECT_VENV_DIR}/bin/python" -m pip install --no-cache-dir --no-deps -r requirements.$(uname).txt
+	"${PROJECT_VENV_DIR}/bin/python" -m pip install --no-cache-dir --no-deps -r requirements.txt
 	md5sum requirements.txt > requirements.txt.md5.$(uname)
 else
 	# Check that virtualenv is using required Python version.
