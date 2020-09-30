@@ -6,7 +6,7 @@ set -e
 
 # './go.sh --reset' will reset the local dev environment, after confirmation.
 if [[ "$1" == "--reset" ]]; then
-	RESET_COMMANDS='find . -name "*.md5" -delete; rm -rf bower_components node_modules src static_root var'
+	RESET_COMMANDS="find . -name '*.$(uname).md5' -delete; rm -rf bower_components node_modules src static_root var webpack_manifest.json"
 	>&2 cat <<EOF
 Are you SURE you want to reset your dev environment? This cannot be undone.
 
@@ -95,7 +95,7 @@ if [[ ! -d "$PROJECT_VENV_DIR" ]]; then
 		python -m pip install virtualenv
 	fi
 	python -m virtualenv "$PROJECT_VENV_DIR"
-	PIP_SRC="$PROJECT_DIR/src" "$PROJECT_VENV_DIR/bin/python" -m pip install --no-cache-dir --no-deps -r requirements.txt
+	PIP_SRC="$PROJECT_DIR/src" "$PROJECT_VENV_DIR/bin/python" -m pip install --no-cache-dir --no-deps -r requirements.$(uname).txt
 	md5sum requirements.txt > requirements.txt.md5
 else
 	# Check that virtualenv is using required Python version.

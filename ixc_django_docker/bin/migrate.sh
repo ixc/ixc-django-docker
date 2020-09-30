@@ -22,7 +22,9 @@ else
 	manage.py showmigrations > "$DIR/migrate.txt" 2> /dev/null
 fi
 
-if [[ ! -s "$DIR/migrate.txt.md5" ]] || ! md5sum --status -c "$DIR/migrate.txt.md5" > /dev/null 2>&1; then
+MIGRATE_TXT="$DIR/migrate.txt.$(uname).md5"
+
+if [[ ! -s "$MIGRATE_TXT" ]] || ! md5sum --status -c "$MIGRATE_TXT" > /dev/null 2>&1; then
 	echo 'Migrations are out of date.'
 
 	# Skip initial migration if all tables created by the initial migration
@@ -39,5 +41,5 @@ if [[ ! -s "$DIR/migrate.txt.md5" ]] || ! md5sum --status -c "$DIR/migrate.txt.m
 		manage.py showmigrations > "$DIR/migrate.txt" 2> /dev/null
 	fi
 
-	md5sum "$DIR/migrate.txt" > "$DIR/migrate.txt.md5"
+	md5sum "$DIR/migrate.txt" > "$MIGRATE_TXT"
 fi

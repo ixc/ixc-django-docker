@@ -12,9 +12,11 @@ fi
 
 mkdir -p "$PROJECT_DIR/var"
 
+MD5=".$(uname).md5"
+
 if [[ -n "${SETUP_FORCE+1}" ]]; then
-	>&2 echo 'SETUP_FORCE is set. Delete "*.md5" files.'
-	find . -name "*.md5" -delete
+	>&2 echo "SETUP_FORCE is set. Delete '*.$MD5' files."
+	find . -name "*.$MD5" -delete
 fi
 
 # Install Node modules.
