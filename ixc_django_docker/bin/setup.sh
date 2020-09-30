@@ -31,14 +31,16 @@ pip-install.sh "$PROJECT_DIR"
 # Create a database.
 setup-postgres.sh
 
-# Apply migrations.
-migrate.sh "$PROJECT_DIR/var"
-
 # Execute setup command.
 if [[ -n "${SETUP_COMMAND+1}" ]]; then
 	echo "Executing setup command: ${SETUP_COMMAND}"
 	bash -c "${SETUP_COMMAND}"
 fi
+
+# Apply migrations last. Because the database is shared state and there might be
+# backwards incompatible changes. This should reduce the duration of any potential
+# downtime before recreating old containers, caused by a slow `SETUP_COMMAND` (above).
+migrate.sh "$PROJECT_DIR/var"
 
 # Save git commit.
 echo "$(git-commit.sh)" > "$PROJECT_DIR/var/setup-git-commit.txt"
