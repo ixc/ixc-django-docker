@@ -50,7 +50,7 @@ EOF
 
 	# Compare git commit and print reminder if setup has not completed successfully.
 	GIT_COMMIT="$(git-commit.sh)"
-	if [[ "$GIT_COMMIT" != $(cat "$PROJECT_DIR/var/setup-git-commit.$(uname).txt" 2>&1) ]]; then
+	if [[ "$GIT_COMMIT" != $(cat "$PROJECT_DIR/var/setup-git-commit.txt.$(uname)" 2>&1) ]]; then
 		>&2 cat <<EOF
 WARNING: Setup is not complete for git commit: '$GIT_COMMIT'
          Run 'setup.sh' manually.

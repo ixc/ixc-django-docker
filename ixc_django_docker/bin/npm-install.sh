@@ -20,11 +20,11 @@ if [[ ! -s package.json ]]; then
 EOF
 fi
 
-PACKAGE_JSON="package.json.$(uname).md5"
+UNAME="$(uname)"
 
-touch "$PACKAGE_JSON"
+touch "package.json.md5.$UNAME"
 
-if [[ ! -s "$PACKAGE_JSON" ]] || ! md5sum --status -c "$PACKAGE_JSON" > /dev/null 2>&1; then
+if [[ ! -s "package.json.md5.$UNAME" ]] || ! md5sum --status -c "package.json.md5.$UNAME" > /dev/null 2>&1; then
 	echo "Node modules in '$DIR' directory are out of date, 'package.json' has been updated."
 	if [[ -d node_modules ]]; then
 		rm -rf node_modules
@@ -36,5 +36,5 @@ if [[ ! -s "$PACKAGE_JSON" ]] || ! md5sum --status -c "$PACKAGE_JSON" > /dev/nul
 	else
 		npm install
 	fi
-	md5sum package.json > "$PACKAGE_JSON"
+	md5sum package.json > "package.json.md5.$UNAME"
 fi

@@ -12,11 +12,11 @@ fi
 
 mkdir -p "$PROJECT_DIR/var"
 
-MD5=".$(uname).md5"
+UNAME="$(uname)"
 
 if [[ -n "${SETUP_FORCE+1}" ]]; then
-	>&2 echo "SETUP_FORCE is set. Delete '*.$MD5' files."
-	find . -name "*.$MD5" -delete
+	>&2 echo "SETUP_FORCE is set. Delete '*.md5.$UNAME' files."
+	find . -name "*.md5.$UNAME" -delete
 fi
 
 # Install Node modules.
@@ -43,9 +43,8 @@ fi
 migrate.sh "$PROJECT_DIR/var"
 
 # Save git commit.
-SETUP_GIT_COMMIT="$PROJECT_DIR/var/setup-git-commit.$(uname).txt"
-echo "$(git-commit.sh)" > "$SETUP_GIT_COMMIT"
-echo "Updated '$SETUP_GIT_COMMIT' ($(cat $SETUP_GIT_COMMIT))"
+echo "$(git-commit.sh)" > "$PROJECT_DIR/var/setup-git-commit.txt.$UNAME"
+echo "Updated '$PROJECT_DIR/var/setup-git-commit.txt.$UNAME' ($(cat $PROJECT_DIR/var/setup-git-commit.txt.$UNAME))"
 
 # Execute command.
 exec "$@"

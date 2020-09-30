@@ -20,15 +20,15 @@ if [[ ! -s bower.json ]]; then
 EOF
 fi
 
-BOWER_JSON="bower.json.$(uname).md5"
+UNAME="$(uname)"
 
-touch "$BOWER_JSON"
+touch "bower.json.md5.$UNAME"
 
-if [[ ! -s "$BOWER_JSON" ]] || ! md5sum --status -c "$BOWER_JSON" > /dev/null 2>&1; then
+if [[ ! -s "bower.json.md5.$UNAME" ]] || ! md5sum --status -c "bower.json.md5.$UNAME" > /dev/null 2>&1; then
 	echo "Bower components in '$DIR' directory are out of date, 'bower.json' has been updated."
 	if [[ -d bower_components ]]; then
 		rm -rf bower_components
 	fi
 	bower install --allow-root
-	md5sum bower.json > "$BOWER_JSON"
+	md5sum bower.json > "bower.json.md5.$UNAME"
 fi

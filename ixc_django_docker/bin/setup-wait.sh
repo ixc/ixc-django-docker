@@ -9,7 +9,7 @@ GIT_COMMIT="$(git-commit.sh)"
 # Wait for setup.
 COUNT=0
 while true; do
-	if [[ "$GIT_COMMIT" == $(cat "$PROJECT_DIR/var/setup-git-commit.$(uname).txt" 2>&1) ]]; then
+	if [[ "$GIT_COMMIT" == $(cat "$PROJECT_DIR/var/setup-git-commit.txt.$(uname)" 2>&1) ]]; then
 		break
 	fi
 	if [[ "$COUNT" == 0 ]]; then
