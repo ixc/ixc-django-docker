@@ -6,7 +6,7 @@ set -e
 
 # './go.sh --reset' will reset the local dev environment, after confirmation.
 if [[ "$1" == "--reset" ]]; then
-	RESET_COMMANDS="find . -name '*.$(uname).md5' -delete; rm -rf bower_components node_modules src static_root var webpack_manifest.json"
+	RESET_COMMANDS="find . -name '*.md5.$(uname)' -delete; rm -rf bower_components node_modules src static_root var webpack_manifest.json"
 	>&2 cat <<EOF
 Are you SURE you want to reset your dev environment? This cannot be undone.
 
