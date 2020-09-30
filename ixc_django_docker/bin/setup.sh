@@ -43,8 +43,9 @@ fi
 migrate.sh "$PROJECT_DIR/var"
 
 # Save git commit.
-echo "$(git-commit.sh)" > "$PROJECT_DIR/var/setup-git-commit.txt"
-echo "Updated '$PROJECT_DIR/var/setup-git-commit.txt' ($(cat $PROJECT_DIR/var/setup-git-commit.txt))"
+SETUP_GIT_COMMIT="$PROJECT_DIR/var/setup-git-commit.$(uname).txt"
+echo "$(git-commit.sh)" > "$SETUP_GIT_COMMIT"
+echo "Updated '$SETUP_GIT_COMMIT' ($(cat $SETUP_GIT_COMMIT))"
 
 # Execute command.
 exec "$@"
