@@ -22,15 +22,15 @@ WORKDIR "${PROJECT_DIR}"
 
 COPY package.json package-lock.json ./
 RUN --mount=type=cache,mode=0777,target=/root/.npm npm ci --unsafe-perm
-RUN md5sum package.json > package.json.md5.$(uname)
+RUN md5sum package.json > "package.json.md5.$(uname)"
 
 COPY bower.json .
 RUN --mount=type=cache,mode=0777,target=/root/.cache/bower ./node_modules/.bin/bower install --allow-root
-RUN md5sum bower.json > bower.json.md5.$(uname)
+RUN md5sum bower.json > "bower.json.md5.$(uname)"
 
 COPY requirements.txt .
 RUN --mount=type=cache,mode=0777,target=/root/.cache/pip pip install -r requirements.txt
-RUN md5sum requirements.txt > requirements.txt.md5.$(uname)
+RUN md5sum requirements.txt > "requirements.txt.md5.$(uname)"
 
 ENTRYPOINT ["tini", "--", "entrypoint.sh"]
 CMD ["bash.sh"]
