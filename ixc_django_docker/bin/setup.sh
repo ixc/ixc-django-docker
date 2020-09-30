@@ -17,6 +17,7 @@ UNAME="$(uname)"
 if [[ -n "${SETUP_FORCE+1}" ]]; then
 	>&2 echo "SETUP_FORCE is set. Delete '*.md5.$UNAME' files."
 	find . -name "*.md5.$UNAME" -delete
+	rm -f "$PROJECT_DIR/var/migrate.txt.$UNAME"
 fi
 
 # Install Node modules.
