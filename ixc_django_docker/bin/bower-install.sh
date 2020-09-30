@@ -30,5 +30,6 @@ if [[ ! -s "bower.json.md5.$UNAME" ]] || ! md5sum --status -c "bower.json.md5.$U
 		rm -rf bower_components
 	fi
 	bower install --allow-root
+	rm -f bower.json.md5.*  # 'bower_components' is shared, if we rebuild for one platform, other platforms become invalid
 	md5sum bower.json > "bower.json.md5.$UNAME"
 fi

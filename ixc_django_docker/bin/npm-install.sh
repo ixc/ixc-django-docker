@@ -36,5 +36,6 @@ if [[ ! -s "package.json.md5.$UNAME" ]] || ! md5sum --status -c "package.json.md
 	else
 		npm install
 	fi
+	rm -f package.json.md5.*  # 'node_modules' is shared, if we rebuild for one platform, other platforms become invalid
 	md5sum package.json > "package.json.md5.$UNAME"
 fi
