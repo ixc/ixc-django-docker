@@ -1,6 +1,13 @@
 Breaking and notable changes
 ===
 
+13 November 2020
+---
+
+### Breaking
+
+- Use tuple instead of list for template dirs, context processors, loaders. Check if you are using `+= [..., ]` and change to `(..., )`
+
 17 September 2020
 ---
 
