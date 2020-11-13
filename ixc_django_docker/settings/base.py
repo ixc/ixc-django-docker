@@ -270,13 +270,15 @@ MIDDLEWARE += (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-if django.VERSION < (1, 10):
+if django.VERSION >= (1, 8):
     MIDDLEWARE += ('django.contrib.admindocs.middleware.XViewMiddleware', )
+else:
+    MIDDLEWARE += ('django.middleware.doc.XViewMiddleware', )
 
-    if django.VERSION >= (1, 7):
-        MIDDLEWARE += (
-            'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-        )
+if (1, 7) <= django.VERSION < (1, 10):
+    MIDDLEWARE += (
+        'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    )
 
 ROOT_URLCONF = 'ixc_django_docker.urls'
 
