@@ -11,3 +11,6 @@ if django.VERSION < (1, 8):
 
     TEMPLATE_DIRS = TEMPLATES[0]['DIRS']
     TEMPLATE_LOADERS = TEMPLATES[0]['OPTIONS']['loaders']
+
+    del MIDDLEWARE
+    del TEMPLATES
