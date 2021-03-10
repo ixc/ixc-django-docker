@@ -30,9 +30,9 @@ if [[ ! -s package.json.md5 ]] || ! md5sum --status -c package.json.md5 > /dev/n
 	if [[ -f yarn.lock ]]; then
 		yarn --non-interactive
 	elif [[ -f package-lock.json ]]; then
-		npm ci
+		npm ci --unsafe-perm
 	else
-		npm install
+		npm install --unsafe-perm
 	fi
 	md5sum package.json > package.json.md5
 fi
