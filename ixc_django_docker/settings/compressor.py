@@ -3,6 +3,12 @@ COMPRESS_CSS_FILTERS = (
     'compressor.filters.cssmin.rCSSMinFilter',
 )
 
+COMPRESS_OFFLINE_MANIFEST = os.path.join(
+    os.environ.get('COMPRESS_OFFLINE_MANIFEST') or os.path.join(
+        'manifest', '%s.json' % (os.environ.get('GIT_COMMIT') or '_unknown')
+    )
+)
+
 # Offline compression is required when using WhiteNoise without autorefresh, which is
 # not used in production because it is only intended for development and has had a
 # serious security issue in the past.
