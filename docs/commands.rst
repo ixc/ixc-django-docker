@@ -26,7 +26,7 @@ Actions:
 
 * Create virtualenv for project
 * (Re)install Python requirements from ``requirements.txt`` when this file
-  changes, as detected via hash file ``requirements.txt.md5``
+  changes, as detected via hash file ``requirements.txt.md5.$(uname)``
 * Source bootstrap environment variables from ``.env.local``
 * Exec ``entrypoint.sh`` with command arguments passed to this script if any,
   otherwise with ``setup-django.sh bash.sh``

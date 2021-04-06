@@ -15,6 +15,5 @@
 	],
 	"settings": {
 		"python.pythonPath": "/usr/bin/python3.8"
-	},
-	"postCreateCommand": "find . -name '*.md5' -delete"
+	}
 }

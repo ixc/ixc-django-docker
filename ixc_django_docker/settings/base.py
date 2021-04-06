@@ -256,37 +256,28 @@ LOGIN_REDIRECT_URL = '/'  # Default: /accounts/profile/
 LOGIN_URL = reverse_lazy('login')  # Default: /accounts/signin/
 LOGOUT_URL = reverse_lazy('logout')  # Default: /accounts/signout/
 
-if django.VERSION < (1, 10):
-    MIDDLEWARE_CLASSES = (
-        # Default.
-        'django.contrib.sessions.middleware.SessionMiddleware',
-        'django.middleware.common.CommonMiddleware',
-        'django.middleware.csrf.CsrfViewMiddleware',
-        'django.contrib.auth.middleware.AuthenticationMiddleware',
-        'django.contrib.messages.middleware.MessageMiddleware',
-        'django.middleware.clickjacking.XFrameOptionsMiddleware',
+MIDDLEWARE = ()
 
-        # Extra.
-        'django.contrib.admindocs.middleware.XViewMiddleware',
-    )
-    if django.VERSION >= (1, 7):
-        MIDDLEWARE_CLASSES += (
-            'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-        )
-    if django.VERSION >= (1, 8):
-        MIDDLEWARE_CLASSES = (
-            'django.middleware.security.SecurityMiddleware',
-        ) + MIDDLEWARE_CLASSES
+if django.VERSION >= (1, 8):
+    MIDDLEWARE += ('django.middleware.security.SecurityMiddleware', )
+
+MIDDLEWARE += (
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+)
+
+if django.VERSION >= (1, 8):
+    MIDDLEWARE += ('django.contrib.admindocs.middleware.XViewMiddleware', )
 else:
-    MIDDLEWARE = (
-        # Default.
-        'django.middleware.security.SecurityMiddleware',
-        'django.contrib.sessions.middleware.SessionMiddleware',
-        'django.middleware.common.CommonMiddleware',
-        'django.middleware.csrf.CsrfViewMiddleware',
-        'django.contrib.auth.middleware.AuthenticationMiddleware',
-        'django.contrib.messages.middleware.MessageMiddleware',
-        'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    MIDDLEWARE += ('django.middleware.doc.XViewMiddleware', )
+
+if (1, 7) <= django.VERSION < (1, 10):
+    MIDDLEWARE += (
+        'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     )
 
 ROOT_URLCONF = 'ixc_django_docker.urls'
@@ -312,53 +303,44 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-import django
-
 TEMPLATES = (
     # Django templates backend.
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [  # Default: empty
+        'DIRS': (  # Default: empty
             os.path.join(PROJECT_DIR, 'templates'),
-        ],
+        ),
         # 'APP_DIRS': True,  # Must not be set when `loaders` is defined
         'OPTIONS': {
-            'context_processors': [
+            'context_processors': (
                 # Default.
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+
+                # Extra.
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
 
                 # Project.
                 'ixc_django_docker.context_processors.environment',
-            ] + (
-                # Extra.
-                [
-                    'django.core.context_processors.i18n',
-                    'django.core.context_processors.media',
-                    'django.core.context_processors.static',
-                    'django.core.context_processors.tz',
-                ] if django.VERSION < (1, 8) else [
-                    'django.template.context_processors.i18n',
-                    'django.template.context_processors.media',
-                    'django.template.context_processors.static',
-                    'django.template.context_processors.tz',
-                ]
             ),
-            'loaders': [
+            'loaders': (
                 # Default.
                 'django.template.loaders.filesystem.Loader',
                 'django.template.loaders.app_directories.Loader',
-            ],
+            ),
         },
     },
     # Jinja2 template backend.
     {
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
-        'DIRS': [
+        'DIRS': (
             os.path.join(PROJECT_DIR, 'jinja2'),
-        ],
+        ),
         'APP_DIRS': True,
         'OPTIONS': {
             'environment': 'ixc_django_docker.jinja2.environment',

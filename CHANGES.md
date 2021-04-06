@@ -1,6 +1,65 @@
 Breaking and notable changes
 ===
 
+6 April 2021
+---
+
+### Breaking
+
+- `django-compressor` and `ixc-whitenoise` will now include a `.$GIT_COMMIT` suffix in their manifest filename, so we can run new and old versions of a codebase side by side with a shared volume.
+
+  When upgrading:
+
+  - To disable this behaviour for local development, where you do not want to re-compress or collect static files for every commit, add the following to your `.env.develop.secret` file:
+
+        # Configure static file manifests. Comment out to save versioned files with a
+        # `$GIT_COMMIT` suffix.
+        export COMPRESS_OFFLINE_MANIFEST='manifest.json'
+        export STATICFILES_MANIFEST='staticfiles.json'
+
+13 November 2020
+---
+
+### Breaking
+
+- Use tuple instead of list for template dirs, context processors, loaders. Check if you are using `+= [..., ]` and change to `(..., )`
+
+17 September 2020
+---
+
+### Breaking
+
+- `setup.sh` and `setup-tests.sh` no longer automatically run any npm script, even if `SETUP_NPM_RUN` or `SETUP_TESTS_NPM_RUN` is defined.
+
+  Instead, export `SETUP_COMMAND` and `SETUP_TESTS_COMMAND`, which can be any shell command instead of the name of an npm script.
+
+  This allows us to execute any combination of npm scripts in sequence (via `run-s`) or parallel (via `run-p`), without cluttering up `package.json` with near identical wrapper scripts.
+
+  We can also execute any shell script or bash command.
+
+  When upgrading:
+
+  - Add `export SETUP_COMMAND='npm run -l build --if-present'` and `export SETUP_TESTS_COMMAND='npm run -l build --if-present'` to your `.env` file to restore the old behaviour.
+
+  - Or add `export SETUP_COMMAND='...'` to your `.env` file, as required.
+
+- The `COMPRESS_OFFLINE` setting is now `True`. Offline compression is required when using WhiteNoise without autorefresh, which is not used in production because it is only intended for development and has had a serious security issue in the past.
+
+  When upgrading:
+
+  - Add `"compress": "manage.py compress --verbosity=0"` to the `package.json` file.
+  - Add `export SETUP_COMMAND='run-s -l compress ...'` to your `.env` file.
+  - Add `run-s -l collectstatic compress` to `Dockerfile`.
+  - Confirm that your `{% compress %}` blocks do not have any dynamic content (changes with context), or set `IXC_COMPRESSOR_REQUEST`, `IXC_COMPRESSOR_GLOBAL_CONTEXT` and `IXC_COMPRESSOR_OPTIONAL_CONTEXT` accordingly.
+
+### Notable
+
+- Supervisor no longer wraps its programs with `entrypoint.sh`. This was a convenience during troubleshooting so we could edit a dotenv file and restart the program, without having to restart supervisor or the container itself.
+
+  Now that `entrypoint.sh` is optional, it is no longer appropriate to always wrap programs with it.
+
+  If you are still using `entrypoint.sh`, in a pinch you can live edit the supervisor template to reinstate the wrapper.
+
 8 September 2020
 ---
 

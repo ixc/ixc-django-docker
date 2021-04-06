@@ -65,6 +65,9 @@ if OVERRIDE_SETTINGS:
     PROJECT_SETTINGS.append(
         optional(os.path.join(PROJECT_SETTINGS_DIR, OVERRIDE_SETTINGS)))
 
+# Add Django compatibility to base settings.
+BASE_SETTINGS.append('django_compat.py')
+
 # Local settings.
 PROJECT_SETTINGS.append(
     optional(os.path.join(PROJECT_SETTINGS_DIR, 'local.py')))

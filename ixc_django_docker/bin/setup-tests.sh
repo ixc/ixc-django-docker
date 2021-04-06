@@ -27,10 +27,10 @@ if [[ "$DJANGO_VERSION_LESS_THAN_1_7" == 'True' ]]; then
 fi
 [[ -z "$QUICK" ]] && manage.py migrate --noinput
 
-# Run 'setup' script.
-if [[ -z "${QUICK+1}" ]]; then
-    echo "Executing: npm run ${SETUP_TESTS_NPM_RUN:-setup}..."
-    npm run "${SETUP_TESTS_NPM_RUN:-setup}" --if-present
+# Execute setup tests command.
+if [[ -z "${QUICK+1}" && -n "${SETUP_TESTS_COMMAND+1}" ]]; then
+	echo "Executing setup tests command: ${SETUP_TESTS_COMMAND}"
+	bash -c "${SETUP_TESTS_COMMAND}"
 fi
 
 # Execute command, only if not sourced.

@@ -20,9 +20,11 @@ if [[ ! -s package.json ]]; then
 EOF
 fi
 
-touch package.json.md5
+UNAME="$(uname)"
 
-if [[ ! -s package.json.md5 ]] || ! md5sum --status -c package.json.md5 > /dev/null 2>&1; then
+touch "package.json.md5.$UNAME"
+
+if [[ ! -s "package.json.md5.$UNAME" ]] || ! md5sum --status -c "package.json.md5.$UNAME" > /dev/null 2>&1; then
 	echo "Node modules in '$DIR' directory are out of date, 'package.json' has been updated."
 	if [[ -d node_modules ]]; then
 		rm -rf node_modules
@@ -34,5 +36,6 @@ if [[ ! -s package.json.md5 ]] || ! md5sum --status -c package.json.md5 > /dev/n
 	else
 		npm install --unsafe-perm
 	fi
-	md5sum package.json > package.json.md5
+	rm -f package.json.md5.*  # 'node_modules' is shared, if we rebuild for one platform, other platforms become invalid
+	md5sum package.json > "package.json.md5.$UNAME"
 fi

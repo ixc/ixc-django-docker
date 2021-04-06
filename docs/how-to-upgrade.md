@@ -185,7 +185,7 @@ Test your changes:
 
 Things to watch out for:
 
-- Run `rm -rf var` and `find . -name "*.md5" -delete` to reset the environment and start over.
+- Run `rm -rf var` and `find . -name "*.md5.$(uname)" -delete` to reset the environment and start over.
 
 - Upgrading Node.js can require that we also upgrade dependencies in `package.json`. If you see any npm errors during setup:
 

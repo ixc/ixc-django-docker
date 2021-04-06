@@ -20,13 +20,16 @@ if [[ ! -s bower.json ]]; then
 EOF
 fi
 
-touch bower.json.md5
+UNAME="$(uname)"
 
-if [[ ! -s bower.json.md5 ]] || ! md5sum --status -c bower.json.md5 > /dev/null 2>&1; then
+touch "bower.json.md5.$UNAME"
+
+if [[ ! -s "bower.json.md5.$UNAME" ]] || ! md5sum --status -c "bower.json.md5.$UNAME" > /dev/null 2>&1; then
 	echo "Bower components in '$DIR' directory are out of date, 'bower.json' has been updated."
 	if [[ -d bower_components ]]; then
 		rm -rf bower_components
 	fi
 	bower install --allow-root
-	md5sum bower.json > bower.json.md5
+	rm -f bower.json.md5.*  # 'bower_components' is shared, if we rebuild for one platform, other platforms become invalid
+	md5sum bower.json > "bower.json.md5.$UNAME"
 fi
