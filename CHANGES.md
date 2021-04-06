@@ -1,6 +1,22 @@
 Breaking and notable changes
 ===
 
+6 April 2021
+---
+
+### Breaking
+
+- `django-compressor` and `ixc-whitenoise` will now include a `.$GIT_COMMIT` suffix in their manifest filename, so we can run new and old versions of a codebase side by side with a shared volume.
+
+  When upgrading:
+
+  - To disable this behaviour for local development, where you do not want to re-compress or collect static files for every commit, add the following to your `.env.develop.secret` file:
+
+        # Configure static file manifests. Comment out to save versioned files with a
+        # `$GIT_COMMIT` suffix.
+        export COMPRESS_OFFLINE_MANIFEST='manifest.json'
+        export STATICFILES_MANIFEST='staticfiles.json'
+
 13 November 2020
 ---
 
