@@ -58,10 +58,11 @@ def lock(
     else:
         raise redis_lock.NotAcquired('Unable to acquire lock.')
 
-    yield
-
-    # Attempt to release lock.
     try:
-        lock.release()
-    except redis_lock.NotAcquired:
-        pass
+        yield
+    finally:
+        # Always release the lock.
+        try:
+            lock.release()
+        except redis_lock.NotAcquired:
+            pass
