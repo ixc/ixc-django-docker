@@ -41,7 +41,7 @@ def skip_concurrent(f, *args, **kwargs):
         with lock(name=name, blocking=False):
             return f(*args, **kwargs)
     except redis_lock.NotAcquired:
-        pass
+        return 'Skipped. Unable to acquire lock: %r' % name
 
 
 @task
