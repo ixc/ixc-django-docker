@@ -18,7 +18,7 @@ try:
 except ImportError:
     from django.template.defaultfilters import slugify
 
-from django.utils.six import text_type
+from six import text_type
 
 # Store DOTENV from environment as a setting
 DOTENV = os.environ.get('DOTENV', 'dotenv-not-set')

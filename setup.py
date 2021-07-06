@@ -28,6 +28,7 @@ setuptools.setup(
             'gunicorn[gevent]>=19.8.0',  # Extra was added in 19.8.0
             'jinja2',
             'python-redis-lock[django]',
+            'six',
     ],
     extras_require={
         'celery': [
