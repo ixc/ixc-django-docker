@@ -127,7 +127,22 @@ class S3StaticLocationMixin(object):
 
 
 class S3PrivateStorage(S3MediaLocationMixin, S3PrivateMixin, S3BotoStorage):
-    pass
+
+    def _setup(self):
+        """
+        Ensure this storage class *ignores* the global `AWS_S3_CUSTOM_DOMAIN`
+        setting because setting a custom domain has the side-effect in the
+        bowels of the Boto library of disabling request signing, which will
+        make URLs to private objects fail.
+
+        By unsetting the local `custom_domain` attribute -- which otherwise
+        gets set to `AWS_S3_CUSTOM_DOMAIN` -- this class will keep serving
+        private objects from the standard S3 bucket endpoints like
+        https://bucket-name.s3.amazonaws.com.
+        """
+        super(S3PrivateStorage, self)._setup()
+        # Unset custom domain attribute normally set to `AWS_S3_CUSTOM_DOMAIN`
+        self._wrapped.custom_domain = None
 
 
 class S3PublicStorage(S3MediaLocationMixin, S3PublicMixin, S3BotoStorage):
