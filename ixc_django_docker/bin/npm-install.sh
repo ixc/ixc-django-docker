@@ -27,7 +27,7 @@ touch "package.json.md5.$UNAME"
 if [[ ! -s "package.json.md5.$UNAME" ]] || ! md5sum --status -c "package.json.md5.$UNAME" > /dev/null 2>&1; then
 	echo "Node modules in '$DIR' directory are out of date, 'package.json' has been updated."
 	if [[ -f yarn.lock ]]; then
-		yarn --non-interactive
+		yarn --frozen-lockfile --non-interactive
 	elif [[ -f package-lock.json ]]; then
 		npm ci --unsafe-perm
 	else
