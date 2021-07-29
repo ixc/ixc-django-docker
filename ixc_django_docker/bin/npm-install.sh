@@ -3,6 +3,7 @@
 # Install Node modules in the given directory, if they have changed.
 
 set -e
+shopt -s dotglob
 
 DIR="${1:-$PWD}"
 
@@ -27,7 +28,7 @@ touch "package.json.md5.$UNAME"
 if [[ ! -s "package.json.md5.$UNAME" ]] || ! md5sum --status -c "package.json.md5.$UNAME" > /dev/null 2>&1; then
 	echo "Node modules in '$DIR' directory are out of date, 'package.json' has been updated."
 	if [[ -d node_modules ]]; then
-		rm -rf node_modules/* node_modules/.*
+		rm -rf node_modules/*
 	fi
 	if [[ -f yarn.lock ]]; then
 		yarn --frozen-lockfile --non-interactive
