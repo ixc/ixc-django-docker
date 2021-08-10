@@ -8,10 +8,22 @@ import re
 import string
 
 import django
+from django.utils.functional import lazy
+
 if django.VERSION < (2,):
-    from django.core.urlresolvers import reverse_lazy
+    from django.core.urlresolvers import reverse, NoReverseMatch
 else:
-    from django.urls import reverse_lazy
+    from django.urls import reverse, NoReverseMatch
+
+def reverse_with_default(*args, **kwargs):
+    default = kwargs.pop("default", None)
+    try:
+        return reverse(*args, **kwargs)
+    except NoReverseMatch:
+        if default is not None:
+            return default
+        raise
+reverse_lazy_with_default = lazy(reverse_with_default)
 
 try:
     from django.utils.text import slugify
@@ -253,8 +265,8 @@ INSTALLED_APPS = (
 LANGUAGE_CODE = 'en-au'  # Default: en-us
 
 LOGIN_REDIRECT_URL = '/'  # Default: /accounts/profile/
-LOGIN_URL = reverse_lazy('login')  # Default: /accounts/signin/
-LOGOUT_URL = reverse_lazy('logout')  # Default: /accounts/signout/
+LOGIN_URL = reverse_lazy_with_default('login', default='/accounts/signin/')
+LOGOUT_URL = reverse_lazy_with_default('logout', default='/accounts/signout/')
 
 MIDDLEWARE = ()
 
