@@ -197,7 +197,7 @@ LOGGING = {
         },
         'logfile': {
             'backupCount': 10,
-            'class': 'cloghandler.ConcurrentRotatingFileHandler',
+            'class': 'concurrent_log_handler.ConcurrentRotatingFileHandler',
             'filename': os.path.join(LOGFILE_DIR, '%s.log' % PROJECT_SLUG),
             'formatter': 'default',
             'maxBytes': 20 * 1024 * 1024,  # 20 MiB
