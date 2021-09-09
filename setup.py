@@ -76,7 +76,8 @@ setuptools.setup(
         'nose': [
             'django-nose',
             'nose-exclude',
-            'nose-progressive',
+            # Temporarily disabled until nose-progressive adds support for setuptools>=58
+            #'nose-progressive',
         ],
         'post-office': [
             'django-post-office',

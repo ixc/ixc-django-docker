@@ -122,7 +122,7 @@ Bundled base settings
 
 * ``nose.py`` - Use `django-nose <https://github.com/django-nose/django-nose>`_
   with `nose-exclude <https://github.com/kgrandis/nose-exclude>`_ and
-  `nose-progressive <https://github.com/erikrose/nose-progressive>`_ when
+  `nose-progressive <https://github.com/erikrose/nose-progressive>`_ (temporarily disabled) when
   running tests.
 
 * ``post_office.py`` - Use `django-post-office
