@@ -1,6 +1,11 @@
 Breaking and notable changes
 ===
 
+14 October 2021
+---
+
+- Add the ability to skip the `rm -rf` step in `bower-install.sh` and `npm-install.sh`, when `bower.json` or `package.json` has changed, by exporting `BOWER_INSTALL_SH_SKIP_CLEAN=1` or `NPM_INSTALL_SH_SKIP_CLEAN=1`.
+
 6 April 2021
 ---
 

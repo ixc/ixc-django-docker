@@ -27,7 +27,7 @@ touch "package.json.md5.$UNAME"
 
 if [[ ! -s "package.json.md5.$UNAME" ]] || ! md5sum --status -c "package.json.md5.$UNAME" > /dev/null 2>&1; then
 	echo "Node modules in '$DIR' directory are out of date, 'package.json' has been updated."
-	if [[ -d node_modules ]]; then
+	if [[ -d node_modules && -z ${NPM_INSTALL_SH_SKIP_CLEAN+1} ]]; then
 		rm -rf node_modules/*
 	fi
 	if [[ -f yarn.lock ]]; then
