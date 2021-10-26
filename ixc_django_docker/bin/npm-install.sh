@@ -31,7 +31,7 @@ if [[ ! -s "package.json.md5.$UNAME" ]] || ! md5sum --status -c "package.json.md
 		rm -rf node_modules/*
 	fi
 	if [[ -f yarn.lock ]]; then
-		yarn --frozen-lockfile --non-interactive
+		yarnpkg --frozen-lockfile --non-interactive
 	elif [[ -f package-lock.json ]]; then
 		npm ci --unsafe-perm
 	else
