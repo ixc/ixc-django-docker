@@ -51,6 +51,11 @@ if [[ "$SRC_PGDATABASE" == *.sql ]]; then
 		echo "Restore to database '$PGDATABASE' from file '$SRC_PGDATABASE'."
 		pv "$SRC_PGDATABASE" | psql -d "$PGDATABASE" > /dev/null
 	fi
+elif [[ "$SRC_PGDATABASE" == *.sql.gz ]]; then
+	if [[ -f "$SRC_PGDATABASE" ]]; then
+		echo "Restore to database '$PGDATABASE' from file '$SRC_PGDATABASE'."
+		pv "$SRC_PGDATABASE" | gunzip | psql -d "$PGDATABASE" > /dev/null
+	fi
 elif [[ -n "$SRC_PGDATABASE" ]]; then
 	# Get source database credentials.
 	SRC_PGHOST="${SRC_PGHOST:-${PGHOST}}"
