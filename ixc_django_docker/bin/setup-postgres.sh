@@ -26,8 +26,9 @@ if psql -l | grep -q "\s$PGDATABASE\s"; then
 		exit 0
 	else
 		echo "Database '$PGDATABASE' already exists and SETUP_POSTGRES_FORCE is set. Drop existing database."
+		PGDATABASE_NEW="$PGDATABASE_$(date)"
 		if [[ -t 1 && -z ${SETUP_TESTS+1} ]]; then
-			>&2 echo "Are you SURE you want to drop '$PGDATABASE'? This cannot be undone."
+			>&2 echo "Are you SURE you want to rename '$PGDATABASE' to '$PGDATABASE_NEW'?"
 			select yn in 'Yes' 'No'; do
 				case $yn in
 						Yes ) break;;
@@ -36,7 +37,7 @@ if psql -l | grep -q "\s$PGDATABASE\s"; then
 			done
 		fi
 		psql -c "ALTER DATABASE \"$PGDATABASE\" CONNECTION LIMIT 0; SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '$PGDATABASE';" -d postgres -o /dev/null
-		dropdb "$PGDATABASE"
+		psql -c "ALTER DATABASE \"$PGDATABASE\" RENAME TO \"$PGDATABASE_NEW\";" -d postgres -o /dev/null
 	fi
 fi
 
