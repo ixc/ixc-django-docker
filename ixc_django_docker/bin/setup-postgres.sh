@@ -76,6 +76,6 @@ elif [[ -n "$SRC_PGDATABASE" ]]; then
 	if (( COUNT > 0 )); then
 		echo "Waited $COUNT seconds for PostgreSQL."
 	fi
-	echo "Restore database '$PGDATABASE' from source database '$SRC_PGDATABASE' on tcp://$SRC_PGHOST:$SRC_PGPORT."
+	echo "Restore to destination database '$PGDATABASE' ($PGHOST:$PGPORT) from source database '$SRC_PGDATABASE' ($SRC_PGHOST:$SRC_PGPORT)."
 	PGPASSWORD="$SRC_PGPASSWORD" pg_dump $SRC_PGDUMP_EXTRA -h "$SRC_PGHOST" -p "$SRC_PGPORT" -U "$SRC_PGUSER" -O -x "$SRC_PGDATABASE" | pv | psql -d "$PGDATABASE" > /dev/null
 fi
