@@ -25,7 +25,7 @@ if psql -l | grep -q "\s$PGDATABASE\s"; then
 	if [[ -z "$SETUP_POSTGRES_FORCE" ]]; then
 		exit 0
 	else
-		echo "Database '$PGDATABASE' already exists and SETUP_POSTGRES_FORCE is set. Rename existing database."
+		echo "Database '$PGDATABASE' ($PGHOST:$PGPORT) already exists and SETUP_POSTGRES_FORCE is set. Rename existing database."
 		# Prompt for confirmation.
 		if [[ -t 1 && -z ${SETUP_TESTS+1} ]]; then
 			>&2 echo "Are you SURE you want to rename '$PGDATABASE' to '${PGDATABASE}_old'? This will overwrite any existing '${PGDATABASE}_old' database, which cannot be undone."
