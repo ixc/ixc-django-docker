@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-from celery.task import task
+from celery import shared_task
 from django.core import management
 import decorator
 import redis_lock
@@ -44,7 +44,7 @@ def skip_concurrent(f, *args, **kwargs):
         return 'Skipped. Unable to acquire lock: %s' % name
 
 
-@task
+@shared_task
 @skip_concurrent
 def call_command(*args, **kwargs):
     return management.call_command(*args, **kwargs)
