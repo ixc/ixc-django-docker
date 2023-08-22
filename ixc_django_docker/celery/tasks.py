@@ -9,11 +9,11 @@ from ixc_django_docker.redis_lock import lock
 
 
 @decorator.decorator
-def enqueue_concurrent(f, *args, **kwargs):
+def enqueue_concurrent(f, lock_kwargs=None, *args, **kwargs):
     """
     Enqueue if task is already running.
     """
-    lock_kwargs = kwargs.pop('_lock_kwargs', {})
+    lock_kwargs = lock_kwargs or {}
     # Get lock name.
     name = '%s:%s(*%s, **%s)' % (f.__module__, f.__name__, args, kwargs)
     with lock(name=name, **lock_kwargs):
@@ -21,11 +21,11 @@ def enqueue_concurrent(f, *args, **kwargs):
 
 
 @decorator.decorator
-def fail_concurrent(f, *args, **kwargs):
+def fail_concurrent(f, lock_kwargs=None, *args, **kwargs):
     """
     Fail if task is already running.
     """
-    lock_kwargs = kwargs.pop('_lock_kwargs', {})
+    lock_kwargs = lock_kwargs or {}
     lock_kwargs.setdefault('blocking', False)
     # Get lock name.
     name = '%s:%s(*%s, **%s)' % (f.__module__, f.__name__, args, kwargs)
@@ -34,11 +34,11 @@ def fail_concurrent(f, *args, **kwargs):
 
 
 @decorator.decorator
-def skip_concurrent(f, *args, **kwargs):
+def skip_concurrent(f, lock_kwargs=None, *args, **kwargs):
     """
     Skip if task is already running.
     """
-    lock_kwargs = kwargs.pop('_lock_kwargs', {})
+    lock_kwargs = lock_kwargs or {}
     lock_kwargs.setdefault('blocking', False)
     # Get lock name.
     name = '%s:%s(*%s, **%s)' % (f.__module__, f.__name__, args, kwargs)
