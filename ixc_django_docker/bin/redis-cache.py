@@ -15,6 +15,8 @@ logger = logging.getLogger(__name__)
 REDIS_HOST, REDIS_PORT = \
     os.environ.get('REDIS_ADDRESS', 'localhost:6379').split(':')
 
+REDIS_PROTOCOL = os.environ.get("REDIS_PROTOCOL", "redis")
+
 DEFAULT_EXPIRE_TIMEOUT_SECS = None
 
 ACTION_CHOICES = ['set', 'match', 'get', 'delete']
@@ -71,6 +73,11 @@ def main():
         '--redis-port',
         default=REDIS_PORT,
         help='Port of redis server (default: %s)' % REDIS_PORT,
+    )
+    parser.add_argument(
+        '--redis-protocol',
+        default=REDIS_PROTOCOL,
+        help='Port of redis server (default: %s)' % REDIS_PROTOCOL,
     )
     parser.add_argument(
         'action',
@@ -165,7 +172,9 @@ def main():
             )
 
     conn = redis.StrictRedis(
-        host=args.redis_host, port=args.redis_port,
+        host=args.redis_host,
+        port=args.redis_port,
+        ssl=args.redis_protocol == "rediss"
     )
 
     if args.action == 'set':

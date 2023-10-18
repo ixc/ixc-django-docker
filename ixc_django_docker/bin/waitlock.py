@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 
 REDIS_HOST, REDIS_PORT = \
     os.environ.get('REDIS_ADDRESS', 'localhost:6379').split(':')
+REDIS_PROTOCOL = os.environ.get("REDIS_PROTOCOL", "redis")
 
 
 def execute(cmd):
@@ -77,7 +78,11 @@ def execute(cmd):
 
 
 def waitlock(cmd, block=False):
-    conn = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT)
+    conn = redis.StrictRedis(
+        host=REDIS_HOST,
+        port=REDIS_PORT,
+        ssl=REDIS_PROTOCOL == "rediss"
+    )
 
     # Create lock object.
     lock = redis_lock.Lock(conn, name=cmd, expire=60, auto_renewal=True)
@@ -109,8 +114,9 @@ def waitlock(cmd, block=False):
             # Retry.
             if block:
                 logger.warning(
-                    "Unable to connect to Redis at '%s:%s'. Retrying in 1 "
+                    "Unable to connect to Redis at '%s://%s:%s'. Retrying in 1 "
                     'second.' % (
+                        REDIS_PROTOCOL,
                         REDIS_HOST,
                         REDIS_PORT,
                     ))
@@ -118,7 +124,8 @@ def waitlock(cmd, block=False):
                 continue
             logger.info(
                 'Unable to acquire lock. Unable to connect to Redis at '
-                "'%s:%s'." % (
+                "'%s://%s:%s'." % (
+                    REDIS_PROTOCOL,
                     REDIS_HOST,
                     REDIS_PORT,
                 ))
@@ -162,6 +169,11 @@ def main():
         '--redis-port',
         default=REDIS_PORT,
         help='port of redis server (default: %s)' % REDIS_PORT,
+    )
+    parser.add_argument(
+        '--redis-protocol',
+        default=REDIS_PROTOCOL,
+        help='port of redis server (default: %s)' % REDIS_PROTOCOL,
     )
     group = parser.add_mutually_exclusive_group()
     group.add_argument(

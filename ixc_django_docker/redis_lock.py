@@ -30,9 +30,14 @@ def lock(
         auto_renewal=True,
         blocking=True,
         host=appsettings.REDIS_HOST,
-        port=appsettings.REDIS_PORT):
+        port=appsettings.REDIS_PORT,
+        protocol=appsettings.REDIS_PROTOCOL):
 
-    conn = redis.StrictRedis(host=host, port=port)
+    conn = redis.StrictRedis(
+        host=host,
+        port=port,
+        ssl=protocol == "rediss",
+    )
 
     # Create lock object.
     lock = redis_lock.Lock(
