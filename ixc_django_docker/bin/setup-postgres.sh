@@ -20,23 +20,30 @@ if (( COUNT > 0 )); then
 	echo "Waited $COUNT seconds for PostgreSQL."
 fi
 
-# Database does not exist.
+# Database already exists.
 if psql -l | grep -q "\s$PGDATABASE\s"; then
 	if [[ -z "$SETUP_POSTGRES_FORCE" ]]; then
 		exit 0
 	else
-		echo "Database '$PGDATABASE' already exists and SETUP_POSTGRES_FORCE is set. Drop existing database."
+		echo "Database '$PGDATABASE' ($PGHOST:$PGPORT) already exists and SETUP_POSTGRES_FORCE is set. Rename existing database."
+		# Prompt for confirmation.
 		if [[ -t 1 && -z ${SETUP_TESTS+1} ]]; then
-			>&2 echo "Are you SURE you want to drop '$PGDATABASE'? This cannot be undone."
+			>&2 echo "Are you SURE you want to rename '$PGDATABASE' to '${PGDATABASE}_old'? This will overwrite any existing '${PGDATABASE}_old' database, which cannot be undone."
 			select yn in 'Yes' 'No'; do
 				case $yn in
-						Yes ) break;;
-						No ) exit 1;;
+					Yes ) break;;
+					No ) exit 1;;
 				esac
 			done
 		fi
+		# Drop old database.
+		if psql -l | grep -q "\s${PGDATABASE}_old\s"; then
+			psql -c "ALTER DATABASE \"${PGDATABASE}_old\" CONNECTION LIMIT 0; SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '${PGDATABASE}_old';" -d postgres -o /dev/null
+			dropdb "${PGDATABASE}_old"
+		fi
+		# Rename database.
 		psql -c "ALTER DATABASE \"$PGDATABASE\" CONNECTION LIMIT 0; SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '$PGDATABASE';" -d postgres -o /dev/null
-		dropdb "$PGDATABASE"
+		psql -c "ALTER DATABASE \"$PGDATABASE\" RENAME TO \"${PGDATABASE}_old\";" -d postgres -o /dev/null
 	fi
 fi
 
@@ -74,6 +81,6 @@ elif [[ -n "$SRC_PGDATABASE" ]]; then
 	if (( COUNT > 0 )); then
 		echo "Waited $COUNT seconds for PostgreSQL."
 	fi
-	echo "Restore database '$PGDATABASE' from source database '$SRC_PGDATABASE' on tcp://$SRC_PGHOST:$SRC_PGPORT."
+	echo "Restore to destination database '$PGDATABASE' ($PGHOST:$PGPORT) from source database '$SRC_PGDATABASE' ($SRC_PGHOST:$SRC_PGPORT)."
 	PGPASSWORD="$SRC_PGPASSWORD" pg_dump $SRC_PGDUMP_EXTRA -h "$SRC_PGHOST" -p "$SRC_PGPORT" -U "$SRC_PGUSER" -O -x "$SRC_PGDATABASE" | pv | psql -d "$PGDATABASE" > /dev/null
 fi
