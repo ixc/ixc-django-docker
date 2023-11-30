@@ -69,7 +69,7 @@ setuptools.setup(
             'logentries',
         ],
         'master-password': [
-            'django-master-password',
+            'git+https://github.com/ixc/django-master-password.git@fa5ae26f3455cb088d1e3e1d40ed2cc80e3516db#egg=django-master-password',
         ],
         'newrelic': [
             'newrelic',
