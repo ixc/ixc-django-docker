@@ -1,3 +1,4 @@
+import environs
 import os
 
 from django.core.exceptions import ImproperlyConfigured
@@ -13,7 +14,13 @@ def _(module, from_dir):
 
 
 # Get project directory from environment. This MUST already be defined.
-PROJECT_DIR = os.environ['PROJECT_DIR']
+PROJECT_DIR = env('PROJECT_DIR')
+
+# Load `.env` file into `os.environ`.
+env = environs.Env()
+env.read_env(
+    os.path.join(PROJECT_DIR, '.env'), override=env('ENVIRONS_OVERRIDE', False)
+)
 
 # Base settings.
 BASE_SETTINGS = os.environ.get(
