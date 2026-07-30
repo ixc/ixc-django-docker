@@ -9,6 +9,7 @@ DIR="${1:-$PROJECT_DIR/var}"
 mkdir -p "$DIR"
 
 DJANGO_VERSION_LESS_THAN_1_7=$(python.sh -c 'import django; print(django.VERSION < (1, 7))')
+DJANGO_VERSION_LESS_THAN_1_8=$(python.sh -c 'import django; print(django.VERSION < (1, 8))')
 DJANGO_VERSION_LESS_THAN_1_10=$(python.sh -c 'import django; print(django.VERSION < (1, 10))')
 
 if [[ "$DJANGO_VERSION_LESS_THAN_1_7" == 'True' ]]; then
@@ -29,8 +30,8 @@ if [[ ! -s "$DIR/migrate.txt.md5.$UNAME" ]] || ! md5sum --status -c "$DIR/migrat
 
 	# Skip initial migration if all tables created by the initial migration
 	# already exist.
-	if [[ "$DJANGO_VERSION_LESS_THAN_1_7" == 'True' ]]; then
-		manage.py migrate --noinput  # South has no `--fake-initial` option
+	if [[ "$DJANGO_VERSION_LESS_THAN_1_8" == 'True' ]]; then
+		manage.py migrate --noinput  # South and Django 1.7 have no `--fake-initial` option
 	else
 		manage.py migrate --fake-initial --noinput
 	fi
